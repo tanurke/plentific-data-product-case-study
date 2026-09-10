@@ -42,6 +42,7 @@
       <a href="#asks">What they are asking me for</a>
       <a href="#jargon">Jargon</a>
       <a href="#questions">Open questions</a>
+      <a href="#provenance">Where claims come from</a>
     </nav>
 
     <h2 id="task">The task, in my own words</h2>
@@ -376,23 +377,36 @@
           </tr>
           <tr>
             <th scope="row">Nothing &mdash; someone changes a setting</th>
-            <td><strong>A new value appears with no code change at all.</strong> An operations person adds a repair category or a tag</td>
-            <td>Categories, services, tags and location types are all client-configurable</td>
+            <td><strong>A new field or value appears with no code change at all</strong></td>
+            <td>Custom fields can be created and their allowed values added or removed. So can tags, location types, asset types, asset classes and finance codes</td>
           </tr>
         </tbody>
       </table>
     </div>
 
     <div class="callout is-warn">
-      <span class="callout-label">The one I nearly missed</span>
+      <span class="callout-label">My own addition &mdash; this one is not in the brief</span>
       <p>
-        That last row is the sneaky one. <strong>The data can change shape without a single engineer
-        touching anything.</strong> Someone in operations adds a new repair category on a Tuesday
-        afternoon, and a value the client's warehouse has never seen starts arriving.
+        Being precise, because it matters if I say it out loud: <strong>the brief does not mention this.</strong>
+        The brief frames all churn as engineering churn &mdash; "new features land, existing workflows change
+        shape, fields are added and retired, and internal APIs and data structures change".
       </p>
       <p>
-        This matters because it means change control cannot only be an engineering process. If I only put a
-        gate in front of code, configuration walks straight past it.
+        But their API shows <strong>configuration can change the shape too, with no engineer involved.</strong>
+        There are endpoints to create and delete custom fields, and to add and remove the allowed values
+        inside them. Same for tags, location types, asset types and finance codes. Those values then flow
+        into the records themselves.
+      </p>
+      <p>
+        Two consequences. First, <strong>a code-review gate is not enough</strong> &mdash; configuration
+        walks straight past it. Second, and sharper:
+        <strong>the client can change their own schema.</strong> If a client adds a custom field and their
+        pipeline then breaks, that is not our change. Which makes it a clean example for the
+        responsibility boundary the brief asks me to make explicit.
+      </p>
+      <p class="muted">
+        Correction to my earlier note: repair <em>categories</em> and <em>services</em> are read-only in the
+        public API, so I should not claim those. Custom fields are the strong example.
       </p>
     </div>
 
@@ -809,7 +823,7 @@
           <tr>
             <th scope="row">Reference data</th>
             <td>The lookup lists that turn ID codes into words</td>
-            <td>Without it the export is barcodes. And it changes constantly, often by configuration</td>
+            <td>Without it the export is barcodes. Some of it is configurable, so it can change without a release</td>
           </tr>
           <tr>
             <th scope="row">Restatement</th>
@@ -847,6 +861,105 @@
       <li><strong>For ALMO clients, who owns the data</strong> &mdash; the ALMO or the council?</li>
       <li><strong>What have we already promised in contracts?</strong> Data is "partly monetised" today, so some clients may believe they have already bought this.</li>
     </ul>
+
+    <h2 id="provenance">Where each claim comes from</h2>
+    <p>
+      So I never attribute my own inference to their brief. If I am challenged on any of these, I need to
+      know instantly which column it sits in.
+    </p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Claim</th>
+            <th scope="col">Source</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Demand is concentrated in large housing associations with their own warehouse</th>
+            <td><span class="pill pill-good">Their brief</span></td>
+          </tr>
+          <tr>
+            <th scope="row">The warehouse is not modelled, governed or isolated for client use</th>
+            <td><span class="pill pill-good">Their brief</span></td>
+          </tr>
+          <tr>
+            <th scope="row">Tenancy isolation has never withstood a client's scrutiny</th>
+            <td><span class="pill pill-good">Their brief</span></td>
+          </tr>
+          <tr>
+            <th scope="row">They ship continuously and will not slow down</th>
+            <td><span class="pill pill-good">Their brief</span></td>
+          </tr>
+          <tr>
+            <th scope="row">Data is partly monetised; one-off extracts are quoted case by case; no view of cost to serve</th>
+            <td><span class="pill pill-good">Their brief</span></td>
+          </tr>
+          <tr>
+            <th scope="row">Change control is what they will push hardest on</th>
+            <td><span class="pill pill-good">Their brief</span></td>
+          </tr>
+          <tr>
+            <th scope="row">Dated API versions exist; 2023-02-01 stable for 3+ years; ~70 changes in 3.5 years, mostly additive</th>
+            <td><span class="pill pill-accent">Their public docs</span></td>
+          </tr>
+          <tr>
+            <th scope="row">Properties&rarr;Locations, Landlords&rarr;Owners, Tenants&rarr;Residents renames</th>
+            <td><span class="pill pill-accent">Their public docs</span></td>
+          </tr>
+          <tr>
+            <th scope="row">Webhooks and events already exist</th>
+            <td><span class="pill pill-accent">Their public docs</span></td>
+          </tr>
+          <tr>
+            <th scope="row">UPRN exists but is nullable; vulnerability flags, free text, photos, contractor bank details</th>
+            <td><span class="pill pill-accent">Their public docs</span></td>
+          </tr>
+          <tr>
+            <th scope="row">Custom fields and their allowed values are configurable, so schema can change with no release</th>
+            <td><span class="pill pill-accent">Their public docs</span></td>
+          </tr>
+          <tr>
+            <th scope="row">Awaab's Law timescales; Phase 2 from 30 Nov 2026; annual Regulator returns</th>
+            <td><span class="pill pill-neutral">GOV.UK and the Regulator</span></td>
+          </tr>
+          <tr>
+            <th scope="row">Client names, three-year council contracts, marketplace and module revenue</th>
+            <td><span class="pill pill-neutral">Their site, contract notices, G-Cloud</span></td>
+          </tr>
+          <tr>
+            <th scope="row">The buyer shifts from Director of Repairs to Head of Data</th>
+            <td><span class="pill pill-warn">My inference</span></td>
+          </tr>
+          <tr>
+            <th scope="row">The real need is auditable evidence, not a copy of everything</th>
+            <td><span class="pill pill-warn">My inference</span></td>
+          </tr>
+          <tr>
+            <th scope="row">Additive for an API is not additive for a warehouse; failures are silent, not loud</th>
+            <td><span class="pill pill-warn">My inference</span></td>
+          </tr>
+          <tr>
+            <th scope="row">A code gate is not enough because configuration bypasses it</th>
+            <td><span class="pill pill-warn">My inference</span></td>
+          </tr>
+          <tr>
+            <th scope="row">Scope discipline is the cost control mechanism for change management</th>
+            <td><span class="pill pill-warn">My inference</span></td>
+          </tr>
+          <tr>
+            <th scope="row">Exact revenue structure per segment; how often the warehouse refreshes; what it costs to serve</th>
+            <td><span class="pill pill-danger">Unknown &mdash; must ask</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="table-note">
+      The <span class="pill pill-warn">My inference</span> rows are the ones worth arguing about, and they
+      are where I add value. But I must present them as a view I am offering, not as a fact they gave me.
+    </p>
 
     <div class="callout is-warn">
       <span class="callout-label">Reminder to myself</span>
