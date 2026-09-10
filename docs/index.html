@@ -30,14 +30,16 @@
       <a href="#task">The task</a>
       <a href="#does">What Plentific does</a>
       <a href="#who">Who the customers are</a>
+      <a href="#money">How they make money now</a>
       <a href="#owns">Who owns what</a>
       <a href="#why">Why now</a>
       <a href="#data">What data exists</a>
       <a href="#today">What clients have today</a>
+      <a href="#schema">Why shipping fast changes the schema</a>
       <a href="#facts">6 facts that matter</a>
       <a href="#mines">The landmines</a>
       <a href="#argument">The winning argument</a>
-      <a href="#brief">What the brief asks</a>
+      <a href="#asks">What they are asking me for</a>
       <a href="#jargon">Jargon</a>
       <a href="#questions">Open questions</a>
     </nav>
@@ -75,7 +77,8 @@
             <th scope="col">Type</th>
             <th scope="col">What it is</th>
             <th scope="col">Examples</th>
-            <th scope="col">Own warehouse?</th>
+            <th scope="col">How Plentific makes money from them today</th>
+            <th scope="col">Warehouse?</th>
             <th scope="col">Asking for this?</th>
           </tr>
         </thead>
@@ -84,6 +87,11 @@
             <th scope="row">Large housing association</th>
             <td>Big not-for-profit landlord, tens of thousands of homes, has its own data team</td>
             <td>Home Group, L&amp;Q, Peabody, Notting Hill Genesis (66k homes), Southern Housing</td>
+            <td>
+              Platform subscription across the whole property operation, plus extra modules, plus a
+              cut when work is placed with marketplace contractors. Long multi-year contracts.
+              <strong>Highest value accounts.</strong>
+            </td>
             <td><span class="pill pill-good">Yes</span></td>
             <td><strong>Yes &mdash; this is the demand</strong></td>
           </tr>
@@ -91,6 +99,10 @@
             <th scope="row">Council</th>
             <td>Local government, owns council housing</td>
             <td>Southwark, Lambeth, Lewisham, Basildon</td>
+            <td>
+              Fixed-term contracts won through public procurement frameworks (Lewisham is a three-year
+              deal). Subscription plus marketplace. Individual jobs competed inside the platform
+            </td>
             <td><span class="pill pill-warn">Sometimes</span></td>
             <td>Mostly no. Wants compliance evidence, not analytics</td>
           </tr>
@@ -98,18 +110,51 @@
             <th scope="row">ALMO</th>
             <td>A company a council set up to run its housing. Manages homes it does not own</td>
             <td>Northampton Partnership Homes</td>
+            <td>
+              Often a single module rather than the full platform &mdash; NPH bought the repair
+              diagnostic tool to feed their existing housing system. Smaller deals
+            </td>
             <td><span class="pill pill-neutral">Rarely</span></td>
             <td>No. And ownership of the data is genuinely unclear here</td>
           </tr>
         </tbody>
       </table>
     </div>
-
-    <p>
-      Also worth knowing: <strong>the buyer changes.</strong> Plentific sells to repairs and operations
-      directors today. A warehouse feed is bought by a Head of Data, who judges it on schema docs, a
-      reliability promise and a security review. Different person, different sale, more support cost.
+    <p class="table-note">
+      The money column is partly my inference from public contract notices and their marketing, not
+      confirmed fact. Worth checking with them &mdash; but the <em>shape</em> of it is what matters for
+      pricing.
     </p>
+
+    <h2 id="money">What their current money model means for pricing</h2>
+    <p>
+      This is why the revenue column matters. Four consequences fall straight out of it:
+    </p>
+    <ul>
+      <li>
+        <strong>Their revenue scales with work, not with data.</strong> Subscription plus a cut of jobs
+        placed means Plentific earns more when more repairs happen. A data product would be the first thing
+        that scales with <em>data volume and query load</em> instead. That is a brand new axis, and it is why
+        the brief warns that good margin at ten clients can be no margin at a hundred.
+      </li>
+      <li>
+        <strong>"We already pay for our data" is the objection I will definitely get</strong> &mdash; and it
+        is half right. Clients pay a platform fee that includes dashboards and CSV downloads. The brief
+        confirms data access is already "partly monetised", with some tiers and modules including more than
+        others. So I am not pricing something new from zero. I am drawing a line inside something they
+        already buy, which is harder.
+      </li>
+      <li>
+        <strong>Today's data revenue is services revenue.</strong> Bespoke dashboards and one-off extracts
+        get "quoted case by case". That means it is people's time, billed once, with no repeatability and no
+        margin leverage. Turning services revenue into product revenue is the actual commercial goal here.
+      </li>
+      <li>
+        <strong>Councils cannot easily be upsold mid-contract.</strong> They are on fixed-term procured
+        deals bought through frameworks. Whatever I design has to survive being bought that way, or it only
+        ever sells to housing associations.
+      </li>
+    </ul>
 
     <h2 id="owns">Who owns what &mdash; the most important thing on this page</h2>
 
@@ -280,6 +325,194 @@
       mechanism.
     </p>
 
+    <h2 id="schema">Why shipping fast changes the schema &mdash; and why it does not have to hurt clients</h2>
+
+    <p>
+      This was my own biggest question, and working it through changed my whole answer. Two parts:
+      <em>why</em> fast shipping moves the data around, and <em>why that is not actually an argument for
+      slowing down.</em>
+    </p>
+
+    <h3>Part one: why building features moves the data</h3>
+    <p>
+      Data structures are not decoration. They are the shape of the product. Change the product and the
+      shape moves with it. Six concrete ways:
+    </p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">What the team does</th>
+            <th scope="col">What happens to the data</th>
+            <th scope="col">Plentific's real example</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Ships a new feature</th>
+            <td>A new field or table appears to hold the new thing</td>
+            <td><code>uprn</code> added to job locations, Sep 2026</td>
+          </tr>
+          <tr>
+            <th scope="row">Makes a workflow more precise</th>
+            <td>A status list grows. What was one step becomes five</td>
+            <td>Bookings gained <code>arrived</code>, <code>in_progress</code>, <code>attended</code>, <code>not_attended</code>, <code>no_access</code>, <code>cancelled</code> in Feb 2026</td>
+          </tr>
+          <tr>
+            <th scope="row">Renames for clarity</th>
+            <td>The same thing is suddenly called something else</td>
+            <td><code>Properties</code> to <code>Locations</code>. <code>Tenants</code> to <code>Residents</code></td>
+          </tr>
+          <tr>
+            <th scope="row">Splits or merges a concept</th>
+            <td>One column becomes two, or two tables become one with a type field</td>
+            <td><code>Blocks</code> and <code>Estates</code> collapsed into <code>Location Types</code></td>
+          </tr>
+          <tr>
+            <th scope="row">Refactors for scale or speed</th>
+            <td>Tables get reshaped. Nothing user-visible changes, but the underlying structure does</td>
+            <td>Not publicly visible, but the brief says internal structures change every week</td>
+          </tr>
+          <tr>
+            <th scope="row">Nothing &mdash; someone changes a setting</th>
+            <td><strong>A new value appears with no code change at all.</strong> An operations person adds a repair category or a tag</td>
+            <td>Categories, services, tags and location types are all client-configurable</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout is-warn">
+      <span class="callout-label">The one I nearly missed</span>
+      <p>
+        That last row is the sneaky one. <strong>The data can change shape without a single engineer
+        touching anything.</strong> Someone in operations adds a new repair category on a Tuesday
+        afternoon, and a value the client's warehouse has never seen starts arriving.
+      </p>
+      <p>
+        This matters because it means change control cannot only be an engineering process. If I only put a
+        gate in front of code, configuration walks straight past it.
+      </p>
+    </div>
+
+    <h3>Why it hurts the client more than it hurts Plentific</h3>
+    <p>
+      When Plentific changes an internal table, they change the code that reads it in the same breath. One
+      team, one deployment, done.
+    </p>
+    <p>
+      A client is a different organisation with its own release cycle, its own backlog and its own
+      priorities. They cannot be migrated. As the brief puts it: today that churn is invisible because
+      Plentific controls everything the client sees &mdash; <strong>the moment a client runs pipelines
+      against the data, Plentific's internal change becomes the client's outage.</strong>
+    </p>
+
+    <h3>Part two: and here is why "we ship fast" is not actually the problem</h3>
+
+    <p>
+      You were right to push on this. Plenty of companies ship continuously <em>and</em> serve customers
+      stable data. Nobody has to slow down. The flaw is in the framing, not the pace.
+    </p>
+    <p>
+      The framing assumes the client reads the internal tables. They should never be allowed to.
+    </p>
+
+    <div class="analogy">
+      <span class="analogy-label">The kitchen and the menu</span>
+      <p>
+        A restaurant kitchen changes constantly. New suppliers, new equipment, stations rearranged, recipes
+        tweaked, staff reorganised. It happens weekly and nobody asks the kitchen to stop improving.
+      </p>
+      <p>
+        <strong>The menu stays the same.</strong> Customers order from the menu, never from the kitchen.
+        When the menu does change, it changes on purpose, with notice, and the old dishes stay available for
+        a while.
+      </p>
+      <p>
+        Right now clients are effectively being handed a stool in the kitchen. The answer is not a slower
+        kitchen. It is a menu.
+      </p>
+    </div>
+
+    <p>
+      In real terms that means a <strong>published, versioned layer that sits between the internal tables
+      and the client.</strong> Engineering renames and reshapes internal tables as freely as it likes. That
+      layer maps the new internal shape back to the stable external names. The client sees nothing change.
+      When the external shape genuinely must change, you publish a new dated version and support both for a
+      stated period.
+    </p>
+
+    <h3>Other companies solve it exactly this way &mdash; including Plentific</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Company</th>
+            <th scope="col">How they hold a stable promise while shipping fast</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Stripe</th>
+            <td>Every account is pinned to the API version it first integrated against. You upgrade when you choose to. Stripe ships constantly and old integrations keep working for years</td>
+          </tr>
+          <tr>
+            <th scope="row">Shopify</th>
+            <td>Dated versions released on a fixed quarterly rhythm, each supported for about a year. Developers always know how long they have</td>
+          </tr>
+          <tr>
+            <th scope="row">Salesforce</th>
+            <td>Many numbered API versions kept alive simultaneously, retired slowly with long published notice</td>
+          </tr>
+          <tr>
+            <th scope="row"><strong>Plentific</strong></th>
+            <td><strong>Already does this.</strong> Dated versions since 2020-01-01, which is still documented six years later. The current one, 2023-02-01, has held for over three years while the product shipped weekly</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout is-good">
+      <span class="callout-label">So my answer to the brief's hardest question</span>
+      <p>
+        I am not going to ask anyone to slow down, and I do not need to.
+        <strong>Plentific has already proved they can hold a stable external contract for three years while
+        shipping continuously.</strong> They even renamed the core entity of the entire business and no
+        client broke, because the version boundary absorbed it.
+      </p>
+      <p>
+        The work is not inventing a capability. It is <strong>extending a discipline they already have from
+        the API channel to the data channel</strong> &mdash; which is a far cheaper and far more fundable
+        argument.
+      </p>
+    </div>
+
+    <h3>The honest cost of this, and the lever that controls it</h3>
+    <p>
+      A mapping layer is not free. Someone has to own it, and every change touching an exposed field costs a
+      little more than it used to. That is a real tax and I should not pretend otherwise. The brief asks
+      exactly this: where does the boundary live, who owns it, and what does it cost to maintain?
+    </p>
+
+    <div class="callout is-danger">
+      <span class="callout-label">The insight I want to build the solution on</span>
+      <p>
+        <strong>The cost of holding a promise is set by how much you promise.</strong>
+      </p>
+      <p>
+        Every field I expose is a field somebody must protect forever. So a narrow, deliberately chosen set
+        of tables is cheap to hold stable. "Export everything" is expensive forever, and gets more expensive
+        with every feature they ship.
+      </p>
+      <p>
+        Which means <strong>scope discipline is not a product nicety, it is the cost control mechanism for
+        change management.</strong> Saying no to fields is how this stays affordable at a hundred clients.
+        That connects the technical answer, the commercial answer and the product answer into one argument.
+      </p>
+    </div>
+
     <h2 id="facts">The 6 facts that matter most for building a solution</h2>
 
     <ol class="factlist">
@@ -399,56 +632,142 @@
       </p>
     </div>
 
-    <h2 id="brief">What the brief actually asks</h2>
+    <h2 id="asks">What they are asking me for</h2>
     <p>
       My checklist. If something I prepare does not answer one of these, it comes out.
     </p>
+
+    <h3>Note: there are two different sets of four</h3>
     <p>
-      <strong>Core question: what should Plentific build, in what order, and what should we sell?</strong>
-      They explicitly want decisions and deferrals, not a reference architecture.
+      Easy to muddle these, so worth separating.
     </p>
+
+    <div class="split">
+      <div class="card">
+        <p class="card-title">Four registers &mdash; <em>how</em> to think</p>
+        <p>
+          <strong>Product, engineering, commercial, governance.</strong>
+        </p>
+        <p>
+          The brief says a data product "sits across" all four and asks me to reason in all of them
+          "rather than retreating into the one you find most comfortable". This is about not being
+          one-dimensional.
+        </p>
+      </div>
+      <div class="card">
+        <p class="card-title">Four areas &mdash; <em>what</em> to cover</p>
+        <p>
+          <strong>1.</strong> Cost and commercial modelling<br>
+          <strong>2.</strong> Technical considerations<br>
+          <strong>3.</strong> Version and change control at their pace of shipping<br>
+          <strong>4.</strong> Governance, security and data protection
+        </p>
+        <p>
+          Cover all four, unequal depth allowed, and <strong>tell them how I weighted them.</strong>
+        </p>
+      </div>
+    </div>
+
+    <h3>Which one I go deeper on, and why</h3>
+    <p>
+      <strong>Version and change control.</strong> Five reasons, and the last is the one I would actually say:
+    </p>
+    <ol>
+      <li>They told me directly it is the one they "will push hardest on".</li>
+      <li>The brief calls it "the part that quietly decides whether the product survives".</li>
+      <li>It is the <strong>least reversible</strong> decision on the list. Once clients build pipelines on a schema and their security team signs it off, changing it is enormously expensive. The transport mechanism, by contrast, can be swapped later.</li>
+      <li>It is where I have the <strong>strongest evidence</strong> &mdash; their own history proves the approach works.</li>
+      <li>
+        <strong>Going deep here is the best way to demonstrate all four registers at once.</strong> Change
+        control is simultaneously a product decision (what goes in the contract), an engineering one (where
+        the boundary lives and who owns it), a commercial one (what we commit to, what we refuse, and what we
+        charge for stability), and a governance one (auditability, restatements, what a client reported last
+        quarter). One deep section, all four registers &mdash; rather than four shallow ones.
+      </li>
+    </ol>
+
+    <h3>Everything they asked for, as a checklist</h3>
 
     <div class="table-wrap">
       <table>
         <thead>
           <tr>
-            <th scope="col">Area</th>
-            <th scope="col">The heart of it</th>
-            <th scope="col">My weight</th>
+            <th scope="col">#</th>
+            <th scope="col">What they asked</th>
+            <th scope="col">What it really demands from me</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <th scope="row">Change control</th>
-            <td>How do clients depend on something stable while engineering keeps changing things? What counts as breaking? What do we commit to, and refuse to commit to?</td>
-            <td><span class="pill pill-danger">Heaviest</span> They said they will push hardest here, and I have the best evidence</td>
+            <th scope="row">1</th>
+            <td>Reason across product, engineering, commercial and governance. Go deeper on one and say why</td>
+            <td>Explicitly state my weighting on a slide. Deeper on change control, for the five reasons above</td>
           </tr>
           <tr>
-            <th scope="row">Cost and commercial</th>
-            <td>What does it cost to serve, and what do we charge? Module, tier, usage-based? Margin must survive 100 clients, not just 10</td>
-            <td><span class="pill pill-warn">Heavy</span></td>
+            <th scope="row">2</th>
+            <td>Clients &mdash; mainly large housing associations &mdash; want to join our repairs and compliance data to their own. They ask for batch export: raw or lightly modelled, dependable schedule, a schema they can build pipelines against and trust not to break. Formats vary</td>
+            <td>
+              Take a position on <strong>each</strong> of those words. How raw is "lightly modelled"?
+              What does "dependable" mean in numbers? Which formats do I support and which do I refuse?
+              And name the <strong>decisions I take versus the ones I defer</strong> &mdash; they ask for
+              that specifically
+            </td>
           </tr>
           <tr>
-            <th scope="row">Governance</th>
-            <td>Whose data is it? Tenancy isolation, personal data, what we withhold, and where responsibility passes to the client</td>
-            <td><span class="pill pill-warn">Heavy</span> Here governance sets the product boundary, not just compliance</td>
+            <th scope="row">3</th>
+            <td>The warehouse is not multi-tenant and is not client-ready</td>
+            <td>This is a hard blocker, not a caveat. Nothing ships to a client until tenant isolation would survive an external security review. It sets the first item on the roadmap for me</td>
           </tr>
           <tr>
-            <th scope="row">Technical</th>
-            <td>How does the data get there? Files, warehouse sharing, managed pipeline. Clients on different tech, or none. Build or buy?</td>
-            <td><span class="pill pill-neutral">Lightest</span> Most reversible decision, and the brief deprioritises it</td>
+            <th scope="row">4</th>
+            <td>There is internal platform work and there is the client-facing product. Which one, or both, in what order?</td>
+            <td>
+              An opinionated sequence with a reason. And critically: <strong>how do I get invisible internal
+              work funded</strong> when on its own it delivers nothing a client can see? My best angle is
+              that it is not new spend &mdash; it replaces manual extract work already being done at
+              unmeasured cost, and it unblocks committed revenue
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">5</th>
+            <td>Pricing, given we carry the cost</td>
+            <td>
+              Unit economics first: storage, compute, egress, and the people who keep it running. Then a
+              model. Who pays when a client triples query volume or wants hourly instead of daily? And it
+              must hold at 100 clients, not just 10
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">6</th>
+            <td><strong>The main concern: can the product keep moving while the export keeps its promises?</strong></td>
+            <td>
+              This is the whole case study in one sentence. My answer: yes, and they have already proved it
+              once &mdash; via a versioned contract layer, a stricter definition of "breaking", a gate that
+              catches configuration as well as code, and a deliberately narrow scope so the promise stays
+              cheap to keep
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">7</th>
+            <td>What is the product, who is it for, what does the first shippable version look like, what comes after, and what is explicitly out of scope? They want a clear opinionated view they can argue with</td>
+            <td>
+              Be <strong>opinionated and specific</strong>. Name the first version. Name what I am
+              deliberately <em>not</em> building yet and defend it. Vagueness reads as not having decided,
+              and they have said twice they want to argue with a real position
+            </td>
           </tr>
         </tbody>
       </table>
     </div>
 
-    <p>Plus three things to cover throughout:</p>
-    <ul>
-      <li><strong>The product and the sequence</strong> &mdash; first shippable version, what comes next, what is out of scope, and how the invisible internal work gets funded.</li>
-      <li><strong>Making it real</strong> &mdash; validating demand beyond the loudest client, pricing, how success is measured, what goes to engineering first.</li>
-      <li><strong>Where I push back</strong> &mdash; and how I would say it to a client who already wrote "nightly full export" into their requirements.</li>
-    </ul>
-    <p>And always: <strong>state my assumptions, name the trade-offs.</strong></p>
+    <div class="callout">
+      <span class="callout-label">Two standing instructions I must not forget</span>
+      <p>
+        <strong>State my assumptions</strong> and <strong>name the trade-offs.</strong> The brief says I will
+        not have every fact and that this is deliberate. So being clear about what I would want to validate
+        before committing is scored as a strength, not an admission.
+      </p>
+    </div>
 
     <h2 id="jargon">Jargon, one line each</h2>
 
@@ -478,6 +797,11 @@
             <td>When it breaks they cannot tell whose fault it is, and they call us either way</td>
           </tr>
           <tr>
+            <th scope="row">Contract layer</th>
+            <td>A published, stable set of tables sitting between our messy internal tables and the client. The menu, not the kitchen</td>
+            <td>This is my core answer. It is how engineering stays fast without breaking clients</td>
+          </tr>
+          <tr>
             <th scope="row">Change capture</th>
             <td>Being told what changed, instead of recounting everything. Like a till telling you each sale, versus recounting the whole shop nightly</td>
             <td>Plentific already has this via webhooks. It is how I offer something better than a nightly export</td>
@@ -485,7 +809,7 @@
           <tr>
             <th scope="row">Reference data</th>
             <td>The lookup lists that turn ID codes into words</td>
-            <td>Without it the export is barcodes. And it changes constantly</td>
+            <td>Without it the export is barcodes. And it changes constantly, often by configuration</td>
           </tr>
           <tr>
             <th scope="row">Restatement</th>
@@ -496,6 +820,11 @@
             <th scope="row">Tenancy isolation</th>
             <td>Making certain one client can never see another's data</td>
             <td>First question in any security review. Currently untested</td>
+          </tr>
+          <tr>
+            <th scope="row">Egress</th>
+            <td>What the cloud provider charges to move data <em>out</em>. Storing is cheap, sending is not</td>
+            <td>Photos make this the cost that scales worst with client count</td>
           </tr>
           <tr>
             <th scope="row">Bearer token</th>
@@ -512,8 +841,9 @@
       <li><strong>How many clients have actually asked, in writing?</strong> Versus one persuasive client. The brief warns me about "the loudest client".</li>
       <li><strong>How many manual extracts have we already done, and how long did they take?</strong> This is my cost baseline.</li>
       <li><strong>What is the warehouse built on?</strong> Build-versus-buy depends entirely on the answer.</li>
+      <li><strong>What did the Properties-to-Locations rename actually cost</strong> in support and migration? Best available estimate for what maintaining a boundary costs.</li>
+      <li><strong>How is the platform fee actually structured</strong> &mdash; per property, per user, tiered? I cannot price a data product sensibly without knowing what it sits next to.</li>
       <li><strong>How complete is UPRN in reality?</strong></li>
-      <li><strong>What did the Properties-to-Locations rename actually cost</strong> in support and migration? Best estimate available for what maintaining a boundary costs.</li>
       <li><strong>For ALMO clients, who owns the data</strong> &mdash; the ALMO or the council?</li>
       <li><strong>What have we already promised in contracts?</strong> Data is "partly monetised" today, so some clients may believe they have already bought this.</li>
     </ul>
