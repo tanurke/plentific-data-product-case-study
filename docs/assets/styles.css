@@ -278,6 +278,76 @@ hr {
   margin: var(--s-7) 0;
 }
 
+/* ---------- Inline contents ---------- */
+
+.toc {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  margin: 0 0 var(--s-7);
+  padding: var(--s-4);
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-radius: var(--radius-lg);
+}
+
+.toc a {
+  font-size: 13.5px;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--c-ink-soft);
+  background: var(--c-surface-alt);
+  border: 1px solid var(--c-line);
+  border-radius: 999px;
+  padding: 3px 11px;
+}
+
+.toc a:hover {
+  color: var(--c-accent-ink);
+  background: var(--c-accent-soft);
+  border-color: #c2d3f0;
+}
+
+/* ---------- Numbered key facts ---------- */
+
+.factlist {
+  list-style: none;
+  counter-reset: fact;
+  padding: 0;
+  margin: 0 0 var(--s-5);
+  max-width: 82ch;
+  display: grid;
+  gap: var(--s-3);
+}
+
+.factlist li {
+  counter-increment: fact;
+  position: relative;
+  margin: 0;
+  padding: var(--s-4) var(--s-5) var(--s-4) 58px;
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-radius: var(--radius-lg);
+}
+
+.factlist li::before {
+  content: counter(fact);
+  position: absolute;
+  left: var(--s-4);
+  top: var(--s-4);
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--c-accent);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-variant-numeric: tabular-nums;
+}
+
 /* ---------- Cards and callouts ---------- */
 
 .card {
