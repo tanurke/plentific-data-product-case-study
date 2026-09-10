@@ -308,6 +308,122 @@ hr {
   border-color: #c2d3f0;
 }
 
+/* ---------- Workflow flow ---------- */
+
+.flow {
+  display: grid;
+  gap: 0;
+  margin: 0 0 var(--s-5);
+  position: relative;
+}
+
+.flow::before {
+  content: "";
+  position: absolute;
+  left: 15px;
+  top: 36px;
+  bottom: 36px;
+  width: 2px;
+  background: var(--c-line-strong);
+}
+
+.flow-step {
+  position: relative;
+  padding: var(--s-3) var(--s-4) var(--s-3) 50px;
+  border-bottom: 1px solid var(--c-line);
+}
+
+.flow-step:last-child {
+  border-bottom: 0;
+}
+
+.flow-num {
+  position: absolute;
+  left: 0;
+  top: var(--s-3);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--c-accent);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-variant-numeric: tabular-nums;
+  z-index: 1;
+}
+
+.flow-step.is-parallel .flow-num {
+  background: var(--c-ink-soft);
+}
+
+.flow-act {
+  margin: 0 0 var(--s-1);
+  font-size: 15.5px;
+  line-height: 1.45;
+}
+
+.flow-who {
+  font-weight: 660;
+  color: var(--c-ink);
+}
+
+.flow-data {
+  margin: 0 0 var(--s-1);
+  font-size: 13.5px;
+  color: var(--c-ink-soft);
+  padding-left: 12px;
+  border-left: 2px solid var(--c-good);
+}
+
+.flow-data strong {
+  color: var(--c-good);
+}
+
+.flow-ext {
+  margin: 0;
+  font-size: 13.5px;
+  color: var(--c-ink-faint);
+  padding-left: 12px;
+  border-left: 2px dashed var(--c-line-strong);
+  font-style: italic;
+}
+
+.flow-out {
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-radius: var(--radius-lg);
+  padding: var(--s-4) var(--s-5);
+  margin: 0 0 var(--s-5);
+}
+
+.flow-out ul {
+  margin: 0 0 var(--s-4);
+  padding-left: var(--s-5);
+}
+
+.flow-out li {
+  margin-bottom: var(--s-1);
+}
+
+.flow-out-title {
+  font-size: 14px;
+  font-weight: 660;
+  color: var(--c-ink-soft);
+  margin: 0 0 var(--s-2);
+}
+
+.flow-ask {
+  margin: var(--s-4) 0 0;
+  font-size: 16px;
+  text-align: center;
+  padding: var(--s-3);
+  background: var(--c-accent-soft);
+  border-radius: var(--radius);
+}
+
 /* ---------- Numbered key facts ---------- */
 
 .factlist {

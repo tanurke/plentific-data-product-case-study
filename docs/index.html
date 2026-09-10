@@ -56,7 +56,7 @@
     </p>
     <p>
       <strong>So there are two products:</strong> the internal platform work that makes a client-facing data
-      product possible, and the client-facing product itself. I have to sequence them and say what to sell.
+      product possible, and the client-facing product itself.
     </p>
 
     <h2 id="does">What Plentific does</h2>
@@ -64,9 +64,98 @@
       When something breaks in a rented home, Plentific runs everything that happens next: logs the job,
       finds a contractor (the landlord's own team or a local firm from its marketplace), books the
       appointment, tracks the visit, collects the photos and paperwork that prove it was done, and handles
-      the invoice. It does the same for legally required safety checks &mdash; gas, electrical, fire, damp
+      the       invoice. It does the same for legally required safety checks &mdash; gas, electrical, fire, damp
       and mould.
     </p>
+
+    <h3>The workflow, and the data it leaves behind</h3>
+    <p>
+      One repair, start to finish. Who does what, who outside is involved, and what data gets created at
+      each step. <strong>Everything in the "creates" lines is what a client wants in their warehouse.</strong>
+    </p>
+
+    <div class="flow">
+
+      <div class="flow-step">
+        <span class="flow-num">1</span>
+        <p class="flow-act"><span class="flow-who">Resident</span> reports a broken boiler through the app or portal &mdash; or rings the contact centre, and an agent logs it</p>
+        <p class="flow-data">creates &rarr; work order &middot; fault &middot; free-text description &middot; photos &middot; linked to the home</p>
+      </div>
+
+      <div class="flow-step">
+        <span class="flow-num">2</span>
+        <p class="flow-act"><span class="flow-who">Plentific</span> diagnoses it, sorts it into a category and sets the priority</p>
+        <p class="flow-data">creates &rarr; category &middot; priority &middot; emergency flag &middot; <strong>the Awaab's Law clock starts here</strong></p>
+      </div>
+
+      <div class="flow-step">
+        <span class="flow-num">3</span>
+        <p class="flow-act"><span class="flow-who">Plentific</span> sends the job to the landlord's own in-house team, or out to marketplace contractors</p>
+        <p class="flow-data">creates &rarr; job leads &middot; appointed contractor</p>
+        <p class="flow-ext">outside &rarr; local SME firms, large contractors</p>
+      </div>
+
+      <div class="flow-step">
+        <span class="flow-num">4</span>
+        <p class="flow-act"><span class="flow-who">Contractor</span> accepts the job, or quotes for it</p>
+        <p class="flow-data">creates &rarr; quote &middot; cost sheet &middot; rates</p>
+        <p class="flow-ext">outside &rarr; the contractor's own scheduling systems</p>
+      </div>
+
+      <div class="flow-step">
+        <span class="flow-num">5</span>
+        <p class="flow-act"><span class="flow-who">Resident and contractor</span> agree an appointment slot</p>
+        <p class="flow-data">creates &rarr; booking &middot; scheduled date and time</p>
+      </div>
+
+      <div class="flow-step">
+        <span class="flow-num">6</span>
+        <p class="flow-act"><span class="flow-who">Engineer</span> attends, working in the mobile app &mdash; which also works with no signal</p>
+        <p class="flow-data">creates &rarr; status changes (arrived &rarr; in progress &rarr; attended, or no access) &middot; before, during and after photos &middot; access notes</p>
+      </div>
+
+      <div class="flow-step">
+        <span class="flow-num">7</span>
+        <p class="flow-act"><span class="flow-who">Engineer</span> completes the work and signs it off</p>
+        <p class="flow-data">creates &rarr; completion report &middot; signature &middot; <strong>the full status history with timestamps</strong></p>
+      </div>
+
+      <div class="flow-step">
+        <span class="flow-num">8</span>
+        <p class="flow-act"><span class="flow-who">Contractor</span> invoices. <span class="flow-who">Landlord staff</span> approve and pay it</p>
+        <p class="flow-data">creates &rarr; invoice &middot; finance code &middot; payment</p>
+        <p class="flow-ext">outside &rarr; payment provider, the landlord's finance system</p>
+      </div>
+
+      <div class="flow-step is-parallel">
+        <span class="flow-num">+</span>
+        <p class="flow-act"><span class="flow-who">Inspector</span> &mdash; running alongside all of the above &mdash; carries out the legally required gas, electrical, fire and damp checks</p>
+        <p class="flow-data">creates &rarr; inspection &middot; every answer given &middot; observations &middot; certificate &middot; remedial work orders</p>
+        <p class="flow-ext">outside &rarr; certificate validation partner</p>
+      </div>
+
+    </div>
+
+    <div class="flow-out">
+      <p class="flow-out-title">All of that data has to come back out &mdash; today it can only leave three ways</p>
+      <ul>
+        <li>Dashboards inside the platform &mdash; fixed, cannot be changed</li>
+        <li>CSV download &mdash; fixed columns, pulled by hand</li>
+        <li>API into their housing system or CRM &mdash; built for workflow, not bulk</li>
+      </ul>
+
+      <p class="flow-out-title">But it has to end up in</p>
+      <ul>
+        <li><strong>Returns to the Regulator</strong> &mdash; Tenant Satisfaction Measures, Statistical Data Return, on fixed annual deadlines</li>
+        <li><strong>Awaab's Law evidence</strong> &mdash; proving the 24 hour, 10 day and 3 day clocks were met</li>
+        <li><strong>Board and committee reports</strong></li>
+        <li><strong>Joined to their own data</strong> &mdash; tenancy, rent, vulnerability, finance, CRM</li>
+      </ul>
+
+      <p class="flow-ask">
+        &there4; The ask: <strong>"put it in our warehouse so we can do that ourselves."</strong>
+      </p>
+    </div>
 
     <h2 id="who">Who the customers are</h2>
     <p>UK social landlords. Over 100 of them. Three types &mdash; but only the first type is asking for this.</p>
@@ -123,8 +212,7 @@
     </div>
     <p class="table-note">
       The money column is partly my inference from public contract notices and their marketing, not
-      confirmed fact. Worth checking with them &mdash; but the <em>shape</em> of it is what matters for
-      pricing.
+      confirmed fact.
     </p>
 
     <h2 id="money">What their current money model means for pricing</h2>
