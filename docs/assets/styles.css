@@ -450,6 +450,10 @@ th code {
   white-space: normal;
 }
 
+.row-highlight {
+  background: var(--c-warn-soft);
+}
+
 .table-note {
   font-size: 13.5px;
   color: var(--c-ink-faint);
