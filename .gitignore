@@ -1,0 +1,16 @@
+# Never commit the case study brief or any material Plentific shared privately
+*.pdf
+*.docx
+*.pptx
+/private/
+
+# OS and editor noise
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# Scratch
+/tmp/
+*.log

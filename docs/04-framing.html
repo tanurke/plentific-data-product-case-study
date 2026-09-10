@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Step 4 &mdash; How I frame the problem | Plentific case study</title>
+<meta name="description" content="The brief is the specification; the technical research is only evidence. How I weight the four areas and budget the time.">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <p class="masthead-title">Plentific &middot; Data Product Manager case study</p>
+    <p class="masthead-meta">Step 4 of 8 &mdash; Framing</p>
+  </div>
+</header>
+
+<div class="shell">
+  <nav class="sidenav" aria-label="Case study steps">
+    <h2>Working notes</h2>
+    <ol>
+      <li><a href="index.html"><span class="step-num">&mdash;</span>Overview</a></li>
+      <li><a href="01-customers.html"><span class="step-num">1</span>Who the customers are</a></li>
+      <li><a href="02-data.html"><span class="step-num">2</span>What data exists</a></li>
+      <li><a href="03-plain-english.html"><span class="step-num">3</span>The jargon, in plain English</a></li>
+      <li><a href="04-framing.html" aria-current="page"><span class="step-num">4</span>How I frame the problem</a></li>
+    </ol>
+    <h2>On this page</h2>
+    <ol>
+      <li><a href="#correction">The discipline check</a></li>
+      <li><a href="#asks">What the brief actually asks</a></li>
+      <li><a href="#weighting">How I weight the four areas</a></li>
+      <li><a href="#mapping">Evidence mapped to their questions</a></li>
+      <li><a href="#time">The time budget</a></li>
+      <li><a href="#out">What I deliberately leave out</a></li>
+      <li><a href="#next">What Step 5 has to produce</a></li>
+    </ol>
+  </nav>
+
+  <main class="content" id="main">
+    <p class="eyebrow">Step 4 &middot; Framing</p>
+    <h1>How I frame the problem</h1>
+    <p class="lede">
+      A course correction I made partway through, and the rule that came out of it: the brief is the
+      specification, and everything I found in the developer documentation is only evidence.
+    </p>
+
+    <h2 id="correction">The discipline check</h2>
+
+    <div class="callout is-warn">
+      <span class="callout-label">The trap I nearly walked into</span>
+      <p>
+        I spent a productive few hours in Plentific's API documentation and found genuinely useful things
+        &mdash; the version history, the entity renames, the changelog cadence. It was easy to start
+        building the presentation <em>around</em> that research.
+      </p>
+      <p>
+        That would have been a mistake. The panel is not assessing whether I can read an OpenAPI
+        specification. They asked a product question:
+        <strong>what should Plentific build, in what order, and what should we sell?</strong>
+      </p>
+      <p>
+        An impressive API analysis that does not answer that question is a failed presentation.
+      </p>
+    </div>
+
+    <p>
+      So the rule for the rest of this work:
+    </p>
+
+    <div class="split">
+      <div class="card">
+        <p class="card-title">The brief drives the structure</p>
+        <p>
+          Every section of my presentation exists because the brief asks for it. If I cannot point at the
+          sentence in the brief that a slide answers, the slide comes out.
+        </p>
+      </div>
+      <div class="card">
+        <p class="card-title">The research earns credibility</p>
+        <p>
+          The technical findings appear as <em>supporting evidence inside</em> those sections &mdash; the
+          specific example instead of the generic claim. Never as the spine.
+        </p>
+      </div>
+    </div>
+
+    <p>
+      The practical difference is large. Compare two ways of answering the same question:
+    </p>
+
+    <div class="table-wrap">
+      <table>
+        <caption>Same knowledge, two very different answers.</caption>
+        <thead>
+          <tr>
+            <th scope="col"></th>
+            <th scope="col">Research-led (wrong)</th>
+            <th scope="col">Brief-led, research-supported (right)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Opening</th>
+            <td>"Let me walk you through what I found in your API documentation."</td>
+            <td>"Here is what I would build first, and why. And here is the thing in your own history that makes me confident it will hold."</td>
+          </tr>
+          <tr>
+            <th scope="row">On change control</th>
+            <td>"You have five API versions and a changelog with roughly 70 entries."</td>
+            <td>"You have already held one data contract stable for three years while shipping weekly, including through renaming your core entity. I would extend that discipline rather than invent a new one."</td>
+          </tr>
+          <tr>
+            <th scope="row">What it signals</th>
+            <td>Thorough, but has not formed a point of view</td>
+            <td>Has a point of view, and it is grounded in their reality rather than a framework</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      The second version uses exactly the same research. It just refuses to make the research the subject.
+    </p>
+
+    <h2 id="asks">What the brief actually asks</h2>
+
+    <p>
+      Reduced to its demands, so I can check my answer against it:
+    </p>
+
+    <div class="card">
+      <p class="card-title">The core question</p>
+      <p>
+        <strong>What should Plentific build, in what order, and what should we sell?</strong>
+      </p>
+      <p class="muted">
+        With the explicit instruction that they are "less interested in a reference architecture diagram
+        than in the decisions you would take and the ones you would defer, and why".
+      </p>
+    </div>
+
+    <p>Four areas to work through, with a stated preference for depth over even coverage, and a request that I explain how I weighted them:</p>
+    <ol>
+      <li><strong>Cost and commercial modelling</strong> &mdash; unit economics, then a view on the model. Explicitly: margin that works at ten clients and fails at a hundred is not a product.</li>
+      <li><strong>Technical considerations</strong> &mdash; mechanism and trade-offs, clients on different warehouse technologies and clients with none, what we model versus hand over raw, backfill, failure and recovery, build versus buy.</li>
+      <li><strong>Version and change control at their pace of shipping</strong> &mdash; flagged as "the part that quietly decides whether the product survives" and the one they "will push hardest on".</li>
+      <li><strong>Governance, security and data protection</strong> &mdash; tenancy isolation, access control, personal data, minimisation, retention, auditability, and where responsibility transfers to the client.</li>
+    </ol>
+
+    <p>Then three things to cover across all of it:</p>
+    <ul>
+      <li><strong>The product and the sequence</strong> &mdash; what is the first shippable version, what comes next, what is explicitly out of scope, and how the internal platform work gets funded when it delivers no client-visible value on its own.</li>
+      <li><strong>Making it real</strong> &mdash; validating demand beyond the loudest client, pricing and packaging, how success is measured for both sides, what goes to engineering first, and how a rollout phases from first client to general availability.</li>
+      <li><strong>Where I would push back</strong> &mdash; if part of the batch export request is the wrong answer, say so, and say how I would have that conversation with a client who has already written "nightly full export" into their requirements.</li>
+    </ul>
+
+    <p>And two standing instructions: <strong>state assumptions</strong>, and <strong>name trade-offs</strong>.</p>
+
+    <h2 id="weighting">How I weight the four areas</h2>
+
+    <p>
+      The brief asks me to declare this, so I do it on a slide rather than leaving it implicit.
+    </p>
+
+    <div class="table-wrap">
+      <table>
+        <caption>My weighting, and the reasoning behind it.</caption>
+        <thead>
+          <tr>
+            <th scope="col">Area</th>
+            <th scope="col">Weight</th>
+            <th scope="col">Why I weighted it there</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Version and change control</th>
+            <td><span class="pill pill-danger">Heaviest</span></td>
+            <td>They told me they will push hardest here, and they are right to. It is also where I have the strongest evidence, because they have already done this once successfully. Leading with my strongest material on their stated priority is the obvious choice.</td>
+          </tr>
+          <tr>
+            <th scope="row">Cost and commercial</th>
+            <td><span class="pill pill-warn">Heavy</span></td>
+            <td>It is the area most often skipped by product candidates, and the brief is pointed about it. It is also the only area where a wrong answer kills the product regardless of how good the engineering is.</td>
+          </tr>
+          <tr>
+            <th scope="row">Governance and security</th>
+            <td><span class="pill pill-warn">Heavy</span></td>
+            <td>Weighted up from where I first placed it, for one reason: in this sector governance is not a compliance tax, it is the <em>product boundary</em>. It decides which rows and columns exist at all, so it has to be settled before scope can be.</td>
+          </tr>
+          <tr>
+            <th scope="row">Technical</th>
+            <td><span class="pill pill-neutral">Lightest</span></td>
+            <td>Deliberate, and I will say so. The brief explicitly deprioritises reference architecture. The mechanism choice is also the most reversible decision on the list &mdash; and the least reversible ones deserve the airtime.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout">
+      <span class="callout-label">The line that carries the weighting</span>
+      <p>
+        "I weighted the mechanism lightest because it is the decision we can change later. Change control
+        and governance are the ones we cannot &mdash; once a client has built on our schema and their
+        security team has signed off, both become very expensive to revisit."
+      </p>
+    </div>
+
+    <h2 id="mapping">Evidence mapped to their questions</h2>
+
+    <p>
+      This is the table that keeps me honest. Every finding from Steps 1 to 3 has to earn its place by
+      answering something the brief actually asked.
+    </p>
+
+    <div class="table-wrap">
+      <table>
+        <caption>Each finding, the brief question it serves, and how much presentation time it gets.</caption>
+        <thead>
+          <tr>
+            <th scope="col">What I found</th>
+            <th scope="col">Which brief question it answers</th>
+            <th scope="col">Airtime</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Contract held stable at <code>2023-02-01</code> for three years, and ~70 mostly additive published changes</td>
+            <td>"How do you decouple what clients depend on from what engineering is free to change?"</td>
+            <td><span class="pill pill-danger">Centrepiece</span></td>
+          </tr>
+          <tr>
+            <td><code>Properties</code> to <code>Locations</code>, <code>Tenants</code> to <code>Residents</code></td>
+            <td>"What counts as a breaking change, and how do you communicate and deprecate it?"</td>
+            <td><span class="pill pill-danger">Centrepiece</span></td>
+          </tr>
+          <tr>
+            <td>New booking statuses being additive for an API but meaning-changing for a warehouse</td>
+            <td>"What counts as a breaking change?" and "restatements or late-arriving corrections"</td>
+            <td><span class="pill pill-warn">Full point</span></td>
+          </tr>
+          <tr>
+            <td>Vulnerability flags, free text, photographs, contractor bank details</td>
+            <td>"What would you withhold or mask?" and "which parts become the client's responsibility?"</td>
+            <td><span class="pill pill-warn">Full point</span></td>
+          </tr>
+          <tr>
+            <td>Awaab's Law Phase 2 from 30 November 2026, and the annual Regulator returns</td>
+            <td>"Who is asking, and what do they actually want?" and "how would you validate demand?"</td>
+            <td><span class="pill pill-warn">Full point</span></td>
+          </tr>
+          <tr>
+            <td>Webhooks and events already existing</td>
+            <td>"Where you'd push back" and "what would you put in front of engineering first?"</td>
+            <td><span class="pill pill-accent">Supporting</span></td>
+          </tr>
+          <tr>
+            <td>Bulk import exists, bulk export is manual bespoke work</td>
+            <td>"What does it cost us to serve?" &mdash; the current manual cost is the cost baseline</td>
+            <td><span class="pill pill-accent">Supporting</span></td>
+          </tr>
+          <tr>
+            <td>A new buyer &mdash; Head of Data rather than Director of Repairs</td>
+            <td>"How does this land with clients?" and "how would you price and package?"</td>
+            <td><span class="pill pill-accent">Supporting</span></td>
+          </tr>
+          <tr>
+            <td>UPRN present but nullable</td>
+            <td>"What do you commit to contractually, and what do you refuse to commit to?"</td>
+            <td><span class="pill pill-accent">Supporting</span></td>
+          </tr>
+          <tr>
+            <td>Reference data being required for the export to mean anything</td>
+            <td>"What we model and expose versus what we hand over raw"</td>
+            <td><span class="pill pill-accent">Supporting</span></td>
+          </tr>
+          <tr>
+            <td>Counts of endpoints, operations and groups per version</td>
+            <td>Nothing. It is background that shaped my thinking</td>
+            <td><span class="pill pill-neutral">Appendix only</span></td>
+          </tr>
+          <tr>
+            <td>Token expiry and scope details</td>
+            <td>Access control, but only if asked directly</td>
+            <td><span class="pill pill-neutral">Appendix only</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="table-note">
+      The bottom two rows are the discipline working. They were interesting to find and they are not worth
+      a minute of a 40-minute session. They go in an appendix so I can answer if pushed, and stay out of the
+      narrative if not.
+    </p>
+
+    <h2 id="time">The time budget</h2>
+
+    <p>
+      The logistics matter more than they look. The brief says 30 to 40 minutes <em>including discussion</em>,
+      that they will "spend a good portion of it digging into your choices", and to
+      "leave room for that rather than over-filling whatever you bring".
+    </p>
+    <p>
+      Read plainly, that is an instruction to bring less. So:
+    </p>
+
+    <div class="table-wrap">
+      <table>
+        <caption>Planned shape of a 35-minute session.</caption>
+        <thead>
+          <tr>
+            <th scope="col">Minutes</th>
+            <th scope="col">What happens</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="nowrap">0 &ndash; 2</td>
+            <td>The problem restated in my own words, and my headline recommendation. No build-up.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">2 &ndash; 4</td>
+            <td>Assumptions and how I weighted the four areas. Short, and it buys credibility for everything after.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">4 &ndash; 8</td>
+            <td>Who this is for, what they actually need, and where I push back on the nightly full export.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">8 &ndash; 14</td>
+            <td>Change control. The heaviest section, built on their own history.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">14 &ndash; 18</td>
+            <td>The sequence: internal platform work first, then first shippable version, then what is explicitly not being built yet.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">18 &ndash; 22</td>
+            <td>Commercial model and governance boundary.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">22 &ndash; 35</td>
+            <td><strong>Discussion.</strong> Roughly a third of the session, protected on purpose.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      That is around 20 minutes of material. It feels thin written down, and I think that is correct: the
+      brief says the discussion is where they assess me, so over-filling the front half actively costs
+      marks.
+    </p>
+
+    <h2 id="out">What I deliberately leave out</h2>
+
+    <ul>
+      <li><strong>A reference architecture diagram as a centrepiece.</strong> The brief says they are less interested in it. One simple diagram to support a decision, not a slide that <em>is</em> the answer.</li>
+      <li><strong>A named vendor recommendation.</strong> Build versus buy is a real question, but committing to a specific product without knowing what their warehouse runs on would be confidently wrong.</li>
+      <li><strong>A precise cost model with invented numbers.</strong> I will bring the <em>structure</em> of the unit economics and the sensitivities that decide the answer, and be explicit that the inputs need their real figures.</li>
+      <li><strong>A full API analysis.</strong> Appendix.</li>
+      <li><strong>Anything resembling a plan to slow engineering down.</strong> The brief closes that door twice. Any proposal of mine has to work at their current pace, not ask for a different one.</li>
+      <li><strong>Certainty I do not have.</strong> Where I do not know, I say so and say what I would do to find out.</li>
+    </ul>
+
+    <h2 id="next">What Step 5 has to produce</h2>
+
+    <p>
+      With discovery done, the next step is the actual product argument. It has to deliver four things, and
+      nothing else:
+    </p>
+    <ol>
+      <li><strong>A one-sentence problem statement</strong> that is about the client's job, not about export mechanics.</li>
+      <li><strong>A clear target segment</strong>, with the segments I am consciously not serving in version one and why that is acceptable.</li>
+      <li><strong>The pushback, in words I could actually say to a client</strong> who has already written "nightly full export" into their requirements &mdash; offering something better rather than something cheaper.</li>
+      <li><strong>The success measures</strong>, for Plentific and for the client, defined before any solution so they cannot be quietly reverse-engineered to flatter the design.</li>
+    </ol>
+
+    <div class="callout is-good">
+      <span class="callout-label">Where I have got to</span>
+      <p>
+        Four steps in, with no solution proposed. That is the intended outcome. I now know who this is for,
+        what exists, what it is called, how fast it moves, and what the brief is actually asking &mdash;
+        which means Step 5 can form a point of view rather than a guess.
+      </p>
+    </div>
+
+    <div class="pager">
+      <a class="pager-prev" href="03-plain-english.html"><span>Previous</span>&larr; Step 3 &mdash; The jargon, in plain English</a>
+      <a class="pager-next" href="index.html"><span>Next</span>Steps 5 to 8 &mdash; not written yet &rarr;</a>
+    </div>
+  </main>
+</div>
+
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <p>
+      Prepared by Tanu Jain for the Plentific Data Product Manager case study. Working notes, not a final
+      deliverable.
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>

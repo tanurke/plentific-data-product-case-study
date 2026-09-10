@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Plentific Data Product Case Study — Working Notes</title>
+<meta name="description" content="Step-by-step working notes for the Plentific Data Product Manager case study: discovery, framing, and decisions.">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <p class="masthead-title">Plentific &middot; Data Product Manager case study</p>
+    <p class="masthead-meta">Working notes &mdash; discovery in progress</p>
+  </div>
+</header>
+
+<div class="shell">
+  <nav class="sidenav" aria-label="Case study steps">
+    <h2>Working notes</h2>
+    <ol>
+      <li><a href="index.html" aria-current="page"><span class="step-num">&mdash;</span>Overview</a></li>
+      <li><a href="01-customers.html"><span class="step-num">1</span>Who the customers are</a></li>
+      <li><a href="02-data.html"><span class="step-num">2</span>What data exists</a></li>
+      <li><a href="03-plain-english.html"><span class="step-num">3</span>The jargon, in plain English</a></li>
+      <li><a href="04-framing.html"><span class="step-num">4</span>How I frame the problem</a></li>
+    </ol>
+    <h2>Not written yet</h2>
+    <ol>
+      <li><a href="#next" ><span class="step-num">5</span>Problem statement</a></li>
+      <li><a href="#next"><span class="step-num">6</span>Options and the decision</a></li>
+      <li><a href="#next"><span class="step-num">7</span>Sequence and roadmap</a></li>
+      <li><a href="#next"><span class="step-num">8</span>Pricing, governance, commitments</a></li>
+    </ol>
+    <p class="sidenav-note">These are working notes, not the final presentation. They exist so the reasoning is visible and can be challenged.</p>
+  </nav>
+
+  <main class="content" id="main">
+    <p class="eyebrow">Overview</p>
+    <h1>How I worked this problem, step by step</h1>
+    <p class="lede">
+      The task is to design how Plentific gives clients their data in the client's own data warehouse,
+      and the path to get there. This page set shows the order I worked in, and why &mdash;
+      starting with who the customer is and what actually exists, before proposing anything.
+    </p>
+
+    <div class="callout">
+      <span class="callout-label">The one rule I set myself</span>
+      <p>
+        <strong>Understand the problem before designing a solution.</strong>
+        The brief is explicit that the client's request &mdash; "batch export everything into our warehouse" &mdash;
+        is the client's <em>proposed solution</em>, not the problem. If I start from the export, I have already
+        accepted their design. So Steps 1 to 4 contain no solution at all.
+      </p>
+    </div>
+
+    <h2>The steps</h2>
+
+    <ul class="steplist">
+      <li>
+        <a href="01-customers.html">
+          <div class="step-head">
+            <span class="step-kicker">Step 1</span>
+            <span class="step-name">Who the customers are</span>
+          </div>
+          <p class="step-desc">
+            Who pays, who uses, who the data is <em>about</em>. Plain-English questions and answers,
+            the three customer types side by side, and why the person asking for this is not the person
+            who bought Plentific.
+          </p>
+        </a>
+      </li>
+      <li>
+        <a href="02-data.html">
+          <div class="step-head">
+            <span class="step-kicker">Step 2</span>
+            <span class="step-name">What data exists, and how fast it moves</span>
+          </div>
+          <p class="step-desc">
+            What Plentific actually holds, in everyday language, and which customer would want each part.
+            Plus hard evidence on how often it changes &mdash; including the fact that it changed on the day
+            I wrote this.
+          </p>
+        </a>
+      </li>
+      <li>
+        <a href="03-plain-english.html">
+          <div class="step-head">
+            <span class="step-kicker">Step 3</span>
+            <span class="step-name">The jargon, in plain English</span>
+          </div>
+          <p class="step-desc">
+            Every technical term I need in the room, explained without jargon: join keys, change capture,
+            access tokens, and why "we only added a field" can still break a client's regulatory return.
+          </p>
+        </a>
+      </li>
+      <li>
+        <a href="04-framing.html">
+          <div class="step-head">
+            <span class="step-kicker">Step 4</span>
+            <span class="step-name">How I frame the problem</span>
+          </div>
+          <p class="step-desc">
+            The discipline check: the brief is the specification, the technical research is only evidence.
+            What earns time in a 30 to 40 minute session, and what I deliberately leave out.
+          </p>
+        </a>
+      </li>
+    </ul>
+
+    <h2 id="next">What comes next</h2>
+    <p>
+      Steps 5 to 8 are the actual product argument: the problem statement, the options I considered and
+      the one I chose, the sequence of what gets built when, and the commercial and governance
+      commitments. They are deliberately not written yet, because writing them before Steps 1 to 4
+      would be guessing.
+    </p>
+
+    <h2>Where the evidence comes from</h2>
+    <p>
+      Three sources, in descending order of authority:
+    </p>
+    <ol>
+      <li><strong>The case study brief itself.</strong> This is the specification. Everything I recommend has to answer a question the brief actually asks.</li>
+      <li><strong>Plentific's public developer documentation</strong> at <a href="https://dev.plentific.com/" rel="noopener">dev.plentific.com</a> &mdash; the Client API, the Contractor API, all five published versions, and the full changelog archive.</li>
+      <li><strong>Public record</strong> &mdash; Plentific's own site and customer stories, the G-Cloud service listing, and UK regulation (Awaab's Law, and the Regulator of Social Housing's annual data returns).</li>
+    </ol>
+    <p>
+      I have no access to Plentific's internal warehouse, cost base, contracts or roadmap. Where something
+      matters and I cannot know it, I say so and mark it as an assumption to validate rather than quietly
+      filling the gap.
+    </p>
+
+    <div class="callout is-warn">
+      <span class="callout-label">Honesty note on sources</span>
+      <p>
+        Plentific's own G-Cloud listing says of the public API: <em>"we seek to provide public API endpoints
+        to mirror all functionality available within the platform. Note that this is an ongoing project and
+        we don't currently guarantee parity between the two."</em>
+        So the public documentation is a <strong>subset</strong> of the real platform, and may lag it.
+        Everything I infer from the API is a floor, not a ceiling &mdash; the internal warehouse almost
+        certainly holds more than this. I would want that corrected in the room.
+      </p>
+    </div>
+
+    <div class="pager">
+      <span></span>
+      <a class="pager-next" href="01-customers.html"><span>Next</span>Step 1 &mdash; Who the customers are &rarr;</a>
+    </div>
+  </main>
+</div>
+
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <p>
+      Prepared by Tanu Jain for the Plentific Data Product Manager case study. Working notes, not a final
+      deliverable.
+    </p>
+    <p>
+      Built only from the case study brief and publicly available information. No confidential Plentific
+      material is reproduced here, and the brief document itself is not published.
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>
