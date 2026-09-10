@@ -110,7 +110,8 @@
 
       <div class="flow-step">
         <span class="flow-num">6</span>
-        <p class="flow-act"><span class="flow-who">Engineer</span> attends, working in the mobile app &mdash; which also works with no signal</p>
+        <p class="flow-act"><span class="flow-who">Engineer</span> attends the property and uses Plentific's mobile app to record what they do</p>
+        <p class="flow-note">(The app works offline &mdash; important because many properties are in basements, rural areas, or places with no phone signal. The engineer records everything on the phone, and it syncs to Plentific when they get signal back.)</p>
         <p class="flow-data">creates &rarr; status changes (arrived &rarr; in progress &rarr; attended, or no access) &middot; before, during and after photos &middot; access notes</p>
       </div>
 
@@ -216,8 +217,36 @@
     </p>
 
     <h2 id="money">What their current money model means for pricing</h2>
+
+    <h3>How Plentific makes money today &mdash; a simple example</h3>
     <p>
-      This is why the revenue column matters. Four consequences fall straight out of it:
+      Imagine a housing association that manages <strong>100 homes</strong>.
+    </p>
+    <ol>
+      <li>
+        The association pays Plentific a <strong>platform subscription</strong> &mdash; a fee to use the
+        system, probably priced per home or as a flat annual deal. That is predictable recurring revenue.
+      </li>
+      <li>
+        A tenant in one of those homes reports a broken boiler. The job gets logged in Plentific.
+      </li>
+      <li>
+        The association's own in-house team cannot fix gas boilers, so Plentific sends it out to its
+        <strong>marketplace</strong> of vetted local contractors. A plumber accepts the job.
+      </li>
+      <li>
+        When that job is placed through the marketplace, <strong>Plentific takes a cut</strong> &mdash;
+        a percentage of the job value, or a fixed fee per transaction.
+      </li>
+    </ol>
+    <p>
+      So Plentific earns <strong>subscription + transaction fees</strong>. The more repairs that happen and
+      the more that go through the marketplace, the more they make.
+    </p>
+
+    <h3>Why that matters for a data product</h3>
+    <p>
+      Four consequences fall straight out of it:
     </p>
     <ul>
       <li>

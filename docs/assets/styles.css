@@ -370,6 +370,13 @@ hr {
   color: var(--c-ink);
 }
 
+.flow-note {
+  margin: 0 0 var(--s-2);
+  font-size: 13px;
+  color: var(--c-ink-faint);
+  font-style: italic;
+}
+
 .flow-data {
   margin: 0 0 var(--s-1);
   font-size: 13.5px;
