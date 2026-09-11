@@ -36,6 +36,7 @@
       <a href="#today">What clients have today</a>
       <a href="#schema">Why shipping fast changes the schema</a>
       <a href="#facts">6 facts that matter</a>
+      <a href="#solve">Problem solving</a>
       <a href="#mines">The landmines</a>
       <a href="#argument">The winning argument</a>
       <a href="#asks">What they are asking me for</a>
@@ -564,53 +565,6 @@
       </p>
     </div>
 
-    <h3>Why it hurts the client more than it hurts Plentific</h3>
-    <p>
-      When Plentific changes an internal table, they change the code that reads it in the same breath. One
-      team, one deployment, done.
-    </p>
-    <p>
-      A client is a different organisation with its own release cycle, its own backlog and its own
-      priorities. They cannot be migrated. As the brief puts it: today that churn is invisible because
-      Plentific controls everything the client sees &mdash; <strong>the moment a client runs pipelines
-      against the data, Plentific's internal change becomes the client's outage.</strong>
-    </p>
-
-    <h3>Part two: and here is why "we ship fast" is not actually the problem</h3>
-
-    <p>
-      You were right to push on this. Plenty of companies ship continuously <em>and</em> serve customers
-      stable data. Nobody has to slow down. The flaw is in the framing, not the pace.
-    </p>
-    <p>
-      The framing assumes the client reads the internal tables. They should never be allowed to.
-    </p>
-
-    <div class="analogy">
-      <span class="analogy-label">The kitchen and the menu</span>
-      <p>
-        A restaurant kitchen changes constantly. New suppliers, new equipment, stations rearranged, recipes
-        tweaked, staff reorganised. It happens weekly and nobody asks the kitchen to stop improving.
-      </p>
-      <p>
-        <strong>The menu stays the same.</strong> Customers order from the menu, never from the kitchen.
-        When the menu does change, it changes on purpose, with notice, and the old dishes stay available for
-        a while.
-      </p>
-      <p>
-        Right now clients are effectively being handed a stool in the kitchen. The answer is not a slower
-        kitchen. It is a menu.
-      </p>
-    </div>
-
-    <p>
-      In real terms that means a <strong>published, versioned layer that sits between the internal tables
-      and the client.</strong> Engineering renames and reshapes internal tables as freely as it likes. That
-      layer maps the new internal shape back to the stable external names. The client sees nothing change.
-      When the external shape genuinely must change, you publish a new dated version and support both for a
-      stated period.
-    </p>
-
     <h3>Other companies solve it exactly this way &mdash; including Plentific</h3>
 
     <div class="table-wrap">
@@ -715,6 +669,15 @@
         That is the cost baseline and the business case.
       </li>
     </ol>
+
+    <h2 id="solve">Problem solving</h2>
+    <p>
+      In real terms, the answer is a <strong>published, versioned layer that sits between the internal tables
+      and the client.</strong> Engineering renames and reshapes internal tables as freely as it likes. That
+      layer maps the new internal shape back to the stable external names. The client sees nothing change.
+      When the external shape genuinely must change, you publish a new dated version and support both for a
+      stated period.
+    </p>
 
     <h2 id="mines">The landmines</h2>
 
