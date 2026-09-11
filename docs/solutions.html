@@ -26,11 +26,14 @@
     </p>
 
     <nav class="toc" aria-label="Contents">
+      <a href="#why-hard">Why this is actually hard</a>
+      <a href="#real-problems">The real problems to solve</a>
+      <a href="#phases">Phased approach</a>
       <a href="#customer-need">What the customer actually needs</a>
-      <a href="#option-1">Option 1: Nightly file drop</a>
-      <a href="#option-2">Option 2: Data sharing (zero-copy)</a>
-      <a href="#option-3">Option 3: Bulk API endpoints</a>
-      <a href="#option-4">Option 4: Read-only warehouse access</a>
+      <a href="#option-1">Delivery: Nightly file drop</a>
+      <a href="#option-2">Delivery: Data sharing (zero-copy)</a>
+      <a href="#option-3">Delivery: Bulk API endpoints</a>
+      <a href="#option-4">Delivery: Read-only warehouse access</a>
       <a href="#comparison">Quick comparison</a>
       <a href="#forward">Forward-looking: AI and automation</a>
       <a href="how-versioning-works.html" class="toc-page"><strong>How versioning works &rarr;</strong></a>
@@ -39,20 +42,167 @@
     <p><a href="index.html">&larr; Back to problem understanding</a></p>
 
     <!-- ============================================================ -->
+    <h2 id="why-hard">Why this is actually hard</h2>
+
+    <p>
+      The brief already says they do manual extracts &mdash; "quoted case by case." So they know how to
+      export data. <strong>The export mechanism is not the hard part.</strong>
+    </p>
+
+    <p>
+      What they're asking is: <em>how do we turn that into a scalable product without breaking things?</em>
+    </p>
+
+    <div class="callout is-danger">
+      <span class="callout-label">The real question</span>
+      <p>
+        Not "how do I export a file" &mdash; that's trivial.<br>
+        But: <strong>how do I deliver data reliably while the product keeps shipping fast, at a price that
+        scales, without breaking clients or leaking data?</strong>
+      </p>
+    </div>
+
+    <!-- ============================================================ -->
+    <h2 id="real-problems">The real problems to solve</h2>
+
+    <p>These are from the brief. They are blockers before any delivery mechanism matters.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>What the brief says</th><th>Why it's hard</th><th>What has to happen first</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>"The warehouse is not modelled for outsiders, not governed to the standard needed"</th>
+            <td>Before you can export anything, you need to <strong>fix the warehouse</strong>. That's a big internal project with no visible client value</td>
+            <td>Internal platform work. Hard to fund because clients can't see it</td>
+          </tr>
+          <tr>
+            <th>"Not properly separated client-by-client"</th>
+            <td><strong>Tenant isolation doesn't exist.</strong> You can't export client A's data if you might accidentally include client B's</td>
+            <td>Security-critical fix. Blocker for everything else</td>
+          </tr>
+          <tr>
+            <th>"Has never had to withstand a client's scrutiny"</th>
+            <td>First security review will ask: "prove you can't leak data." They can't prove it today</td>
+            <td>Needs to pass penetration testing and audit before any client goes live</td>
+          </tr>
+          <tr>
+            <th>"They ship continuously and will not slow down"</th>
+            <td>The export mechanism is easy. <strong>Keeping the schema stable while shipping fast</strong> is the organisational challenge</td>
+            <td>Process and discipline, not just code. Who approves schema changes?</td>
+          </tr>
+          <tr>
+            <th>"Good margin at 10 clients can be no margin at a hundred"</th>
+            <td><strong>Pricing model is unsolved.</strong> Costs scale with data volume. Revenue needs to scale too</td>
+            <td>Unit economics must be modelled before committing to pricing</td>
+          </tr>
+          <tr>
+            <th>"Data is partly monetised"</th>
+            <td>Some clients think they already paid for this. <strong>Commercial conversation is hard</strong></td>
+            <td>Need clear positioning: what's included vs what's an add-on</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ============================================================ -->
+    <h2 id="phases">Phased approach</h2>
+
+    <p>
+      The export mechanism (files to S3, or API, or data share) is just <strong>Phase 3</strong>.
+      Most of the work is before that.
+    </p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Phase</th><th>What</th><th>Why it's hard</th><th>Effort</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>Phase 0</th>
+            <td><strong>Fix tenant isolation in warehouse</strong></td>
+            <td>No client value. Hard to fund. But blocker for everything. Must pass security review</td>
+            <td>Depends on current state. Could be weeks or months</td>
+          </tr>
+          <tr>
+            <th>Phase 1</th>
+            <td><strong>Define scope</strong> &mdash; which tables, which columns</td>
+            <td>Product decision. What to include, what to exclude. Saying no is hard. Every field you expose is a field you must maintain forever</td>
+            <td>2-4 weeks of product work, stakeholder alignment</td>
+          </tr>
+          <tr>
+            <th>Phase 2</th>
+            <td><strong>Build versioning layer</strong> (views on top of tables)</td>
+            <td>Technical work, but also needs process: who approves changes? What's the deprecation policy?</td>
+            <td>4-6 weeks engineering</td>
+          </tr>
+          <tr>
+            <th>Phase 3</th>
+            <td><strong>Build delivery mechanism</strong> (export to bucket, API, etc.)</td>
+            <td>Actually the easy part &mdash; well-understood patterns</td>
+            <td>6-8 weeks engineering</td>
+          </tr>
+          <tr>
+            <th>Phase 4</th>
+            <td><strong>Onboard first client (pilot)</strong></td>
+            <td>Proves it works. Finds gaps. Probably breaks things. Need a client willing to be a guinea pig</td>
+            <td>4-8 weeks including fixes</td>
+          </tr>
+          <tr>
+            <th>Phase 5</th>
+            <td><strong>Productise</strong> &mdash; self-service config, pricing, documentation, support</td>
+            <td>Makes it scalable beyond "we configure each one manually"</td>
+            <td>Ongoing</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>The hard questions this phasing raises</h3>
+    <ul>
+      <li><strong>How do you get Phase 0 funded</strong> when it's invisible internal work that delivers nothing clients can see?</li>
+      <li><strong>How do you keep engineering shipping fast</strong> while Phase 2 adds constraints on schema changes?</li>
+      <li><strong>How do you price this</strong> so it's not a cost centre at scale?</li>
+      <li><strong>How do you handle the client who wants everything</strong> when you've scoped it narrow?</li>
+      <li><strong>Who owns this?</strong> Is it the data team? A PM? Engineering? Cross-functional?</li>
+    </ul>
+
+    <div class="callout is-warn">
+      <span class="callout-label">My angle for funding Phase 0</span>
+      <p>
+        It's not new spend &mdash; it <strong>replaces manual extract work already being done at unmeasured cost</strong>,
+        and it <strong>unblocks committed revenue</strong> from clients who've been promised this.
+      </p>
+      <p>
+        First question to ask them: <em>how many manual extracts have we done, how long did each take, and who did them?</em>
+        That's the cost baseline and the business case.
+      </p>
+    </div>
+
+    <!-- ============================================================ -->
     <h2 id="customer-need">What the customer actually needs</h2>
     <p>
       From the brief: <em>"They want raw or lightly modelled data, on a dependable schedule, with a
       schema they can build pipelines against and trust not to break."</em>
     </p>
     <ul>
-      <li><strong>Raw or lightly modelled</strong> &mdash; not heavily transformed, close to source</li>
-      <li><strong>Dependable schedule</strong> &mdash; arrives when promised, every time</li>
-      <li><strong>Stable schema</strong> &mdash; columns don't disappear or rename without warning</li>
-      <li><strong>Build pipelines against</strong> &mdash; can automate, not manual downloads</li>
+      <li><strong>Raw or lightly modelled</strong> &mdash; not heavily transformed, close to source. Row-level records, not aggregated summaries</li>
+      <li><strong>Dependable schedule</strong> &mdash; arrives when promised, every time. SLA tracked and alerted</li>
+      <li><strong>Stable schema</strong> &mdash; columns don't disappear or rename without warning. Versioning absorbs changes</li>
+      <li><strong>Build pipelines against</strong> &mdash; can automate, not manual downloads. Machine-readable formats (Parquet, not PDF)</li>
     </ul>
 
+    <p>
+      <strong>Note:</strong> The delivery mechanism options below (file drop, data share, API, warehouse access)
+      are different ways to deliver this. They are <strong>Phase 3</strong> decisions. The hard work is in
+      Phases 0-2.
+    </p>
+
     <!-- ============================================================ -->
-    <h2 id="option-1">Option 1: Nightly file drop</h2>
+    <h2 id="option-1">Delivery mechanism 1: Nightly file drop</h2>
 
     <h3>What it is (simple terms)</h3>
     <p>
@@ -287,7 +437,7 @@
     </ol>
 
     <!-- ============================================================ -->
-    <h2 id="option-2">Option 2: Data sharing (zero-copy)</h2>
+    <h2 id="option-2">Delivery mechanism 2: Data sharing (zero-copy)</h2>
 
     <h3>What it is (simple terms)</h3>
     <p>
@@ -402,7 +552,7 @@
     </ol>
 
     <!-- ============================================================ -->
-    <h2 id="option-3">Option 3: Bulk API endpoints</h2>
+    <h2 id="option-3">Delivery mechanism 3: Bulk API endpoints</h2>
 
     <h3>What it is (simple terms)</h3>
     <p>
@@ -517,7 +667,7 @@
     </ol>
 
     <!-- ============================================================ -->
-    <h2 id="option-4">Option 4: Read-only warehouse access</h2>
+    <h2 id="option-4">Delivery mechanism 4: Read-only warehouse access</h2>
 
     <h3>What it is (simple terms)</h3>
     <p>
