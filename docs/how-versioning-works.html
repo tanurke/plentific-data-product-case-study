@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>How versioning actually works &mdash; Plentific case study</title>
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <p class="masthead-title">Plentific &middot; Data PM case study</p>
+    <p class="masthead-meta">Technical deep dive &mdash; for my understanding</p>
+  </div>
+</header>
+
+<div class="shell shell-wide">
+  <main class="content" id="main">
+
+    <h1>How versioning actually works</h1>
+    <p class="lede">
+      Questions I had about how schema versioning works in practice, explained simply.
+    </p>
+
+    <p><a href="solutions.html">&larr; Back to solution options</a></p>
+
+    <nav class="toc" aria-label="Contents">
+      <a href="#q1">How do we push data to their pipelines?</a>
+      <a href="#q2">Do they test before switching versions?</a>
+      <a href="#q3">Are we keeping two copies of the database?</a>
+      <a href="#q4">What about adding a new column?</a>
+      <a href="#q5">What about new workflow states?</a>
+      <a href="#q6">How does one schema per version work in real life?</a>
+    </nav>
+
+    <!-- ============================================================ -->
+    <h2 id="q1">Question 1: How do we push data to their pipelines?</h2>
+
+    <p><strong>Not APIs.</strong> APIs are for real-time, one-record-at-a-time requests.</p>
+    <p>For bulk data, we <strong>write files and drop them somewhere</strong>:</p>
+
+    <pre>
+Our system                              Their system
+─────────────────                       ─────────────────
+Plentific database                      Their S3 bucket
+       │                                      │
+       ▼                                      ▼
+[Export job runs]                       [Their Airflow picks up files]
+       │                                      │
+       ▼                                      ▼
+Creates Parquet files ───────────────▶  Loads into their Snowflake
+       │
+       └──── We PUSH files to their bucket (using S3 SDK)
+             or they PULL from a bucket we host
+    </pre>
+
+    <p><strong>The "push" is:</strong></p>
+    <ul>
+      <li>We use AWS SDK to write files to their S3 bucket</li>
+      <li>They gave us credentials (IAM role) that allows write access</li>
+      <li>Every night at 2am, our job runs, creates files, uploads them</li>
+    </ul>
+
+    <p><strong>No API calls involved.</strong> Just file transfer.</p>
+
+    <!-- ============================================================ -->
+    <h2 id="q2">Question 2: Do they need to test the new version before switching?</h2>
+
+    <p><strong>Yes, ideally.</strong> Here's the timeline:</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Day</th><th>What happens</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>Day 0</th>
+            <td>We announce v2026-10-01 is available. Both versions work: v2023-02-01 (old) and v2026-10-01 (new)</td>
+          </tr>
+          <tr>
+            <th>Day 1-30</th>
+            <td>Client's data engineer downloads sample from new version. Tests their pipeline against it. Finds what breaks, fixes it</td>
+          </tr>
+          <tr>
+            <th>Day 30</th>
+            <td>Client is ready. They tell us: "switch us to v2026-10-01". We update their config. Next export uses new version</td>
+          </tr>
+          <tr>
+            <th>Day 90</th>
+            <td>v2023-02-01 is retired. Anyone still on it gets cut off. (In practice, we'd chase them before this)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p><strong>How do they test?</strong></p>
+    <ul>
+      <li>We give them access to both versions in parallel during the transition</li>
+      <li>They can export sample data from the new version into a test environment</li>
+      <li>They run their pipeline, see what breaks, fix it</li>
+      <li>When ready, they flip the switch</li>
+    </ul>
+
+    <!-- ============================================================ -->
+    <h2 id="q3">Question 3: Are we keeping two copies of the database?</h2>
+
+    <p><strong>No.</strong> There's only ONE database with the real data.</p>
+    <p>The "versions" are <strong>views</strong> or <strong>queries</strong> that sit on top of it.</p>
+
+    <h3>The actual database (one copy)</h3>
+    <pre>
+-- This is the REAL table. Only one copy exists.
+CREATE TABLE repairs (
+    id UUID,
+    client_id UUID,
+    description TEXT,
+    resident_name TEXT,     -- This is the current name
+    status TEXT,
+    created_at TIMESTAMP
+);
+    </pre>
+
+    <h3>The versioned views (no data duplication)</h3>
+    <pre>
+-- Version 2023-02-01 view (old name)
+CREATE VIEW repairs_v2023_02_01 AS
+SELECT 
+    id,
+    description,
+    resident_name AS tenant_name,  -- Old name, mapped from new name
+    status,
+    created_at
+FROM repairs
+WHERE client_id = :current_client;
+
+-- Version 2026-10-01 view (new name)
+CREATE VIEW repairs_v2026_10_01 AS
+SELECT 
+    id,
+    description,
+    resident_name,  -- New name, direct
+    status,
+    created_at
+FROM repairs
+WHERE client_id = :current_client;
+    </pre>
+
+    <div class="callout is-good">
+      <span class="callout-label">What happened here</span>
+      <ul>
+        <li>The real table has <code>resident_name</code></li>
+        <li>The old view <strong>renames it back</strong> to <code>tenant_name</code> for clients on old version</li>
+        <li>The new view uses <code>resident_name</code> directly</li>
+        <li><strong>No data is copied.</strong> It's just a different "lens" on the same data</li>
+      </ul>
+    </div>
+
+    <!-- ============================================================ -->
+    <h2 id="q4">Question 4: What about adding a new column?</h2>
+
+    <p>Same principle. Let's say we add <code>uprn</code>:</p>
+
+    <h3>The actual database</h3>
+    <pre>
+ALTER TABLE repairs ADD COLUMN uprn TEXT;
+-- Now the real table has: id, description, resident_name, status, uprn
+    </pre>
+
+    <h3>The views</h3>
+    <pre>
+-- Version 2023-02-01 (old) - doesn't include uprn
+CREATE VIEW repairs_v2023_02_01 AS
+SELECT 
+    id,
+    description,
+    resident_name AS tenant_name,
+    status
+    -- NO uprn here
+FROM repairs;
+
+-- Version 2026-10-01 (new) - includes uprn
+CREATE VIEW repairs_v2026_10_01 AS
+SELECT 
+    id,
+    description,
+    resident_name,
+    status,
+    uprn  -- NEW column
+FROM repairs;
+    </pre>
+
+    <p><strong>Clients on old version never see <code>uprn</code>.</strong> It's filtered out by the view.</p>
+
+    <!-- ============================================================ -->
+    <h2 id="q5">Question 5: What about new workflow states? (the hard one)</h2>
+
+    <p>This is where it gets tricky. Let's use the real example:</p>
+
+    <p><strong>Before:</strong> Booking status could be: <code>scheduled</code>, <code>completed</code>, <code>cancelled</code></p>
+    <p><strong>After:</strong> Booking status can be: <code>scheduled</code>, <code>arrived</code>, <code>in_progress</code>, <code>attended</code>, <code>not_attended</code>, <code>no_access</code>, <code>completed</code>, <code>cancelled</code></p>
+
+    <p>The <strong>data itself</strong> now has the new statuses. We can't "hide" them like we hide a column.</p>
+
+    <h3>Option A: Map new statuses back to old ones</h3>
+    <pre>
+-- Version 2023-02-01 view
+CREATE VIEW bookings_v2023_02_01 AS
+SELECT 
+    id,
+    CASE 
+        WHEN status IN ('arrived', 'in_progress') THEN 'scheduled'
+        WHEN status IN ('attended', 'not_attended', 'no_access') THEN 'completed'
+        ELSE status
+    END AS status
+FROM bookings;
+    </pre>
+
+    <p>This "collapses" the new statuses back into the old ones. Old clients see what they expect.</p>
+
+    <div class="callout is-warn">
+      <span class="callout-label">Problem with Option A</span>
+      <p>You're losing information. <code>not_attended</code> and <code>attended</code> both become <code>completed</code>. That might be wrong for the client's use case.</p>
+    </div>
+
+    <h3>Option B: Don't map, just warn</h3>
+    <pre>
+-- Version 2023-02-01 view
+-- Status column unchanged. New values will appear.
+-- Changelog says: "New status values added. Your pipeline must handle unknown values."
+    </pre>
+
+    <div class="callout is-warn">
+      <span class="callout-label">Problem with Option B</span>
+      <p>This breaks clients who have hard-coded logic like <code>IF status = 'completed' THEN...</code></p>
+    </div>
+
+    <h3>Option C: Call it a breaking change, force migration</h3>
+    <p>If the status change is fundamental, you declare it a <strong>breaking change</strong>:</p>
+    <ul>
+      <li>Old version is deprecated</li>
+      <li>Clients must migrate to new version</li>
+      <li>No attempt to maintain compatibility</li>
+    </ul>
+
+    <div class="callout is-danger">
+      <span class="callout-label">The real trade-off</span>
+      <p>There's no perfect answer. You pick based on:</p>
+      <ul>
+        <li>How fundamental is the change?</li>
+        <li>How many clients would break?</li>
+        <li>Is the mapping semantically correct or misleading?</li>
+      </ul>
+    </div>
+
+    <!-- ============================================================ -->
+    <h2 id="q6">Question 6: How does "one schema per version" actually work in real life?</h2>
+
+    <p>Here's the complete real-life setup:</p>
+
+    <h3>1. The real database (one copy, always current)</h3>
+    <pre>
+┌─────────────────────────────────────┐
+│  repairs (real table)               │
+│  ─────────────────────              │
+│  id, description, resident_name,    │
+│  status, uprn, created_at           │
+└─────────────────────────────────────┘
+    </pre>
+
+    <h3>2. The version layer (views, no data copied)</h3>
+    <pre>
+┌─────────────────────────────────────┐
+│  repairs_v2023_02_01 (view)         │
+│  ─────────────────────              │
+│  SELECT id, description,            │
+│         resident_name AS tenant_name│
+│  FROM repairs                       │
+└─────────────────────────────────────┘
+
+┌─────────────────────────────────────┐
+│  repairs_v2026_10_01 (view)         │
+│  ─────────────────────              │
+│  SELECT id, description,            │
+│         resident_name, uprn         │
+│  FROM repairs                       │
+└─────────────────────────────────────┘
+    </pre>
+
+    <h3>3. The export job (reads from views)</h3>
+    <pre>
+export_config = {
+    "client": "NHG",
+    "version": "v2023-02-01",   # &lt;-- This client is on old version
+    "destination": "s3://nhg-bucket/..."
+}
+
+# Export job does:
+SELECT * FROM repairs_v2023_02_01 WHERE client_id = 'nhg'
+# Writes result to Parquet
+# Uploads to their bucket
+    </pre>
+
+    <h3>4. The client config (just one field different)</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Client</th><th>Version</th><th>Destination</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>NHG</td><td>v2023-02-01</td><td>s3://nhg-bucket/</td></tr>
+          <tr><td>Peabody</td><td>v2026-10-01</td><td>s3://peabody-bucket/</td></tr>
+          <tr><td>Southern</td><td>v2023-02-01</td><td>azure://southern-blob/</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>When NHG is ready to upgrade</h3>
+    <ol>
+      <li>They test with v2026-10-01 data</li>
+      <li>They tell us "ready"</li>
+      <li>We change their config row from <code>v2023-02-01</code> to <code>v2026-10-01</code></li>
+      <li>Next export uses the new view</li>
+      <li>Done</li>
+    </ol>
+
+    <!-- ============================================================ -->
+    <h2>The key insight</h2>
+
+    <div class="callout is-good">
+      <span class="callout-label">Views are cheap</span>
+      <p>They're just SQL queries with a name. They don't copy data.</p>
+      <p><strong>Maintaining two versions means:</strong> writing two SQL queries that read the same table differently.</p>
+    </div>
+
+    <p><strong>The cost is not storage.</strong> The cost is:</p>
+    <ul>
+      <li>Writing the mapping logic</li>
+      <li>Testing that both views work</li>
+      <li>Documenting what's different</li>
+      <li>Supporting clients on old versions</li>
+    </ul>
+
+    <div class="callout is-danger">
+      <span class="callout-label">Why scope discipline matters</span>
+      <p>The more columns and tables you expose, the more views you have to maintain when things change.</p>
+      <p>Every field you promise is a field you must protect forever. That's why saying "no" to fields is how the product stays maintainable.</p>
+    </div>
+
+  </main>
+</div>
+
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <p>Personal notes. Built from the brief plus public information. The brief itself is not published here.</p>
+  </div>
+</footer>
+
+</body>
+</html>
