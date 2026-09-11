@@ -568,13 +568,10 @@
 
     <h2 id="asks">What they are asking me for</h2>
     <p>
-      My checklist. If something I prepare does not answer one of these, it comes out.
+      My checklist.
     </p>
 
     <h3>Note: there are two different sets of four</h3>
-    <p>
-      Easy to muddle these, so worth separating.
-    </p>
 
     <div class="split">
       <div class="card">
@@ -602,21 +599,16 @@
       </div>
     </div>
 
-    <h3>Which one I go deeper on, and why</h3>
-    <p>
-      <strong>Version and change control.</strong> Five reasons, and the last is the one I would actually say:
-    </p>
+    <h3>I want to go deep into version and change control</h3>
     <ol>
-      <li>They told me directly it is the one they "will push hardest on".</li>
       <li>The brief calls it "the part that quietly decides whether the product survives".</li>
       <li>It is the <strong>least reversible</strong> decision on the list. Once clients build pipelines on a schema and their security team signs it off, changing it is enormously expensive. The transport mechanism, by contrast, can be swapped later.</li>
-      <li>It is where I have the <strong>strongest evidence</strong> &mdash; their own history proves the approach works.</li>
+      <li>It is where I have the <strong>strongest evidence</strong> &mdash; their own API shows dated versions: <code>2020-01-01</code>, <code>2021-10-28</code>, <code>2023-02-01</code>. The current version has held for over three years while the product shipped weekly. They have already solved this problem once.</li>
       <li>
-        <strong>Going deep here is the best way to demonstrate all four registers at once.</strong> Change
-        control is simultaneously a product decision (what goes in the contract), an engineering one (where
+        I think change control is a product decision (what goes in the contract), an engineering one (where
         the boundary lives and who owns it), a commercial one (what we commit to, what we refuse, and what we
         charge for stability), and a governance one (auditability, restatements, what a client reported last
-        quarter). One deep section, all four registers &mdash; rather than four shallow ones.
+        quarter).
       </li>
     </ol>
 
@@ -635,7 +627,7 @@
           <tr>
             <th scope="row">1</th>
             <td>Reason across product, engineering, commercial and governance. Go deeper on one and say why</td>
-            <td>Explicitly state my weighting on a slide. Deeper on change control, for the five reasons above</td>
+            <td>Explicitly state my weighting on a slide. Deeper on change control, for the reasons above</td>
           </tr>
           <tr>
             <th scope="row">2</th>
