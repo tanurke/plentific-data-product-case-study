@@ -26,9 +26,9 @@
     </p>
 
     <nav class="toc" aria-label="Contents">
+      <a href="#customer-need">What the customer actually needs</a>
       <a href="#real-problems">The real problems to solve</a>
       <a href="#phases">Phased approach</a>
-      <a href="#customer-need">What the customer actually needs</a>
       <a href="#option-1">Delivery: Nightly file drop</a>
       <a href="#option-2">Delivery: Data sharing (zero-copy)</a>
       <a href="#option-3">Delivery: Bulk API endpoints</a>
@@ -39,6 +39,25 @@
     </nav>
 
     <p><a href="index.html">&larr; Back to problem understanding</a></p>
+
+    <!-- ============================================================ -->
+    <h2 id="customer-need">What the customer actually needs</h2>
+    <p>
+      From the brief: <em>"They want raw or lightly modelled data, on a dependable schedule, with a
+      schema they can build pipelines against and trust not to break."</em>
+    </p>
+    <ul>
+      <li><strong>Raw or lightly modelled</strong> &mdash; not heavily transformed, close to source. Row-level records, not aggregated summaries</li>
+      <li><strong>Dependable schedule</strong> &mdash; arrives when promised, every time. SLA tracked and alerted</li>
+      <li><strong>Stable schema</strong> &mdash; columns don't disappear or rename without warning. Versioning absorbs changes</li>
+      <li><strong>Build pipelines against</strong> &mdash; can automate, not manual downloads. Machine-readable formats (Parquet, not PDF)</li>
+    </ul>
+
+    <p>
+      <strong>Note:</strong> The delivery mechanism options below (file drop, data share, API, warehouse access)
+      are different ways to deliver this. They are <strong>Phase 3</strong> decisions. The hard work is in
+      Phases 0-2.
+    </p>
 
     <!-- ============================================================ -->
     <h2 id="real-problems">The real problems to solve</h2>
@@ -216,25 +235,6 @@
       Cross-functional, but with a single accountable PM. Engineering owns the build. Data team owns the
       warehouse quality. Commercial owns pricing and packaging. Governance owns compliance. The PM owns
       the product decisions: what's in scope, what's out, what's the roadmap.
-    </p>
-
-    <!-- ============================================================ -->
-    <h2 id="customer-need">What the customer actually needs</h2>
-    <p>
-      From the brief: <em>"They want raw or lightly modelled data, on a dependable schedule, with a
-      schema they can build pipelines against and trust not to break."</em>
-    </p>
-    <ul>
-      <li><strong>Raw or lightly modelled</strong> &mdash; not heavily transformed, close to source. Row-level records, not aggregated summaries</li>
-      <li><strong>Dependable schedule</strong> &mdash; arrives when promised, every time. SLA tracked and alerted</li>
-      <li><strong>Stable schema</strong> &mdash; columns don't disappear or rename without warning. Versioning absorbs changes</li>
-      <li><strong>Build pipelines against</strong> &mdash; can automate, not manual downloads. Machine-readable formats (Parquet, not PDF)</li>
-    </ul>
-
-    <p>
-      <strong>Note:</strong> The delivery mechanism options below (file drop, data share, API, warehouse access)
-      are different ways to deliver this. They are <strong>Phase 3</strong> decisions. The hard work is in
-      Phases 0-2.
     </p>
 
     <!-- ============================================================ -->
