@@ -1,0 +1,665 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Solution options &mdash; Plentific case study</title>
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <p class="masthead-title">Plentific &middot; Data PM case study</p>
+    <p class="masthead-meta">Solution shaping &mdash; my thinking</p>
+  </div>
+</header>
+
+<div class="shell shell-wide">
+  <main class="content" id="main">
+
+    <h1>Solution options</h1>
+    <p class="lede">
+      Thinking through possible solutions. Each one is evaluated against the same checklist.
+    </p>
+
+    <nav class="toc" aria-label="Contents">
+      <a href="#customer-need">What the customer actually needs</a>
+      <a href="#option-1">Option 1: Nightly file drop</a>
+      <a href="#option-2">Option 2: Data sharing (zero-copy)</a>
+      <a href="#option-3">Option 3: Bulk API endpoints</a>
+      <a href="#option-4">Option 4: Read-only warehouse access</a>
+      <a href="#comparison">Quick comparison</a>
+      <a href="#forward">Forward-looking: AI and automation</a>
+    </nav>
+
+    <p><a href="index.html">&larr; Back to problem understanding</a></p>
+
+    <!-- ============================================================ -->
+    <h2 id="customer-need">What the customer actually needs</h2>
+    <p>
+      From the brief: <em>"They want raw or lightly modelled data, on a dependable schedule, with a
+      schema they can build pipelines against and trust not to break."</em>
+    </p>
+    <ul>
+      <li><strong>Raw or lightly modelled</strong> &mdash; not heavily transformed, close to source</li>
+      <li><strong>Dependable schedule</strong> &mdash; arrives when promised, every time</li>
+      <li><strong>Stable schema</strong> &mdash; columns don't disappear or rename without warning</li>
+      <li><strong>Build pipelines against</strong> &mdash; can automate, not manual downloads</li>
+    </ul>
+
+    <!-- ============================================================ -->
+    <h2 id="option-1">Option 1: Nightly file drop</h2>
+
+    <h3>What it is (simple terms)</h3>
+    <p>
+      Every night, Plentific generates files (like spreadsheets but for machines &mdash; Parquet or CSV)
+      and drops them into the client's cloud storage bucket (S3, Azure Blob, Google Cloud Storage).
+      The client's data pipeline picks them up automatically.
+    </p>
+
+    <h3>Why it could work</h3>
+    <ul>
+      <li>Simple to explain to clients &mdash; "you get a file every night"</li>
+      <li>Client owns the destination &mdash; no shared infrastructure</li>
+      <li>Works with any warehouse the client uses</li>
+      <li>Plentific already does manual extracts &mdash; this is automating that</li>
+    </ul>
+
+    <h3>Impact by area</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Area</th><th>Impact</th></tr>
+        </thead>
+        <tbody>
+          <tr><th>Product</th><td>New feature to configure: which tables, which bucket, what schedule. Need a UI for clients to set it up</td></tr>
+          <tr><th>Engineering</th><td>Build export jobs, scheduling, retry logic, monitoring. Moderate effort</td></tr>
+          <tr><th>Governance</th><td>Clear handoff point &mdash; once file lands, it's the client's responsibility</td></tr>
+          <tr><th>Compliance</th><td>Data leaves Plentific's control. Need DPA (data processing agreement) per client. Encryption in transit and at rest</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Customer problem it solves</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Need</th><th>How this solves it</th></tr>
+        </thead>
+        <tbody>
+          <tr><th>Raw or lightly modelled</th><td>Files are direct table exports, minimal transformation</td></tr>
+          <tr><th>Dependable schedule</th><td>Runs every night at same time, monitoring alerts if it fails</td></tr>
+          <tr><th>Stable schema</th><td>Versioned schema &mdash; columns only change with notice</td></tr>
+          <tr><th>Build pipelines</th><td>Files land in bucket, client's pipeline picks them up automatically</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Challenges and pushback</h3>
+    <ul>
+      <li><strong>Freshness</strong> &mdash; nightly means up to 24 hours stale. Some clients may want real-time</li>
+      <li><strong>Full exports are expensive</strong> &mdash; if we export everything every night, storage and egress costs grow fast</li>
+      <li><strong>"We already get CSV"</strong> &mdash; need to show this is automated, reliable, and versioned</li>
+      <li><strong>Schema changes</strong> &mdash; even additive changes can break client pipelines. Need clear notification process</li>
+    </ul>
+
+    <h3>Scalability and pricing (10 to 100 clients)</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Clients</th><th>Cost drivers</th><th>Pricing model</th></tr>
+        </thead>
+        <tbody>
+          <tr><th>10 clients</th><td>Compute for export jobs, egress to their buckets. Manageable</td><td>Flat fee per client, included in platform tier</td></tr>
+          <tr><th>100 clients</th><td>100x the egress. Some clients have 10x more data than others. Photos are the killer</td><td>Usage-based: per GB exported. Or tier by property count. Exclude photos from base tier</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Value, effort, risk</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Dimension</th><th>Rating</th><th>Why</th></tr>
+        </thead>
+        <tbody>
+          <tr><th>Volume</th><td>High</td><td>Every client gets the same thing. Scales well</td></tr>
+          <tr><th>Effort</th><td>Medium</td><td>Export jobs, scheduling, monitoring, bucket config per client</td></tr>
+          <tr><th>Risk</th><td>Low</td><td>Well understood pattern. Many companies do this</td></tr>
+          <tr><th>Bespoke</th><td>Low</td><td>Same export for everyone, just different destinations</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Metrics to measure success</h3>
+    <ul>
+      <li><strong>Delivery SLA</strong> &mdash; % of exports that land on time (target: 99.5%)</li>
+      <li><strong>Pipeline failures reported</strong> &mdash; how often clients report breakage after an export</li>
+      <li><strong>Time to onboard</strong> &mdash; how long from sale to first successful export</li>
+      <li><strong>Support tickets</strong> &mdash; data export related tickets per client per month</li>
+    </ul>
+
+    <h3>When to revert or try something else</h3>
+    <ul>
+      <li>Clients consistently need fresher data (more than 50% ask for hourly)</li>
+      <li>Egress costs exceed revenue from the feature</li>
+      <li>Too many schema-change breakages &mdash; versioning isn't working</li>
+    </ul>
+
+    <h3>Technical: multitenancy and APIs</h3>
+    <ul>
+      <li><strong>Multitenancy</strong> &mdash; each export job queries only that client's data. Tenant isolation must be rock solid</li>
+      <li><strong>APIs</strong> &mdash; API for clients to check export status, download history, trigger manual re-export</li>
+    </ul>
+
+    <h3>User journey example</h3>
+    <ol>
+      <li>Client signs contract including data export add-on</li>
+      <li>Client's IT provides an S3 bucket ARN with write permissions for Plentific's IAM role</li>
+      <li>Plentific ops configures the export: tables = repairs, bookings, inspections. Schedule = 2am UTC</li>
+      <li>First export runs. Client's data engineer sees files appear in their bucket</li>
+      <li>Client builds a pipeline in dbt/Airflow to load files into Snowflake</li>
+      <li>Every morning, fresh data is in their warehouse, ready for dashboards</li>
+    </ol>
+
+    <!-- ============================================================ -->
+    <h2 id="option-2">Option 2: Data sharing (zero-copy)</h2>
+
+    <h3>What it is (simple terms)</h3>
+    <p>
+      Instead of copying files, the client sees a live view of their data that lives in Plentific's
+      warehouse. Snowflake calls this "Data Sharing", BigQuery calls it "Analytics Hub". No files move.
+      The client queries the data directly, but can only see their own records.
+    </p>
+
+    <h3>Why it could work</h3>
+    <ul>
+      <li>Real-time (or near real-time) &mdash; no waiting for nightly export</li>
+      <li>No egress costs &mdash; data doesn't leave the warehouse</li>
+      <li>Client doesn't need to build ingestion pipelines</li>
+      <li>Schema changes are instant &mdash; but also instantly visible</li>
+    </ul>
+
+    <h3>Impact by area</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Area</th><th>Impact</th></tr>
+        </thead>
+        <tbody>
+          <tr><th>Product</th><td>Premium tier feature. Need UI to manage shares, see usage</td></tr>
+          <tr><th>Engineering</th><td>Build secure views per client. Ensure row-level security is bulletproof</td></tr>
+          <tr><th>Governance</th><td>Data stays in Plentific's warehouse &mdash; more control, but also more liability</td></tr>
+          <tr><th>Compliance</th><td>Need to verify client can only see their data. Audit logging essential</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Customer problem it solves</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Need</th><th>How this solves it</th></tr>
+        </thead>
+        <tbody>
+          <tr><th>Raw or lightly modelled</th><td>Direct access to tables (via views), minimal transformation</td></tr>
+          <tr><th>Dependable schedule</th><td>No schedule needed &mdash; always live</td></tr>
+          <tr><th>Stable schema</th><td>Versioned views. Old views stay available during transition</td></tr>
+          <tr><th>Build pipelines</th><td>Client queries the share from their own warehouse. Native integration</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Challenges and pushback</h3>
+    <ul>
+      <li><strong>Lock-in</strong> &mdash; only works if client uses same warehouse (Snowflake-to-Snowflake, BigQuery-to-BigQuery)</li>
+      <li><strong>Query costs</strong> &mdash; who pays when client runs expensive queries? Their compute, but our data</li>
+      <li><strong>Security scrutiny</strong> &mdash; "you're sharing our live database?" Trust barrier is higher</li>
+      <li><strong>Schema changes hurt instantly</strong> &mdash; no buffer, client sees changes immediately</li>
+    </ul>
+
+    <h3>Scalability and pricing (10 to 100 clients)</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Clients</th><th>Cost drivers</th><th>Pricing model</th></tr>
+        </thead>
+        <tbody>
+          <tr><th>10 clients</th><td>Storage (shared), compute for views. Low marginal cost per client</td><td>Premium add-on fee. Flat per client or per-property</td></tr>
+          <tr><th>100 clients</th><td>Managing 100 secure shares. Row-level security complexity. Support load increases</td><td>Tiered by usage or property count. Consider query volume caps</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Value, effort, risk</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Dimension</th><th>Rating</th><th>Why</th></tr>
+        </thead>
+        <tbody>
+          <tr><th>Volume</th><td>Medium</td><td>Only works for clients on compatible warehouse</td></tr>
+          <tr><th>Effort</th><td>Medium-High</td><td>Row-level security, view management, cross-account sharing</td></tr>
+          <tr><th>Risk</th><td>Medium</td><td>Security failure = data breach. Must be bulletproof</td></tr>
+          <tr><th>Bespoke</th><td>Low</td><td>Same views for everyone, filtered by tenant</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Metrics to measure success</h3>
+    <ul>
+      <li><strong>Query activity</strong> &mdash; are clients actually using the share?</li>
+      <li><strong>Time to first query</strong> &mdash; how fast from setup to client running queries</li>
+      <li><strong>Security incidents</strong> &mdash; any cross-tenant data exposure (target: zero)</li>
+      <li><strong>Support tickets</strong> &mdash; questions about access, permissions, schema</li>
+    </ul>
+
+    <h3>When to revert or try something else</h3>
+    <ul>
+      <li>Most clients use different warehouse than Plentific (incompatible)</li>
+      <li>Security reviews consistently fail or take too long</li>
+      <li>Clients prefer to own the data, not access a view</li>
+    </ul>
+
+    <h3>Technical: multitenancy and APIs</h3>
+    <ul>
+      <li><strong>Multitenancy</strong> &mdash; row-level security (RLS) on every table. Client ID filter on every query</li>
+      <li><strong>APIs</strong> &mdash; API to check share status, list available tables, see schema versions</li>
+    </ul>
+
+    <h3>User journey example</h3>
+    <ol>
+      <li>Client (on Snowflake) asks for real-time access</li>
+      <li>Plentific creates a Snowflake share scoped to that client's data</li>
+      <li>Client's admin accepts the share in their Snowflake account</li>
+      <li>Client sees tables appear as a new database in their Snowflake</li>
+      <li>Client queries directly: <code>SELECT * FROM plentific_share.repairs WHERE ...</code></li>
+      <li>Data is always current &mdash; no waiting for exports</li>
+    </ol>
+
+    <!-- ============================================================ -->
+    <h2 id="option-3">Option 3: Bulk API endpoints</h2>
+
+    <h3>What it is (simple terms)</h3>
+    <p>
+      Add new API endpoints designed for pulling large amounts of data at once. Instead of calling
+      the API 10,000 times for 10,000 jobs, the client calls one endpoint and gets all jobs in one
+      response (paginated). They pull when they want, as often as they want.
+    </p>
+
+    <h3>Why it could work</h3>
+    <ul>
+      <li>Extends existing API &mdash; clients already know how to use it</li>
+      <li>Pull-based &mdash; client controls timing, no push infrastructure needed</li>
+      <li>Works for any client, regardless of their warehouse</li>
+      <li>Change capture possible &mdash; "give me everything changed since X"</li>
+    </ul>
+
+    <h3>Impact by area</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Area</th><th>Impact</th></tr>
+        </thead>
+        <tbody>
+          <tr><th>Product</th><td>New API tier or add-on. Rate limits, authentication, documentation</td></tr>
+          <tr><th>Engineering</th><td>Build bulk endpoints, pagination, change tracking (watermarks). Medium effort</td></tr>
+          <tr><th>Governance</th><td>Data leaves via API. Same as current API, but higher volume</td></tr>
+          <tr><th>Compliance</th><td>Existing API security applies. Need rate limiting to prevent abuse</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Customer problem it solves</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Need</th><th>How this solves it</th></tr>
+        </thead>
+        <tbody>
+          <tr><th>Raw or lightly modelled</th><td>API returns records as-is, JSON format</td></tr>
+          <tr><th>Dependable schedule</th><td>Client pulls on their schedule. Availability SLA on the API</td></tr>
+          <tr><th>Stable schema</th><td>API versioning (already exists: 2023-02-01). Additive-only within version</td></tr>
+          <tr><th>Build pipelines</th><td>Client calls API from Airflow/dbt, loads into warehouse</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Challenges and pushback</h3>
+    <ul>
+      <li><strong>Client has to build the pipeline</strong> &mdash; more work on their side</li>
+      <li><strong>Compute cost on Plentific</strong> &mdash; every API call hits our servers</li>
+      <li><strong>Rate limits</strong> &mdash; if too restrictive, clients can't get data fast enough</li>
+      <li><strong>Not truly "bulk"</strong> &mdash; still JSON over HTTP, not as efficient as Parquet files</li>
+    </ul>
+
+    <h3>Scalability and pricing (10 to 100 clients)</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Clients</th><th>Cost drivers</th><th>Pricing model</th></tr>
+        </thead>
+        <tbody>
+          <tr><th>10 clients</th><td>API compute, bandwidth. Depends on call frequency</td><td>Include in premium API tier. Rate limit per client</td></tr>
+          <tr><th>100 clients</th><td>100 clients all pulling at midnight = spike. Need infrastructure to handle</td><td>Per-call or per-record pricing. Or monthly quota</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Value, effort, risk</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Dimension</th><th>Rating</th><th>Why</th></tr>
+        </thead>
+        <tbody>
+          <tr><th>Volume</th><td>High</td><td>Any client can use it. No warehouse compatibility needed</td></tr>
+          <tr><th>Effort</th><td>Medium</td><td>New endpoints, but builds on existing API infrastructure</td></tr>
+          <tr><th>Risk</th><td>Low-Medium</td><td>API patterns well understood. Risk is in scaling</td></tr>
+          <tr><th>Bespoke</th><td>Low</td><td>Same endpoints for everyone</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Metrics to measure success</h3>
+    <ul>
+      <li><strong>API call volume</strong> &mdash; how much are bulk endpoints being used?</li>
+      <li><strong>Latency</strong> &mdash; p95 response time for bulk endpoints</li>
+      <li><strong>Error rate</strong> &mdash; % of calls that fail</li>
+      <li><strong>Data freshness achieved</strong> &mdash; how current is the data clients end up with?</li>
+    </ul>
+
+    <h3>When to revert or try something else</h3>
+    <ul>
+      <li>Clients don't want to build their own pipelines</li>
+      <li>API infrastructure can't handle the load cost-effectively</li>
+      <li>Clients need data faster than API can serve it</li>
+    </ul>
+
+    <h3>Technical: multitenancy and APIs</h3>
+    <ul>
+      <li><strong>Multitenancy</strong> &mdash; API already tenant-scoped via authentication. Each client only sees their data</li>
+      <li><strong>APIs</strong> &mdash; this IS the API. New endpoints: <code>/v1/bulk/jobs</code>, <code>/v1/bulk/bookings</code>, etc.</li>
+    </ul>
+
+    <h3>User journey example</h3>
+    <ol>
+      <li>Client's data engineer gets API credentials with bulk access enabled</li>
+      <li>They write a script: call <code>GET /v1/bulk/jobs?since=2026-09-10</code></li>
+      <li>API returns paginated JSON with all jobs changed since that date</li>
+      <li>Script loads JSON into their warehouse (Snowflake, BigQuery, whatever)</li>
+      <li>They schedule this to run every hour via Airflow</li>
+      <li>Their dashboards stay fresh within ~1 hour</li>
+    </ol>
+
+    <!-- ============================================================ -->
+    <h2 id="option-4">Option 4: Read-only warehouse access</h2>
+
+    <h3>What it is (simple terms)</h3>
+    <p>
+      Give clients a username and password to connect directly to a read-only copy of their data
+      in a database. They can run SQL queries, connect BI tools (Tableau, Power BI), or extract
+      data however they want.
+    </p>
+
+    <h3>Why it could work</h3>
+    <ul>
+      <li>Maximum flexibility &mdash; client can do anything SQL allows</li>
+      <li>Familiar to data teams &mdash; just a database connection</li>
+      <li>Real-time (or near real-time) access</li>
+      <li>Client doesn't need to build pipelines &mdash; they query directly</li>
+    </ul>
+
+    <h3>Impact by area</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Area</th><th>Impact</th></tr>
+        </thead>
+        <tbody>
+          <tr><th>Product</th><td>Premium feature. Credential management, usage monitoring, query limits</td></tr>
+          <tr><th>Engineering</th><td>Provision isolated schemas per client. Read replicas. Query governors. High effort</td></tr>
+          <tr><th>Governance</th><td>Data stays in Plentific's infrastructure. Full audit trail possible</td></tr>
+          <tr><th>Compliance</th><td>Highest scrutiny. Client running arbitrary SQL against live data. Security critical</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Customer problem it solves</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Need</th><th>How this solves it</th></tr>
+        </thead>
+        <tbody>
+          <tr><th>Raw or lightly modelled</th><td>Direct table access &mdash; as raw as it gets</td></tr>
+          <tr><th>Dependable schedule</th><td>Always available. 99.9% uptime SLA</td></tr>
+          <tr><th>Stable schema</th><td>Versioned views layer on top of tables. Old versions maintained</td></tr>
+          <tr><th>Build pipelines</th><td>Connect any tool that speaks SQL/JDBC/ODBC</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Challenges and pushback</h3>
+    <ul>
+      <li><strong>Security risk</strong> &mdash; direct database access is scary for security teams</li>
+      <li><strong>Runaway queries</strong> &mdash; client writes bad SQL, impacts performance for everyone</li>
+      <li><strong>Support burden</strong> &mdash; "why is my query slow?" becomes Plentific's problem</li>
+      <li><strong>Isolation complexity</strong> &mdash; ensuring one client can never see another's data is hard</li>
+    </ul>
+
+    <h3>Scalability and pricing (10 to 100 clients)</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Clients</th><th>Cost drivers</th><th>Pricing model</th></tr>
+        </thead>
+        <tbody>
+          <tr><th>10 clients</th><td>Read replica capacity, query compute, storage for per-client schemas</td><td>Premium tier, flat fee. Query time limits included</td></tr>
+          <tr><th>100 clients</th><td>Infrastructure scales significantly. Query isolation becomes critical. Support scales too</td><td>Per-seat or per-query pricing. Compute quotas. Overage charges</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Value, effort, risk</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Dimension</th><th>Rating</th><th>Why</th></tr>
+        </thead>
+        <tbody>
+          <tr><th>Volume</th><td>Medium</td><td>Only for sophisticated clients with data teams</td></tr>
+          <tr><th>Effort</th><td>High</td><td>Per-client isolation, query governors, credential management</td></tr>
+          <tr><th>Risk</th><td>High</td><td>Security breach, performance issues, support load</td></tr>
+          <tr><th>Bespoke</th><td>Medium</td><td>Each client gets their own schema, some config</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Metrics to measure success</h3>
+    <ul>
+      <li><strong>Query volume</strong> &mdash; are clients actually using it?</li>
+      <li><strong>Query performance</strong> &mdash; p95 query time, slow query rate</li>
+      <li><strong>Security incidents</strong> &mdash; any unauthorized access (target: zero)</li>
+      <li><strong>Support tickets</strong> &mdash; access issues, slow queries, "how do I..." questions</li>
+    </ul>
+
+    <h3>When to revert or try something else</h3>
+    <ul>
+      <li>Security reviews consistently block clients from using it</li>
+      <li>Support cost exceeds revenue from the feature</li>
+      <li>Performance issues affect other clients or the main platform</li>
+    </ul>
+
+    <h3>Technical: multitenancy and APIs</h3>
+    <ul>
+      <li><strong>Multitenancy</strong> &mdash; per-client schemas or row-level security. Must pass penetration testing</li>
+      <li><strong>APIs</strong> &mdash; API to manage credentials, view query history, check quotas</li>
+    </ul>
+
+    <h3>User journey example</h3>
+    <ol>
+      <li>Client signs up for warehouse access tier</li>
+      <li>Plentific provisions a read-only user with access to views filtered to their data</li>
+      <li>Client receives connection string: <code>host=data.plentific.com, user=nhg_readonly, ...</code></li>
+      <li>Client's BI analyst connects Tableau directly to the database</li>
+      <li>They build dashboards that refresh in real-time from live data</li>
+      <li>No pipelines, no exports, just SQL</li>
+    </ol>
+
+    <!-- ============================================================ -->
+    <h2 id="comparison">Quick comparison</h2>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Dimension</th>
+            <th>Nightly file drop</th>
+            <th>Data sharing</th>
+            <th>Bulk API</th>
+            <th>Warehouse access</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>Freshness</th>
+            <td>Daily</td>
+            <td>Real-time</td>
+            <td>Hourly possible</td>
+            <td>Real-time</td>
+          </tr>
+          <tr>
+            <th>Client effort</th>
+            <td>Low &mdash; just receive files</td>
+            <td>Low &mdash; just query</td>
+            <td>Medium &mdash; build pipeline</td>
+            <td>Low &mdash; just connect</td>
+          </tr>
+          <tr>
+            <th>Plentific effort</th>
+            <td>Medium</td>
+            <td>Medium-High</td>
+            <td>Medium</td>
+            <td>High</td>
+          </tr>
+          <tr>
+            <th>Works for any client</th>
+            <td>Yes</td>
+            <td>No &mdash; same warehouse only</td>
+            <td>Yes</td>
+            <td>Yes</td>
+          </tr>
+          <tr>
+            <th>Security risk</th>
+            <td>Low</td>
+            <td>Medium</td>
+            <td>Low</td>
+            <td>High</td>
+          </tr>
+          <tr>
+            <th>Cost at scale</th>
+            <td>Egress grows</td>
+            <td>Low marginal</td>
+            <td>Compute grows</td>
+            <td>Infrastructure grows</td>
+          </tr>
+          <tr>
+            <th>My recommendation</th>
+            <td><strong>Start here</strong></td>
+            <td>Phase 2 for Snowflake clients</td>
+            <td>Already have API &mdash; extend it</td>
+            <td>Only if clients demand it</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ============================================================ -->
+    <h2 id="forward">Forward-looking: AI and automation</h2>
+
+    <p>
+      Once the basic data product exists, there are opportunities to add value with AI and automation.
+    </p>
+
+    <h3>AI-powered features</h3>
+    <ul>
+      <li>
+        <strong>Natural language queries</strong> &mdash; client asks "how many emergency repairs last month?"
+        and gets an answer without writing SQL. Uses the data product as the source.
+      </li>
+      <li>
+        <strong>Anomaly detection</strong> &mdash; "your completion rate dropped 15% this week" alerts,
+        automatically surfaced from the data.
+      </li>
+      <li>
+        <strong>Report generation</strong> &mdash; AI drafts the regulator return based on the data,
+        human reviews and submits.
+      </li>
+      <li>
+        <strong>Schema change assistant</strong> &mdash; when Plentific changes the schema, AI generates
+        migration scripts for the client's pipeline.
+      </li>
+    </ul>
+
+    <h3>MCP (Model Context Protocol) and agent integration</h3>
+    <ul>
+      <li>
+        <strong>MCP server for Plentific data</strong> &mdash; expose the data product as an MCP server.
+        AI agents can query repairs, bookings, compliance data as context for their tasks.
+      </li>
+      <li>
+        <strong>Agent handover</strong> &mdash; when a human can't answer a question, hand off to an AI agent
+        that has access to the full data history. "Why was this repair delayed?" &mdash; agent investigates.
+      </li>
+      <li>
+        <strong>Automated compliance checks</strong> &mdash; agent monitors data for Awaab's Law deadlines,
+        flags at-risk cases before they become breaches.
+      </li>
+    </ul>
+
+    <h3>SaaS-style features on top of the data product</h3>
+    <ul>
+      <li>
+        <strong>Embedded dashboards</strong> &mdash; Plentific hosts dashboards the client can embed in their
+        own portals. Data product powers them, client doesn't need their own BI tool.
+      </li>
+      <li>
+        <strong>Scheduled reports</strong> &mdash; client configures "send me a PDF summary every Monday".
+        Data product generates it automatically.
+      </li>
+      <li>
+        <strong>Alerts and notifications</strong> &mdash; "tell me when any repair is overdue by more than 7 days".
+        Runs against the data product, sends email/Slack/webhook.
+      </li>
+      <li>
+        <strong>Self-service data exploration</strong> &mdash; a simple UI where non-technical users can
+        filter, group, and export data without SQL.
+      </li>
+    </ul>
+
+    <h3>Why this matters for the case study</h3>
+    <p>
+      The data product is not the end state &mdash; it's the foundation. Once data flows reliably to clients,
+      you can build services on top. The question is: what do you build yourself vs. what do you let
+      clients build in their own warehouse?
+    </p>
+    <ul>
+      <li><strong>Build yourself</strong> &mdash; things that need Plentific's domain knowledge (compliance logic, repair categorisation)</li>
+      <li><strong>Let clients build</strong> &mdash; things specific to their organisation (joining to their tenancy data, their own KPIs)</li>
+    </ul>
+
+  </main>
+</div>
+
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <p>Personal notes. Built from the brief plus public information. The brief itself is not published here.</p>
+  </div>
+</footer>
+
+</body>
+</html>
