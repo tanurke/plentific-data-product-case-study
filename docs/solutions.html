@@ -135,25 +135,39 @@
     </div>
 
     <!-- ============================================================ -->
-    <h3>Why Phase 0 (multitenancy) is the absolute blocker</h3>
+    <h3>Why Phase 0 (multitenancy) is a must to sell a product</h3>
 
     <p>
-      The brief says the warehouse "has never had to withstand a client's scrutiny" and is "not properly
-      separated client-by-client." This is Phase 0 because <strong>nothing else matters if we can't
-      guarantee tenant isolation.</strong>
+      We want to sell a data product. But we can't sell it until clients' security teams approve it.
+      Their security teams will ask how we isolate data. We need an answer that passes their audit.
+      Product asks Engineering to build whatever is needed so we can say YES with evidence.
     </p>
 
-    <div class="callout is-danger">
-      <span class="callout-label">Why we cannot skip Phase 0</span>
-      <p><strong>Without tenant isolation, we cannot ship anything to any client.</strong></p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Product asks</th><th>Engineering delivers</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>"Prove tenant isolation"</td>
+            <td>RLS policies on all tables</td>
+          </tr>
+          <tr>
+            <td>"Show it can't be bypassed"</td>
+            <td>Automated tests that try to access other tenants' data and fail</td>
+          </tr>
+          <tr>
+            <td>"Document it for auditors"</td>
+            <td>Security documentation explaining the controls</td>
+          </tr>
+          <tr>
+            <td>"Pass penetration testing"</td>
+            <td>Fix any gaps found in the pen test</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-
-    <p><strong>What tenant isolation means:</strong></p>
-    <ul>
-      <li>When we query data for Client A, we get <em>only</em> Client A's data</li>
-      <li>There is no possible query, no bug, no misconfiguration that could return Client B's data</li>
-      <li>This must be provable &mdash; not just "we think it works"</li>
-    </ul>
 
     <p><strong>What happens if we get this wrong:</strong></p>
     <ul>
@@ -163,78 +177,46 @@
       <li><strong>Contract termination</strong> &mdash; most contracts have clauses for data breaches</li>
     </ul>
 
-    <p><strong>Why the brief calls this out:</strong></p>
-    <p>
-      The current warehouse was built for <em>internal</em> analytics. Plentific staff query it. They're
-      trusted. If someone writes a bad query, it's embarrassing but not catastrophic.
-    </p>
-    <p>
-      The moment you export data to clients, the stakes change. The query that generates Client A's export
-      must be <strong>bulletproof</strong>. A <code>WHERE client_id = 'A'</code> that accidentally becomes
-      <code>WHERE client_id IN ('A', 'B')</code> is a data breach.
-    </p>
-
-    <p><strong>What Phase 0 actually involves:</strong></p>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr><th>Task</th><th>Why</th></tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Audit every table for <code>client_id</code> or equivalent</td>
-            <td>Some tables might not have tenant identifiers, or they might be inconsistent</td>
-          </tr>
-          <tr>
-            <td>Enforce tenant filtering at the query layer</td>
-            <td>Every query must have <code>WHERE client_id = X</code> &mdash; not optional, not forgettable</td>
-          </tr>
-          <tr>
-            <td>Write tests that prove isolation</td>
-            <td>Automated tests: "query for Client A returns zero rows from Client B's data"</td>
-          </tr>
-          <tr>
-            <td>Pass security review / penetration testing</td>
-            <td>External auditor tries to break it. Must pass before any client goes live</td>
-          </tr>
-          <tr>
-            <td>Document the isolation model</td>
-            <td>When a client's security team asks "how do you ensure we only see our data?", you need an answer</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <p><strong>Why this is hard to fund:</strong></p>
-    <p>
-      Phase 0 delivers nothing clients can see. No new feature. No dashboard. No export. It's purely
-      internal hardening. But without it, everything else is blocked.
-    </p>
-    <p>
-      <strong>The argument for funding:</strong> "We cannot sell the data product until this is done.
-      Every week we delay Phase 0 is a week we delay revenue from clients who are already asking for this."
-    </p>
-
     <h3>The hard questions this phasing raises</h3>
-    <ul>
-      <li><strong>How do you get Phase 0 funded</strong> when it's invisible internal work that delivers nothing clients can see?</li>
-      <li><strong>How do you keep engineering shipping fast</strong> while Phase 2 adds constraints on schema changes?</li>
-      <li><strong>How do you price this</strong> so it's not a cost centre at scale?</li>
-      <li><strong>How do you handle the client who wants everything</strong> when you've scoped it narrow?</li>
-      <li><strong>Who owns this?</strong> Is it the data team? A PM? Engineering? Cross-functional?</li>
-    </ul>
 
-    <div class="callout is-warn">
-      <span class="callout-label">My angle for funding Phase 0</span>
-      <p>
-        It's not new spend &mdash; it <strong>replaces manual extract work already being done at unmeasured cost</strong>,
-        and it <strong>unblocks committed revenue</strong> from clients who've been promised this.
-      </p>
-      <p>
-        First question to ask them: <em>how many manual extracts have we done, how long did each take, and who did them?</em>
-        That's the cost baseline and the business case.
-      </p>
-    </div>
+    <p><strong>1. How do you get Phase 0 funded when it's invisible internal work?</strong></p>
+    <p>
+      It's not new spend &mdash; it <strong>replaces manual extract work already being done at unmeasured cost</strong>,
+      and it <strong>unblocks committed revenue</strong> from clients who've been promised this.
+    </p>
+    <p>
+      First question to ask them: <em>how many manual extracts have we done, how long did each take, and who did them?</em>
+      That's the cost baseline and the business case.
+    </p>
+
+    <p><strong>2. How do you keep engineering shipping fast while Phase 2 adds constraints?</strong></p>
+    <p>
+      The versioning layer absorbs changes. Engineering changes internal tables freely. The version layer
+      maps those changes back to stable external names. Clients see nothing change. When a breaking change
+      is genuinely needed, publish a new version and support both for a stated period. This is exactly what
+      Plentific already does for their API &mdash; extend the same discipline to the data channel.
+    </p>
+
+    <p><strong>3. How do you price this so it's not a cost centre at scale?</strong></p>
+    <p>
+      Unit economics first: storage, compute, egress, and the people who keep it running. The cost that
+      scales is egress (moving data out). Pricing must track data volume, not client count. Options:
+      per-GB pricing, tiered by property count, or photos as a separate add-on (they're the biggest files).
+    </p>
+
+    <p><strong>4. How do you handle the client who wants everything when you've scoped it narrow?</strong></p>
+    <p>
+      The narrow scope IS the product. "Everything" is not a product &mdash; it's a support nightmare.
+      Position it clearly: "This is what's in the data product. Additional fields are custom work, quoted
+      separately." Some clients will pay for custom. Most will accept the standard scope.
+    </p>
+
+    <p><strong>5. Who owns this?</strong></p>
+    <p>
+      Cross-functional, but with a single accountable PM. Engineering owns the build. Data team owns the
+      warehouse quality. Commercial owns pricing and packaging. Governance owns compliance. The PM owns
+      the product decisions: what's in scope, what's out, what's the roadmap.
+    </p>
 
     <!-- ============================================================ -->
     <h2 id="customer-need">What the customer actually needs</h2>
