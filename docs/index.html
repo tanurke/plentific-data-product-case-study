@@ -37,7 +37,6 @@
       <a href="#schema">Why shipping fast changes the schema</a>
       <a href="#asks">What they are asking me for</a>
       <a href="#questions">Questions and assumptions</a>
-      <a href="#provenance">Where claims come from</a>
     </nav>
 
     <h2 id="task">The task</h2>
@@ -701,119 +700,6 @@
       <li><strong>For ALMO clients, who owns the data</strong> &mdash; the ALMO or the council?</li>
       <li><strong>What have we already promised in contracts?</strong> Data is "partly monetised" today, so some clients may believe they have already bought this.</li>
     </ul>
-
-    <h2 id="provenance">Where each claim comes from</h2>
-    <p>
-      So I never attribute my own inference to their brief. If I am challenged on any of these, I need to
-      know instantly which column it sits in.
-    </p>
-
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th scope="col">Claim</th>
-            <th scope="col">Source</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row">Demand is concentrated in large housing associations with their own warehouse</th>
-            <td><span class="pill pill-good">Their brief</span></td>
-          </tr>
-          <tr>
-            <th scope="row">The warehouse is not modelled, governed or isolated for client use</th>
-            <td><span class="pill pill-good">Their brief</span></td>
-          </tr>
-          <tr>
-            <th scope="row">Tenancy isolation has never withstood a client's scrutiny</th>
-            <td><span class="pill pill-good">Their brief</span></td>
-          </tr>
-          <tr>
-            <th scope="row">They ship continuously and will not slow down</th>
-            <td><span class="pill pill-good">Their brief</span></td>
-          </tr>
-          <tr>
-            <th scope="row">Data is partly monetised; one-off extracts are quoted case by case; no view of cost to serve</th>
-            <td><span class="pill pill-good">Their brief</span></td>
-          </tr>
-          <tr>
-            <th scope="row">Change control is what they will push hardest on</th>
-            <td><span class="pill pill-good">Their brief</span></td>
-          </tr>
-          <tr>
-            <th scope="row">Dated API versions exist; 2023-02-01 stable for 3+ years; ~70 changes in 3.5 years, mostly additive</th>
-            <td><span class="pill pill-accent">Their public docs</span></td>
-          </tr>
-          <tr>
-            <th scope="row">Properties&rarr;Locations, Landlords&rarr;Owners, Tenants&rarr;Residents renames</th>
-            <td><span class="pill pill-accent">Their public docs</span></td>
-          </tr>
-          <tr>
-            <th scope="row">Webhooks and events already exist</th>
-            <td><span class="pill pill-accent">Their public docs</span></td>
-          </tr>
-          <tr>
-            <th scope="row">UPRN exists but is nullable; vulnerability flags, free text, photos, contractor bank details</th>
-            <td><span class="pill pill-accent">Their public docs</span></td>
-          </tr>
-          <tr>
-            <th scope="row">Custom fields and their allowed values are configurable, so schema can change with no release</th>
-            <td><span class="pill pill-accent">Their public docs</span></td>
-          </tr>
-          <tr>
-            <th scope="row">Awaab's Law timescales; Phase 2 from 30 Nov 2026; annual Regulator returns</th>
-            <td><span class="pill pill-neutral">GOV.UK and the Regulator</span></td>
-          </tr>
-          <tr>
-            <th scope="row">Client names, three-year council contracts, marketplace and module revenue</th>
-            <td><span class="pill pill-neutral">Their site, contract notices, G-Cloud</span></td>
-          </tr>
-          <tr>
-            <th scope="row">The buyer shifts from Director of Repairs to Head of Data</th>
-            <td><span class="pill pill-warn">My inference</span></td>
-          </tr>
-          <tr>
-            <th scope="row">The real need is auditable evidence, not a copy of everything</th>
-            <td><span class="pill pill-warn">My inference</span></td>
-          </tr>
-          <tr>
-            <th scope="row">Additive for an API is not additive for a warehouse; failures are silent, not loud</th>
-            <td><span class="pill pill-warn">My inference</span></td>
-          </tr>
-          <tr>
-            <th scope="row">A code gate is not enough because configuration bypasses it</th>
-            <td><span class="pill pill-warn">My inference</span></td>
-          </tr>
-          <tr>
-            <th scope="row">Scope discipline is the cost control mechanism for change management</th>
-            <td><span class="pill pill-warn">My inference</span></td>
-          </tr>
-          <tr>
-            <th scope="row">Exact revenue structure per segment; how often the warehouse refreshes; what it costs to serve</th>
-            <td><span class="pill pill-danger">Unknown &mdash; must ask</span></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <p class="table-note">
-      The <span class="pill pill-warn">My inference</span> rows are the ones worth arguing about, and they
-      are where I add value. But I must present them as a view I am offering, not as a fact they gave me.
-    </p>
-
-    <div class="callout is-warn">
-      <span class="callout-label">Reminder to myself</span>
-      <p>
-        The public docs are a <strong>floor, not a ceiling</strong>. Plentific's own G-Cloud listing says
-        they "don't currently guarantee parity" between the API and the platform. So never say "Plentific
-        cannot do X" &mdash; say "it is not in the public docs, so I assumed it is not productised, please
-        correct me."
-      </p>
-      <p>
-        And the problem comes from <strong>the brief</strong>. The API research is only evidence that makes
-        my examples specific instead of generic. It is never the story.
-      </p>
-    </div>
 
   </main>
 </div>
