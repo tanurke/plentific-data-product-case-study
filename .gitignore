@@ -1,5 +1,6 @@
 # Never commit the case study brief or any material Plentific shared privately
 *.pdf
+local-notes.md
 *.docx
 *.pptx
 /private/
