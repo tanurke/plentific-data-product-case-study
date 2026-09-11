@@ -227,46 +227,82 @@
       </table>
     </div>
 
-    <h3>The hard questions this phasing raises</h3>
+    <h3>Phase 0 questions</h3>
 
-    <p><strong>1. How do you get Phase 0 funded when it's invisible internal work?</strong></p>
-    <p>
-      It's not new spend &mdash; it <strong>replaces manual extract work already being done at unmeasured cost</strong>,
-      and it <strong>unblocks committed revenue</strong> from clients who've been promised this.
-    </p>
-    <p>
-      First question to ask them: <em>how many manual extracts have we done, how long did each take, and who did them?</em>
-      That's the cost baseline and the business case.
-    </p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Question</th><th>Answer</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>How do we fund it?</strong></td>
+            <td>It's a revenue enabler, not a cost saver. Without it, client security teams reject us and deals are blocked. With it, every enterprise client becomes possible. It's the gate to selling the product</td>
+          </tr>
+          <tr>
+            <td><strong>What's the scope?</strong></td>
+            <td>Start with tables being exported. Don't boil the ocean &mdash; secure what leaves the building first</td>
+          </tr>
+          <tr>
+            <td><strong>How long will it take?</strong></td>
+            <td>Depends on current state. If tenant IDs already exist on export tables: 4-6 weeks. If gaps need fixing: 8-12 weeks. Need an audit first to know</td>
+          </tr>
+          <tr>
+            <td><strong>Can we skip it?</strong></td>
+            <td>No. Client security teams will reject us. And the risk (GDPR fines, breach, lawsuits) is unacceptable</td>
+          </tr>
+          <tr>
+            <td><strong>Can we do it incrementally?</strong></td>
+            <td>Yes &mdash; secure the export tables first, then expand. But nothing ships to clients until the export path is secure</td>
+          </tr>
+          <tr>
+            <td><strong>Who does the work?</strong></td>
+            <td>Engineering builds RLS. Data team validates the data is correct. Security team reviews and pen tests</td>
+          </tr>
+          <tr>
+            <td><strong>How do we know it's done?</strong></td>
+            <td>Passes penetration testing. Can answer client security questionnaire with evidence. Automated tests prove isolation</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-    <p><strong>2. How do you keep engineering shipping fast while Phase 2 adds constraints?</strong></p>
-    <p>
-      The versioning layer absorbs changes. Engineering changes internal tables freely. The version layer
-      maps those changes back to stable external names. Clients see nothing change. When a breaking change
-      is genuinely needed, publish a new version and support both for a stated period. This is exactly what
-      Plentific already does for their API &mdash; extend the same discipline to the data channel.
-    </p>
+    <h3>Questions for other phases</h3>
 
-    <p><strong>3. How do you price this so it's not a cost centre at scale?</strong></p>
-    <p>
-      Unit economics first: storage, compute, egress, and the people who keep it running. The cost that
-      scales is egress (moving data out). Pricing must track data volume, not client count. Options:
-      per-GB pricing, tiered by property count, or photos as a separate add-on (they're the biggest files).
-    </p>
-
-    <p><strong>4. How do you handle the client who wants everything when you've scoped it narrow?</strong></p>
-    <p>
-      The narrow scope IS the product. "Everything" is not a product &mdash; it's a support nightmare.
-      Position it clearly: "This is what's in the data product. Additional fields are custom work, quoted
-      separately." Some clients will pay for custom. Most will accept the standard scope.
-    </p>
-
-    <p><strong>5. Who owns this?</strong></p>
-    <p>
-      Cross-functional, but with a single accountable PM. Engineering owns the build. Data team owns the
-      warehouse quality. Commercial owns pricing and packaging. Governance owns compliance. The PM owns
-      the product decisions: what's in scope, what's out, what's the roadmap.
-    </p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Phase</th><th>Question</th><th>Answer</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Phase 1 (scope)</strong></td>
+            <td>How do you handle the client who wants everything?</td>
+            <td>The narrow scope IS the product. "Everything" is a support nightmare. Position clearly: standard scope is the product, additional fields are custom work quoted separately</td>
+          </tr>
+          <tr>
+            <td><strong>Phase 2 (versioning)</strong></td>
+            <td>How do you keep engineering shipping fast?</td>
+            <td>The versioning layer absorbs changes. Engineering changes internal tables freely. The version layer maps back to stable external names. This is what Plentific already does for their API &mdash; extend it to the data channel</td>
+          </tr>
+          <tr>
+            <td><strong>Phase 3 (delivery)</strong></td>
+            <td>Which mechanism &mdash; file drop, API, data share?</td>
+            <td>Start with file drop (simplest, works for everyone). Add others later based on demand. Don't over-engineer Phase 3 &mdash; it's the easy part</td>
+          </tr>
+          <tr>
+            <td><strong>Phase 5 (productise)</strong></td>
+            <td>How do you price so it's not a cost centre?</td>
+            <td>Unit economics first: storage, compute, egress. The cost that scales is egress. Pricing must track data volume, not client count. Options: per-GB, tiered by property count, photos as separate add-on</td>
+          </tr>
+          <tr>
+            <td><strong>All phases</strong></td>
+            <td>Who owns this?</td>
+            <td>Cross-functional with a single accountable PM. Engineering owns build. Data team owns warehouse quality. Commercial owns pricing. Governance owns compliance. PM owns product decisions</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
     <!-- ============================================================ -->
     <h2 id="option-1">Delivery mechanism 1: Nightly file drop</h2>
