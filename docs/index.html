@@ -212,7 +212,10 @@
             <td>Southwark, Lambeth, Lewisham, Basildon</td>
             <td>
               Fixed-term contracts won through public procurement frameworks (Lewisham is a three-year
-              deal). Subscription plus marketplace. Individual jobs competed inside the platform
+              deal). Subscription plus marketplace &mdash; the <strong>marketplace</strong> is Plentific's
+              network of vetted local contractors (plumbers, electricians, roofers etc.). When the council
+              needs a job done and cannot do it in-house, they post it to the marketplace and contractors
+              bid or accept it. Plentific takes a cut of each job placed this way.
             </td>
             <td><span class="pill pill-warn">Sometimes</span></td>
             <td>Mostly no. Wants compliance evidence, not analytics</td>
@@ -452,11 +455,75 @@
     </div>
 
     <h2 id="today">What clients have today, and why each one breaks</h2>
-    <ul>
-      <li><strong>Dashboards and reports.</strong> Fixed fields, cannot be changed. Breaks as soon as the client's definition of "completed repair" differs from Plentific's &mdash; which it always does, because the Regulator's differs too.</li>
-      <li><strong>CSV downloads.</strong> Fixed columns, pulled by hand. Cannot be scheduled, cannot be joined, no schema promise, no audit trail. Useless as a pipeline source.</li>
-      <li><strong>The public API.</strong> Capable, but built for workflow not bulk analytics. To rebuild a repairs table you would walk jobs, then bookings, then quotes, then invoices, then history, one at a time. Slow and expensive for both sides.</li>
-    </ul>
+    <p>
+      Clients already have three ways to see or extract their data. None of them do what the big
+      associations actually need.
+    </p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Tool</th>
+            <th scope="col">What it is</th>
+            <th scope="col">Good for</th>
+            <th scope="col">Why it breaks for the warehouse ask</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Dashboards and reports</th>
+            <td>
+              Built-in screens inside the Plentific platform. Charts, tables, KPIs. Staff log in and
+              look at them.
+            </td>
+            <td>
+              Day-to-day operations &mdash; "how many jobs are open right now", "which contractors
+              are behind"
+            </td>
+            <td>
+              <strong>Fixed fields, cannot be changed.</strong> If the client's definition of
+              "completed repair" differs from Plentific's &mdash; which it always does, because the
+              Regulator's differs too &mdash; they cannot fix it. They see Plentific's answer, not
+              their own.
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">CSV downloads</th>
+            <td>
+              A button in the platform that exports a spreadsheet of jobs, invoices, etc. The client
+              clicks it and gets a file.
+            </td>
+            <td>
+              Ad-hoc analysis &mdash; someone in finance wants to check something in Excel
+            </td>
+            <td>
+              <strong>Fixed columns, pulled by hand.</strong> Cannot be scheduled to run automatically.
+              Cannot be joined to other data easily. No guarantee the columns will be the same next
+              month. No audit trail. Useless as a proper pipeline source.
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">The public API</th>
+            <td>
+              A programmer's interface. Another system (like the client's housing management system)
+              can call it to read or write data automatically.
+            </td>
+            <td>
+              Integration &mdash; "when a job is completed in Plentific, update our housing system".
+              Real-time, one record at a time.
+            </td>
+            <td>
+              <strong>Built for workflow, not bulk analytics.</strong> To rebuild a full repairs
+              table you would have to call it thousands of times &mdash; once per job, then once per
+              booking, then once per invoice, etc. Slow, expensive, and Plentific pays the compute
+              for all those calls.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
     <p>
       <strong>The pattern:</strong> all three are shaped by Plentific's definitions, but the client's
       questions are shaped by the Regulator's. That mismatch is the problem &mdash; not the transport
