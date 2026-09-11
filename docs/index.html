@@ -36,7 +36,6 @@
       <a href="#today">What clients have today</a>
       <a href="#schema">Why shipping fast changes the schema</a>
       <a href="#asks">What they are asking me for</a>
-      <a href="#jargon">Jargon</a>
       <a href="#questions">Open questions</a>
       <a href="#provenance">Where claims come from</a>
     </nav>
@@ -686,72 +685,6 @@
             <th scope="row">8</th>
             <td>State my assumptions and name the trade-offs</td>
             <td></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <h2 id="jargon">Jargon, one line each</h2>
-
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th scope="col">Term</th>
-            <th scope="col">Plain English</th>
-            <th scope="col">Why I care</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row">Join key / UPRN</th>
-            <td>The shared ID that matches a row in our data to a row in theirs. UPRN is the national ID for a UK home</td>
-            <td>It is the whole reason they want this. And it is optional today</td>
-          </tr>
-          <tr>
-            <th scope="row">Schema</th>
-            <td>The agreed shape of the data: which tables, which columns</td>
-            <td>Once a client builds on it, it stops being documentation and becomes a promise</td>
-          </tr>
-          <tr>
-            <th scope="row">Pipeline</th>
-            <td>The automated job that moves data into their warehouse on a schedule</td>
-            <td>When it breaks they cannot tell whose fault it is, and they call us either way</td>
-          </tr>
-          <tr>
-            <th scope="row">Contract layer</th>
-            <td>A published, stable set of tables sitting between our messy internal tables and the client. The menu, not the kitchen</td>
-            <td>This is my core answer. It is how engineering stays fast without breaking clients</td>
-          </tr>
-          <tr>
-            <th scope="row">Change capture</th>
-            <td>Being told what changed, instead of recounting everything. Like a till telling you each sale, versus recounting the whole shop nightly</td>
-            <td>Plentific already has this via webhooks. It is how I offer something better than a nightly export</td>
-          </tr>
-          <tr>
-            <th scope="row">Reference data</th>
-            <td>The lookup lists that turn ID codes into words</td>
-            <td>Without it the export is barcodes. Some of it is configurable, so it can change without a release</td>
-          </tr>
-          <tr>
-            <th scope="row">Restatement</th>
-            <td>Correcting data a client already copied and already reported on</td>
-            <td>The hardest promise to make &mdash; it means telling a client a number they filed was wrong</td>
-          </tr>
-          <tr>
-            <th scope="row">Tenancy isolation</th>
-            <td>Making certain one client can never see another's data</td>
-            <td>First question in any security review. Currently untested</td>
-          </tr>
-          <tr>
-            <th scope="row">Egress</th>
-            <td>What the cloud provider charges to move data <em>out</em>. Storing is cheap, sending is not</td>
-            <td>Photos make this the cost that scales worst with client count</td>
-          </tr>
-          <tr>
-            <th scope="row">Bearer token</th>
-            <td>A temporary pass, like a wristband. Show ID once, then just flash the band. Ours lasts 10 hours</td>
-            <td>Built for apps doing work, not for a client's data team needing narrow read-only access</td>
           </tr>
         </tbody>
       </table>
