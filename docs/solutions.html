@@ -102,8 +102,9 @@
     <h2 id="phases">Phased approach</h2>
 
     <p>
-      The export mechanism (files to S3, or API, or data share) is just <strong>Phase 3</strong>.
-      Most of the work is before that.
+      <strong>Phases 0, 1, 2 apply to ALL delivery mechanisms.</strong> You must do them regardless of
+      whether you choose file drop, data sharing, API, or warehouse access. Phase 3 is where you pick
+      the delivery mechanism. Phases 4 and 5 are the same again for all.
     </p>
 
     <div class="table-wrap">
@@ -132,7 +133,7 @@
           </tr>
           <tr>
             <th>Phase 3</th>
-            <td><strong>Build delivery mechanism</strong> (export to bucket, API, etc.)</td>
+            <td><strong>Build delivery mechanism</strong> &mdash; pick one: file drop, data share, API, or warehouse access</td>
             <td>Actually the easy part &mdash; well-understood patterns</td>
             <td>6-8 weeks engineering</td>
           </tr>
@@ -151,6 +152,87 @@
         </tbody>
       </table>
     </div>
+
+    <!-- ============================================================ -->
+    <h3>Why Phase 0 (multitenancy) is the absolute blocker</h3>
+
+    <p>
+      The brief says the warehouse "has never had to withstand a client's scrutiny" and is "not properly
+      separated client-by-client." This is Phase 0 because <strong>nothing else matters if we can't
+      guarantee tenant isolation.</strong>
+    </p>
+
+    <div class="callout is-danger">
+      <span class="callout-label">Why we cannot skip Phase 0</span>
+      <p><strong>Without tenant isolation, we cannot ship anything to any client.</strong></p>
+    </div>
+
+    <p><strong>What tenant isolation means:</strong></p>
+    <ul>
+      <li>When we query data for Client A, we get <em>only</em> Client A's data</li>
+      <li>There is no possible query, no bug, no misconfiguration that could return Client B's data</li>
+      <li>This must be provable &mdash; not just "we think it works"</li>
+    </ul>
+
+    <p><strong>What happens if we get this wrong:</strong></p>
+    <ul>
+      <li><strong>Data breach</strong> &mdash; Client A sees Client B's repairs, residents, photos</li>
+      <li><strong>Regulatory disaster</strong> &mdash; GDPR breach, ICO investigation, fines</li>
+      <li><strong>Trust destroyed</strong> &mdash; one leak and every client loses confidence</li>
+      <li><strong>Contract termination</strong> &mdash; most contracts have clauses for data breaches</li>
+    </ul>
+
+    <p><strong>Why the brief calls this out:</strong></p>
+    <p>
+      The current warehouse was built for <em>internal</em> analytics. Plentific staff query it. They're
+      trusted. If someone writes a bad query, it's embarrassing but not catastrophic.
+    </p>
+    <p>
+      The moment you export data to clients, the stakes change. The query that generates Client A's export
+      must be <strong>bulletproof</strong>. A <code>WHERE client_id = 'A'</code> that accidentally becomes
+      <code>WHERE client_id IN ('A', 'B')</code> is a data breach.
+    </p>
+
+    <p><strong>What Phase 0 actually involves:</strong></p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Task</th><th>Why</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Audit every table for <code>client_id</code> or equivalent</td>
+            <td>Some tables might not have tenant identifiers, or they might be inconsistent</td>
+          </tr>
+          <tr>
+            <td>Enforce tenant filtering at the query layer</td>
+            <td>Every query must have <code>WHERE client_id = X</code> &mdash; not optional, not forgettable</td>
+          </tr>
+          <tr>
+            <td>Write tests that prove isolation</td>
+            <td>Automated tests: "query for Client A returns zero rows from Client B's data"</td>
+          </tr>
+          <tr>
+            <td>Pass security review / penetration testing</td>
+            <td>External auditor tries to break it. Must pass before any client goes live</td>
+          </tr>
+          <tr>
+            <td>Document the isolation model</td>
+            <td>When a client's security team asks "how do you ensure we only see our data?", you need an answer</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p><strong>Why this is hard to fund:</strong></p>
+    <p>
+      Phase 0 delivers nothing clients can see. No new feature. No dashboard. No export. It's purely
+      internal hardening. But without it, everything else is blocked.
+    </p>
+    <p>
+      <strong>The argument for funding:</strong> "We cannot sell the data product until this is done.
+      Every week we delay Phase 0 is a week we delay revenue from clients who are already asking for this."
+    </p>
 
     <h3>The hard questions this phasing raises</h3>
     <ul>
