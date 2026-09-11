@@ -507,17 +507,20 @@
             <th scope="row">The public API</th>
             <td>
               A programmer's interface. Another system (like the client's housing management system)
-              can call it to read or write data automatically.
+              can call it to <strong>read data out</strong> or <strong>write data in</strong>.
+              For example: read job status from Plentific, or create a new work order in Plentific
+              from the housing system.
             </td>
             <td>
-              Integration &mdash; "when a job is completed in Plentific, update our housing system".
-              Real-time, one record at a time.
+              Integration and workflow &mdash; keeping two systems in sync. "When a tenant reports
+              a repair in our housing system, automatically create the job in Plentific." Or the
+              reverse: "when a job is completed in Plentific, update our housing system."
             </td>
             <td>
-              <strong>Built for workflow, not bulk analytics.</strong> To rebuild a full repairs
-              table you would have to call it thousands of times &mdash; once per job, then once per
-              booking, then once per invoice, etc. Slow, expensive, and Plentific pays the compute
-              for all those calls.
+              <strong>Built for workflow, not bulk analytics.</strong> Designed for one record at
+              a time, in real-time. To rebuild a full repairs table you would have to call it
+              thousands of times &mdash; once per job, then once per booking, then once per invoice,
+              etc. Slow, expensive, and Plentific pays the compute for all those calls.
             </td>
           </tr>
         </tbody>
