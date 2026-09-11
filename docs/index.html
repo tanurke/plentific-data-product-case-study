@@ -539,32 +539,6 @@
       </table>
     </div>
 
-    <div class="callout is-warn">
-      <span class="callout-label">My own addition &mdash; this one is not in the brief</span>
-      <p>
-        Being precise, because it matters if I say it out loud: <strong>the brief does not mention this.</strong>
-        The brief frames all churn as engineering churn &mdash; "new features land, existing workflows change
-        shape, fields are added and retired, and internal APIs and data structures change".
-      </p>
-      <p>
-        But their API shows <strong>configuration can change the shape too, with no engineer involved.</strong>
-        There are endpoints to create and delete custom fields, and to add and remove the allowed values
-        inside them. Same for tags, location types, asset types and finance codes. Those values then flow
-        into the records themselves.
-      </p>
-      <p>
-        Two consequences. First, <strong>a code-review gate is not enough</strong> &mdash; configuration
-        walks straight past it. Second, and sharper:
-        <strong>the client can change their own schema.</strong> If a client adds a custom field and their
-        pipeline then breaks, that is not our change. Which makes it a clean example for the
-        responsibility boundary the brief asks me to make explicit.
-      </p>
-      <p class="muted">
-        Correction to my earlier note: repair <em>categories</em> and <em>services</em> are read-only in the
-        public API, so I should not claim those. Custom fields are the strong example.
-      </p>
-    </div>
-
     <h3>Other companies solve it exactly this way &mdash; including Plentific</h3>
 
     <div class="table-wrap">
