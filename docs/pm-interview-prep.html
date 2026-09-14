@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>PM interview prep &mdash; Plentific case study</title>
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <p class="masthead-title">Plentific &middot; Data PM case study</p>
+    <p class="masthead-meta">Interview preparation &mdash; difficult questions</p>
+  </div>
+</header>
+
+<div class="shell shell-wide">
+  <main class="content" id="main">
+
+    <h1>PM interview prep</h1>
+    <p class="lede">
+      Difficult questions a Senior PM might face in this case study, and how to answer them.
+    </p>
+
+    <p><a href="solutions.html">&larr; Back to solutions</a></p>
+
+    <nav class="toc" aria-label="Contents">
+      <a href="#phase0-pm">Phase 0 &mdash; PM-level questions</a>
+      <a href="#phase0-technical">Phase 0 &mdash; technical questions</a>
+      <a href="#traps">Common PM traps</a>
+    </nav>
+
+    <!-- ============================================================ -->
+    <h2 id="phase0-pm">Phase 0 &mdash; PM-level questions</h2>
+
+    <p>These test prioritisation, stakeholder management, and business thinking &mdash; not technical knowledge.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Question</th><th>What they're testing</th><th>How to answer</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Engineering says Phase 0 will take 6 months. Sales promised the client 3. What do you do?</strong></td>
+            <td>Stakeholder management, negotiation, managing expectations</td>
+            <td>Reset with sales and client immediately. Explain what's possible, offer interim solutions (manual extract for now, automated later). Never promise what you can't deliver &mdash; own the conversation early</td>
+          </tr>
+          <tr>
+            <td><strong>How do you prioritise Phase 0 against 5 other features clients are screaming for?</strong></td>
+            <td>Prioritisation frameworks, saying no, communicating trade-offs</td>
+            <td>Phase 0 is a blocker &mdash; nothing else ships securely without it. Frame it as unblocking everything else, not competing with it. Use a risk/revenue matrix to show why it comes first</td>
+          </tr>
+          <tr>
+            <td><strong>The CEO asks "why are we spending engineering time on something clients don't see?"</strong></td>
+            <td>Executive communication, selling internal work, business case articulation</td>
+            <td>"They don't see it, but they'll reject us without it. Enterprise clients require security evidence. And if we skip it, one breach costs us &pound;17M+ in fines and every client's trust"</td>
+          </tr>
+          <tr>
+            <td><strong>Legal says we need multitenancy. Engineering says it's not their top priority. How do you resolve it?</strong></td>
+            <td>Cross-functional influence without authority</td>
+            <td>Align on the risk first. Bring engineering into the legal conversation. Make it their problem too, not a mandate from above. Find scope they can commit to</td>
+          </tr>
+          <tr>
+            <td><strong>A client threatens to leave if they don't get data export in 4 weeks. Phase 0 alone takes 6. What's your move?</strong></td>
+            <td>Crisis management, creative problem-solving, knowing when to say no</td>
+            <td>Be honest: "We can do a secure manual extract now, or wait 6 weeks for automated. We won't ship something insecure." Offer the interim, protect the relationship, don't cave on safety</td>
+          </tr>
+          <tr>
+            <td><strong>How do you measure success for Phase 0? It has no direct revenue.</strong></td>
+            <td>Defining metrics for enabling/foundational work</td>
+            <td>Pen test pass rate. Time to answer security questionnaires. Number of enterprise deals unblocked. Reduction in manual extract requests. These are leading indicators of revenue</td>
+          </tr>
+          <tr>
+            <td><strong>You've shipped Phase 0. How do you know it actually works?</strong></td>
+            <td>Defining "done," acceptance criteria, validation</td>
+            <td>Automated isolation tests pass. External pen test passes. Can fill out client security questionnaire with evidence. First secure export delivered without incident</td>
+          </tr>
+          <tr>
+            <td><strong>The sales team keeps promising custom data fields. How do you handle scope creep?</strong></td>
+            <td>Product discipline, managing commercial pressure</td>
+            <td>Define what's in the standard product vs custom. Custom is quoted separately. Sales needs a pricing framework, not a blank cheque. Work with commercial to create it</td>
+          </tr>
+          <tr>
+            <td><strong>What's your 12-month roadmap for this data product? Walk me through it.</strong></td>
+            <td>Strategic thinking, sequencing, phased delivery</td>
+            <td>Phase 0 (multitenancy): months 1-2. Phase 1 (scope definition): month 3. Phase 2 (versioning): months 4-5. Phase 3 (delivery mechanism): months 6-7. Phase 4 (governance): ongoing. Phase 5 (productise): months 8-12</td>
+          </tr>
+          <tr>
+            <td><strong>You have to cut scope. What do you drop from Phase 0 and why?</strong></td>
+            <td>Trade-off decisions, understanding what's truly essential</td>
+            <td>Keep: RLS on export tables, pen test, automated tests. Cut: full database coverage (do export tables only), fancy monitoring (basic logging is enough for MVP). Secure the exit path first</td>
+          </tr>
+          <tr>
+            <td><strong>How do you get buy-in from engineering when they'd rather build features?</strong></td>
+            <td>Influence, storytelling, making the case</td>
+            <td>Show the cost of not doing it: blocked deals, breach risk, fines. Show the benefit: once done, we can sell to every enterprise client. Make it a "build once, unlock many" story</td>
+          </tr>
+          <tr>
+            <td><strong>A competitor launches a data export feature next month. Does that change your plan?</strong></td>
+            <td>Competitive response, staying focused vs reacting</td>
+            <td>Not fundamentally. We don't rush and ship something insecure because a competitor moved. We might accelerate, but we don't skip Phase 0. Speed without safety is a liability</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ============================================================ -->
+    <h2 id="phase0-technical">Phase 0 &mdash; technical questions</h2>
+
+    <p>You need to understand these, but don't get lost in the detail. Know enough to be credible, focus on decisions.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Question</th><th>How to answer</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>What is multitenancy?</strong></td>
+            <td>One system, many clients, each sees only their own data. Not separate databases per client</td>
+          </tr>
+          <tr>
+            <td><strong>Why can't we just filter in queries?</strong></td>
+            <td>Human error &mdash; one missed WHERE clause = data breach. RLS enforces it at database level, no exceptions</td>
+          </tr>
+          <tr>
+            <td><strong>How long will Phase 0 take?</strong></td>
+            <td>Depends on current state. Need to audit first. If tenant IDs exist: 4-6 weeks. If gaps: 8-12 weeks</td>
+          </tr>
+          <tr>
+            <td><strong>What's the risk of not doing it?</strong></td>
+            <td>GDPR fines (&pound;17.5M or 4% turnover), client lawsuits, contract termination, reputation destroyed</td>
+          </tr>
+          <tr>
+            <td><strong>What if tenant IDs don't exist on some tables?</strong></td>
+            <td>Then we have a data problem first. Need to backfill or restructure. This is why we audit before estimating</td>
+          </tr>
+          <tr>
+            <td><strong>What about reference/lookup tables shared across clients?</strong></td>
+            <td>Those don't contain client data &mdash; they're fine to share. Example: a list of repair categories. But anything with client-specific records needs isolation</td>
+          </tr>
+          <tr>
+            <td><strong>What about historical data that was never tagged with tenant?</strong></td>
+            <td>Risky. Options: backfill if possible, exclude from exports if not, or accept that old data can't be exported safely</td>
+          </tr>
+          <tr>
+            <td><strong>How do you test multitenancy without using production data?</strong></td>
+            <td>Create test tenants with synthetic data, run queries as each tenant, verify isolation. Also: security team does pen testing</td>
+          </tr>
+          <tr>
+            <td><strong>Can you guarantee zero data leakage?</strong></td>
+            <td>No one can guarantee zero. But RLS is the industry standard, and we'll have automated tests + pen testing + monitoring. That's the defensible position</td>
+          </tr>
+          <tr>
+            <td><strong>What are automated tests for multitenancy?</strong></td>
+            <td>Create test data for Tenant A and B. Query as Tenant A. Assert: you see ONLY Tenant A's data, zero rows from B. Run on every deploy</td>
+          </tr>
+          <tr>
+            <td><strong>What is pen testing?</strong></td>
+            <td>Security experts try to break your system &mdash; find ways to access data they shouldn't. External pen test is more credible to clients</td>
+          </tr>
+          <tr>
+            <td><strong>Is RLS industry standard?</strong></td>
+            <td>Yes. Used by Salesforce, AWS, most modern B2B SaaS. Built into PostgreSQL, SQL Server, Oracle, Snowflake</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ============================================================ -->
+    <h2 id="traps">Common PM traps</h2>
+
+    <p>What NOT to do in the interview:</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Trap</th><th>What good looks like</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Getting lost in technical details</strong></td>
+            <td>Know enough to be credible, but focus on decisions, trade-offs, outcomes</td>
+          </tr>
+          <tr>
+            <td><strong>Saying "engineering decides that"</strong></td>
+            <td>You own the WHAT and WHY. Engineering owns HOW. You can't abdicate the decision</td>
+          </tr>
+          <tr>
+            <td><strong>No clear prioritisation logic</strong></td>
+            <td>Have a framework: risk, revenue, effort, dependencies</td>
+          </tr>
+          <tr>
+            <td><strong>Can't articulate the business case</strong></td>
+            <td>"It enables revenue and protects us from fines" &mdash; simple, clear</td>
+          </tr>
+          <tr>
+            <td><strong>No plan for stakeholder conflict</strong></td>
+            <td>Show you can navigate competing priorities</td>
+          </tr>
+          <tr>
+            <td><strong>Promising what you can't deliver</strong></td>
+            <td>Be honest about constraints. Offer alternatives. Don't cave to pressure</td>
+          </tr>
+          <tr>
+            <td><strong>Treating security as optional</strong></td>
+            <td>Phase 0 is not negotiable. You can scope it, but you can't skip it</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ============================================================ -->
+    <h3>The killer question (be ready)</h3>
+
+    <blockquote>
+      "If multitenancy is so critical, why hasn't it been done already?"
+    </blockquote>
+
+    <p><strong>How to answer:</strong></p>
+    <p>
+      "Probably because manual extracts worked for the clients they had, and the security risk wasn't visible 
+      until enterprise clients started asking hard questions. That's normal &mdash; you don't build infrastructure 
+      until you need it. Now they need it."
+    </p>
+
+  </main>
+</div>
+
+<footer class="site-footer">
+  <p>&copy; 2026 Tanu Jain &middot; Plentific Data PM case study prep</p>
+</footer>
+</body>
+</html>
