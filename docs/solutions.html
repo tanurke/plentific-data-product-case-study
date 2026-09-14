@@ -233,43 +233,6 @@
       </table>
     </div>
 
-    <h3>Questions for other phases</h3>
-
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr><th>Phase</th><th>Question</th><th>Answer</th></tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><strong>Phase 1 (scope)</strong></td>
-            <td>How do you handle the client who wants everything?</td>
-            <td>The narrow scope IS the product. "Everything" is a support nightmare. Position clearly: standard scope is the product, additional fields are custom work quoted separately</td>
-          </tr>
-          <tr>
-            <td><strong>Phase 2 (versioning)</strong></td>
-            <td>How do you keep engineering shipping fast?</td>
-            <td>The versioning layer absorbs changes. Engineering changes internal tables freely. The version layer maps back to stable external names. This is what Plentific already does for their API &mdash; extend it to the data channel</td>
-          </tr>
-          <tr>
-            <td><strong>Phase 3 (delivery)</strong></td>
-            <td>Which mechanism &mdash; file drop, API, data share?</td>
-            <td>Start with file drop (simplest, works for everyone). Add others later based on demand. Don't over-engineer Phase 3 &mdash; it's the easy part</td>
-          </tr>
-          <tr>
-            <td><strong>Phase 5 (productise)</strong></td>
-            <td>How do you price so it's not a cost centre?</td>
-            <td>Unit economics first: storage, compute, egress. The cost that scales is egress. Pricing must track data volume, not client count. Options: per-GB, tiered by property count, photos as separate add-on</td>
-          </tr>
-          <tr>
-            <td><strong>All phases</strong></td>
-            <td>Who owns this?</td>
-            <td>Cross-functional with a single accountable PM. Engineering owns build. Data team owns warehouse quality. Commercial owns pricing. Governance owns compliance. PM owns product decisions</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
     <!-- ============================================================ -->
     <h2 id="option-1">Delivery mechanism 1: Nightly file drop</h2>
 
