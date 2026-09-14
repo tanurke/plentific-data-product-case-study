@@ -37,6 +37,7 @@
     <nav class="toc" aria-label="Contents">
       <a href="#matrix">Risk/revenue matrix</a>
       <a href="#phase0-pm">Phase 0 &mdash; PM-level questions</a>
+      <a href="#phase1">Phase 1 &mdash; scope questions</a>
       <a href="#phase0-technical">Phase 0 &mdash; technical questions</a>
       <a href="#traps">Common PM traps</a>
     </nav>
@@ -225,6 +226,38 @@ RISK     │                     │                     │      RISK
         </tbody>
       </table>
     </div>
+
+    <!-- ============================================================ -->
+    <h2 id="phase1">Phase 1 &mdash; scope questions</h2>
+
+    <p>How do you support different client requirements without building custom code for each?</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Layer</th><th>What it covers</th><th>How it's handled</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Standard scope</strong></td>
+            <td>The 80% that most clients need (repairs, properties, compliance, work orders)</td>
+            <td>Built once, available to all. This IS the product</td>
+          </tr>
+          <tr>
+            <td><strong>Configuration</strong></td>
+            <td>Delivery schedule, file format, destination, which tables they want from the standard set</td>
+            <td>Config per client &mdash; no code, just a settings row</td>
+          </tr>
+          <tr>
+            <td><strong>Custom fields/tables</strong></td>
+            <td>The 20% where one client has a unique ask</td>
+            <td>Quoted separately, funded by that client, or "no"</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p><strong>The product discipline:</strong> You're NOT trying to support every requirement. You define what's IN the product (standard scope), what's OUT (custom or "not available"), and price the difference.</p>
 
     <!-- ============================================================ -->
     <h2 id="phase0-technical">Phase 0 &mdash; technical questions</h2>
