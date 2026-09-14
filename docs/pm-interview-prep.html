@@ -259,6 +259,84 @@ RISK     │                     │                     │      RISK
 
     <p><strong>The product discipline:</strong> You're NOT trying to support every requirement. You define what's IN the product (standard scope), what's OUT (custom or "not available"), and price the difference.</p>
 
+    <h3>What the client sees: settings page</h3>
+
+    <pre>
+┌─────────────────────────────────────────────────────────────┐
+│  PLENTIFIC › Settings › Data Export                         │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  Destination                                                │
+│  ┌─────────────────────────────────────────────────────┐   │
+│  │ Type:     [Amazon S3 ▼]                             │   │
+│  │ Bucket:   [nhg-data-imports]                        │   │
+│  │ Path:     [/plentific/daily/]                       │   │
+│  │ Credentials: [••••••••••••] [Update]                │   │
+│  └─────────────────────────────────────────────────────┘   │
+│                                                             │
+│  Schedule                                                   │
+│  ┌─────────────────────────────────────────────────────┐   │
+│  │ Frequency:  [Daily ▼]                               │   │
+│  │ Time:       [02:00 UTC ▼]                           │   │
+│  └─────────────────────────────────────────────────────┘   │
+│                                                             │
+│  Data included                                              │
+│  ☑ Repairs                                                 │
+│  ☑ Properties                                              │
+│  ☑ Compliance records                                      │
+│  ☐ Work orders (coming soon)                               │
+│                                                             │
+│  [Save changes]                                             │
+│                                                             │
+├─────────────────────────────────────────────────────────────┤
+│  Recent exports                                             │
+│  ┌──────────────┬──────────┬─────────┬─────────────────┐   │
+│  │ Date         │ Status   │ Rows    │ File size       │   │
+│  ├──────────────┼──────────┼─────────┼─────────────────┤   │
+│  │ 14 Sep 02:00 │ ✓ Done   │ 48,291  │ 12.4 MB        │   │
+│  │ 13 Sep 02:00 │ ✓ Done   │ 48,105  │ 12.3 MB        │   │
+│  │ 12 Sep 02:00 │ ✓ Done   │ 47,892  │ 12.1 MB        │   │
+│  └──────────────┴──────────┴─────────┴─────────────────┘   │
+│                                                             │
+│  [Trigger manual export]   [View all history]               │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+    </pre>
+
+    <h3>Client-facing API</h3>
+
+    <p>We build this. It's NOT the existing Plentific API &mdash; it's a small, new API specifically for the data export product.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Endpoint</th><th>What client uses it for</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>GET /exports/latest</code></td>
+            <td>"Did my export run? What's the status?"</td>
+          </tr>
+          <tr>
+            <td><code>GET /exports/history</code></td>
+            <td>"Show me exports from this month"</td>
+          </tr>
+          <tr>
+            <td><code>POST /exports/trigger</code></td>
+            <td>"I need a re-export now, don't wait for 2am"</td>
+          </tr>
+          <tr>
+            <td><code>PUT /config/destination</code></td>
+            <td>"We changed our S3 bucket"</td>
+          </tr>
+          <tr>
+            <td><code>GET /config</code></td>
+            <td>"Show me my current settings"</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
     <!-- ============================================================ -->
     <h2 id="phase0-technical">Phase 0 &mdash; technical questions</h2>
 
