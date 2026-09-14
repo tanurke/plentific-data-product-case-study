@@ -271,20 +271,32 @@
     <div class="table-wrap">
       <table>
         <thead>
-          <tr><th>Change type</th><th>Example</th><th>What we do</th><th>Client impact</th></tr>
+          <tr><th>Change type</th><th>Example</th><th>Client notice</th><th>Action required by client</th></tr>
         </thead>
         <tbody>
           <tr>
-            <th>Additive</th>
+            <th>Additive (non-breaking)</th>
             <td>New column <code>uprn</code> added to locations</td>
-            <td>Column appears in next export. Changelog published. Email sent to client data contacts</td>
-            <td>Should be fine &mdash; pipelines should ignore unknown columns. If they break, that's their pipeline being too strict</td>
+            <td>Changelog only, no advance notice needed</td>
+            <td>None &mdash; their pipelines ignore new columns</td>
+          </tr>
+          <tr>
+            <th>Deprecation</th>
+            <td>Column <code>legacy_category_code</code> will be removed in 90 days</td>
+            <td>90 days advance notice, changelog, direct email</td>
+            <td>Update their pipelines before deadline</td>
           </tr>
           <tr>
             <th>Breaking</th>
-            <td>Column <code>tenant_name</code> renamed to <code>resident_name</code></td>
-            <td>New schema version released (e.g. <code>v2026-10-01</code>). Old version keeps working. 90 days notice. Client migrates when ready</td>
-            <td>No immediate impact. They choose when to switch</td>
+            <td>Column <code>tenant_name</code> renamed to <code>resident_name</code>, or type changed</td>
+            <td>90+ days notice, changelog, direct email, migration support</td>
+            <td>Must update pipelines or break</td>
+          </tr>
+          <tr>
+            <th>New version</th>
+            <td>v2 schema released with restructured tables</td>
+            <td>Changelog, migration guide, support both versions</td>
+            <td>Migrate when ready, within support window</td>
           </tr>
         </tbody>
       </table>
