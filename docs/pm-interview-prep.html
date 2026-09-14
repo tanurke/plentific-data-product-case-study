@@ -28,10 +28,121 @@
     <p><a href="solutions.html">&larr; Back to solutions</a></p>
 
     <nav class="toc" aria-label="Contents">
+      <a href="#matrix">Risk/revenue matrix</a>
       <a href="#phase0-pm">Phase 0 &mdash; PM-level questions</a>
       <a href="#phase0-technical">Phase 0 &mdash; technical questions</a>
       <a href="#traps">Common PM traps</a>
     </nav>
+
+    <!-- ============================================================ -->
+    <h2 id="matrix">Risk/revenue matrix</h2>
+
+    <p>Use this to justify prioritisation. Phase 0 comes first because it's high risk AND blocks revenue.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Risk if skipped</th>
+            <th>Revenue impact</th>
+            <th>Effort</th>
+            <th>Priority</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="background: #ffe0e0;">
+            <td><strong>Phase 0: Multitenancy (RLS)</strong></td>
+            <td><strong>Critical</strong> &mdash; GDPR fines, breach, lawsuits</td>
+            <td><strong>Blocker</strong> &mdash; enterprise deals rejected without it</td>
+            <td>Medium (4-12 weeks)</td>
+            <td><strong>1 &mdash; Must do first</strong></td>
+          </tr>
+          <tr style="background: #fff4e0;">
+            <td><strong>Phase 1: Scope definition</strong></td>
+            <td>Medium &mdash; scope creep, support burden</td>
+            <td>High &mdash; defines what we can sell</td>
+            <td>Low (2-3 weeks)</td>
+            <td><strong>2 &mdash; Do immediately after</strong></td>
+          </tr>
+          <tr style="background: #fff4e0;">
+            <td><strong>Phase 2: Versioning</strong></td>
+            <td>High &mdash; breaking changes break clients</td>
+            <td>High &mdash; client retention depends on stability</td>
+            <td>Medium (4-6 weeks)</td>
+            <td><strong>3 &mdash; Before scaling</strong></td>
+          </tr>
+          <tr style="background: #e0ffe0;">
+            <td><strong>Phase 3: File drop (S3/SFTP)</strong></td>
+            <td>Low &mdash; simplest option</td>
+            <td>High &mdash; works for most clients</td>
+            <td>Low (2-4 weeks)</td>
+            <td><strong>4 &mdash; First delivery mechanism</strong></td>
+          </tr>
+          <tr style="background: #e0f0ff;">
+            <td><strong>Phase 3: API access</strong></td>
+            <td>Low &mdash; nice to have</td>
+            <td>Medium &mdash; some clients want real-time</td>
+            <td>Medium (4-6 weeks)</td>
+            <td><strong>5 &mdash; After file drop works</strong></td>
+          </tr>
+          <tr style="background: #e0f0ff;">
+            <td><strong>Phase 3: Data share (Snowflake/BigQuery)</strong></td>
+            <td>Low &mdash; premium option</td>
+            <td>Medium &mdash; enterprise upsell</td>
+            <td>Medium (4-6 weeks)</td>
+            <td><strong>6 &mdash; Premium tier</strong></td>
+          </tr>
+          <tr style="background: #e0f0ff;">
+            <td><strong>Phase 3: Embedded dashboards</strong></td>
+            <td>Low &mdash; alternative to raw data</td>
+            <td>Low &mdash; clients asking for raw data, not dashboards</td>
+            <td>High (8-12 weeks)</td>
+            <td><strong>7 &mdash; Only if demand</strong></td>
+          </tr>
+          <tr style="background: #f0f0f0;">
+            <td><strong>Phase 4: Governance</strong></td>
+            <td>Medium &mdash; compliance gaps</td>
+            <td>Indirect &mdash; retention, trust</td>
+            <td>Ongoing</td>
+            <td><strong>Continuous &mdash; starts with Phase 0</strong></td>
+          </tr>
+          <tr style="background: #f0f0f0;">
+            <td><strong>Phase 5: Productise (pricing, packaging)</strong></td>
+            <td>Low &mdash; can do manually first</td>
+            <td>High &mdash; turns cost centre into revenue</td>
+            <td>Medium</td>
+            <td><strong>8 &mdash; Once delivery works</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>The 2x2 view</h3>
+
+    <pre>
+                        HIGH REVENUE IMPACT
+                               │
+         ┌─────────────────────┼─────────────────────┐
+         │                     │                     │
+         │   Phase 1 (Scope)   │   PHASE 0 (RLS)     │
+         │   Phase 2 (Version) │   ← DO THIS FIRST   │
+         │   File drop         │                     │
+         │                     │                     │
+LOW ─────┼─────────────────────┼─────────────────────┼───── HIGH
+RISK     │                     │                     │      RISK
+         │                     │                     │
+         │   Dashboards        │   (nothing here     │
+         │   Data share        │    ideally)         │
+         │   API access        │                     │
+         │                     │                     │
+         └─────────────────────┼─────────────────────┘
+                               │
+                        LOW REVENUE IMPACT
+    </pre>
+
+    <p><strong>Reading this:</strong> Phase 0 is top-right (high risk if skipped, high revenue impact). That's why it's priority 1. 
+    Dashboards are bottom-left (low risk, low revenue for this brief) &mdash; do last or not at all.</p>
 
     <!-- ============================================================ -->
     <h2 id="phase0-pm">Phase 0 &mdash; PM-level questions</h2>
