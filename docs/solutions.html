@@ -38,6 +38,7 @@
       <a href="#customer-need">What the customer actually needs</a>
       <a href="#real-problems">The real problems to solve</a>
       <a href="#phases">Phased approach</a>
+      <a href="#presentation">Presentation summary</a>
       <a href="#option-1">Delivery: Nightly file drop</a>
       <a href="#option-2">Delivery: Data sharing (zero-copy)</a>
       <a href="#option-3">Delivery: Bulk API endpoints</a>
@@ -232,6 +233,56 @@
         </tbody>
       </table>
     </div>
+
+    <!-- ============================================================ -->
+    <h2 id="presentation">Presentation summary</h2>
+
+    <h3>How we cover all 4 areas</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Area</th><th>Our approach</th><th>Key decision</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Cost/commercial</strong></td>
+            <td>Volume-based pricing, tiered by frequency</td>
+            <td>Per-GB egress, not flat fee</td>
+          </tr>
+          <tr>
+            <td><strong>Technical</strong></td>
+            <td>RLS, export jobs, S3 file drop</td>
+            <td>Phase 0 before anything ships</td>
+          </tr>
+          <tr>
+            <td><strong>Version/change control</strong></td>
+            <td>View-based versioning, 90-day deprecation</td>
+            <td>Engineering ships fast, clients stay stable</td>
+          </tr>
+          <tr>
+            <td><strong>Governance</strong></td>
+            <td>Audit trail, DPA, data minimisation</td>
+            <td>Clear handoff point, client owns their copy</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>The main concern: can we keep shipping?</h3>
+    <ul>
+      <li><strong>Yes.</strong> Version layer absorbs changes</li>
+      <li>Internal schema &ne; external schema</li>
+      <li>Breaking changes only = new version (rare)</li>
+      <li>Engineering velocity unchanged</li>
+    </ul>
+
+    <h3>Why I weighted version control highest</h3>
+    <ul>
+      <li>Least reversible decision</li>
+      <li>Already proven in their API</li>
+      <li>Touches all 4 registers</li>
+      <li>The question that decides if the product survives</li>
+    </ul>
 
     <!-- ============================================================ -->
     <h2 id="option-1">Delivery mechanism 1: Nightly file drop</h2>

@@ -259,6 +259,70 @@ RISK     │                     │                     │      RISK
 
     <p><strong>The product discipline:</strong> You're NOT trying to support every requirement. You define what's IN the product (standard scope), what's OUT (custom or "not available"), and price the difference.</p>
 
+    <h3>How the solution covers the brief's 4 areas</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Area</th><th>What the brief asks</th><th>How our solution covers it</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>1. Cost and commercial</strong></td>
+            <td>Pricing, unit economics, who pays when usage grows</td>
+            <td>Phase 5 (productise). Pricing by data volume/egress, not flat fee. Tiered: daily = base, hourly/real-time = premium. Self-service config reduces support cost</td>
+          </tr>
+          <tr>
+            <td><strong>2. Technical considerations</strong></td>
+            <td>How to build it, what infrastructure</td>
+            <td>Phase 0 (multitenancy/RLS), Phase 3 (export jobs, S3, scheduling). 8-12 weeks. Tenant isolation is critical</td>
+          </tr>
+          <tr>
+            <td><strong>3. Version and change control</strong></td>
+            <td>"Can the product keep moving while the export keeps its promises?"</td>
+            <td>Phase 2 (versioning layer). Views absorb internal changes. Breaking changes = new version. Both versions supported. Engineering ships fast, clients see stable schema</td>
+          </tr>
+          <tr>
+            <td><strong>4. Governance, security, data protection</strong></td>
+            <td>GDPR, audit trail, tenant isolation</td>
+            <td>Phase 0 (RLS, pen test), Phase 4 (governance). Audit trail of what was sent. DPA per client. Data minimisation. Clear handoff point</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Impact on the 4 registers</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Register</th><th>Impact</th><th>What changes for them</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Product</strong></td>
+            <td>Schema versioning becomes a product discipline, not just an API thing. Need to decide: what's additive (just add it), what's breaking (new version), what's out of scope (no)</td>
+            <td>Product defines the version policy. Product owns the scope. Product decides when to deprecate old versions</td>
+          </tr>
+          <tr>
+            <td><strong>Engineering</strong></td>
+            <td>Build once, version layer absorbs changes. No slowdown to shipping</td>
+            <td>Engineering changes internal tables freely. They DON'T touch the version layer for most changes. Only breaking changes need coordination</td>
+          </tr>
+          <tr>
+            <td><strong>Commercial</strong></td>
+            <td>Version stability is a selling point. Premium tiers for faster delivery. Clear pricing model</td>
+            <td>"Your pipelines won't break" is the pitch. Price by volume, not features. Upsell path: daily &rarr; hourly &rarr; real-time</td>
+          </tr>
+          <tr>
+            <td><strong>Governance</strong></td>
+            <td>Audit trail, clear handoff, compliance</td>
+            <td>We track what was sent, when, to whom. Client owns data after handoff. DPA required. Data minimisation enforced by scope</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
     <h3>What the client sees: settings page</h3>
 
     <pre>
