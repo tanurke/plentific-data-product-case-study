@@ -1,0 +1,1050 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plentific Data Delivery — Prototype</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  :root {
+    --primary: #0066cc;
+    --primary-dark: #004d99;
+    --success: #00a854;
+    --warning: #faad14;
+    --error: #f5222d;
+    --gray-50: #fafafa;
+    --gray-100: #f5f5f5;
+    --gray-200: #e8e8e8;
+    --gray-300: #d9d9d9;
+    --gray-500: #8c8c8c;
+    --gray-700: #595959;
+    --gray-900: #262626;
+  }
+  
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--gray-100);
+    color: var(--gray-900);
+    line-height: 1.5;
+  }
+  
+  /* Top bar */
+  .topbar {
+    background: var(--gray-900);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .topbar-logo {
+    font-weight: 600;
+    font-size: 1.1rem;
+  }
+  .topbar-logo span {
+    color: var(--primary);
+  }
+  .topbar-user {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+  }
+  .avatar {
+    width: 32px;
+    height: 32px;
+    background: var(--primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.85rem;
+  }
+  
+  /* Layout */
+  .layout {
+    display: flex;
+    min-height: calc(100vh - 52px);
+  }
+  
+  /* Sidebar */
+  .sidebar {
+    width: 240px;
+    background: white;
+    border-right: 1px solid var(--gray-200);
+    padding: 1rem 0;
+  }
+  .sidebar-section {
+    padding: 0.5rem 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .sidebar-link {
+    display: block;
+    padding: 0.6rem 1rem;
+    color: var(--gray-700);
+    text-decoration: none;
+    font-size: 0.9rem;
+    border-left: 3px solid transparent;
+  }
+  .sidebar-link:hover {
+    background: var(--gray-50);
+  }
+  .sidebar-link.active {
+    background: #e6f0ff;
+    color: var(--primary);
+    border-left-color: var(--primary);
+    font-weight: 500;
+  }
+  
+  /* Main content */
+  .main {
+    flex: 1;
+    padding: 2rem;
+    overflow-y: auto;
+  }
+  
+  .page-header {
+    margin-bottom: 1.5rem;
+  }
+  .page-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+  .page-subtitle {
+    color: var(--gray-500);
+    font-size: 0.9rem;
+  }
+  
+  /* Cards */
+  .card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    margin-bottom: 1.5rem;
+  }
+  .card-header {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--gray-200);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .card-title {
+    font-weight: 600;
+    font-size: 1rem;
+  }
+  .card-body {
+    padding: 1.5rem;
+  }
+  
+  /* Form elements */
+  .form-group {
+    margin-bottom: 1.25rem;
+  }
+  .form-label {
+    display: block;
+    font-weight: 500;
+    font-size: 0.9rem;
+    margin-bottom: 0.4rem;
+  }
+  .form-hint {
+    font-size: 0.8rem;
+    color: var(--gray-500);
+    margin-top: 0.25rem;
+  }
+  .form-input, .form-select {
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid var(--gray-300);
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-family: inherit;
+  }
+  .form-input:focus, .form-select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(0,102,204,0.1);
+  }
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  
+  /* Checkboxes */
+  .checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .checkbox-item input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--primary);
+  }
+  .checkbox-label {
+    font-size: 0.9rem;
+  }
+  .checkbox-label code {
+    background: var(--gray-100);
+    padding: 0.1rem 0.3rem;
+    border-radius: 3px;
+    font-size: 0.85em;
+  }
+  
+  /* Buttons */
+  .btn {
+    padding: 0.6rem 1.25rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    font-family: inherit;
+    transition: all 0.15s;
+  }
+  .btn-primary {
+    background: var(--primary);
+    color: white;
+  }
+  .btn-primary:hover {
+    background: var(--primary-dark);
+  }
+  .btn-secondary {
+    background: white;
+    color: var(--gray-700);
+    border: 1px solid var(--gray-300);
+  }
+  .btn-secondary:hover {
+    background: var(--gray-50);
+  }
+  .btn-sm {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.8rem;
+  }
+  
+  /* Status badges */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+  .badge-success {
+    background: #e6f7ed;
+    color: var(--success);
+  }
+  .badge-warning {
+    background: #fff7e6;
+    color: #d48806;
+  }
+  .badge-error {
+    background: #fff1f0;
+    color: var(--error);
+  }
+  .badge-info {
+    background: #e6f0ff;
+    color: var(--primary);
+  }
+  .badge::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+  
+  /* Tables */
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+  .table th, .table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--gray-200);
+  }
+  .table th {
+    font-weight: 600;
+    color: var(--gray-500);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    background: var(--gray-50);
+  }
+  .table tbody tr:hover {
+    background: var(--gray-50);
+  }
+  .table code {
+    background: var(--gray-100);
+    padding: 0.15rem 0.4rem;
+    border-radius: 3px;
+    font-size: 0.85em;
+  }
+  
+  /* Stats */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .stat-card {
+    background: white;
+    border-radius: 8px;
+    padding: 1.25rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+  .stat-label {
+    font-size: 0.8rem;
+    color: var(--gray-500);
+    margin-bottom: 0.25rem;
+  }
+  .stat-value {
+    font-size: 1.75rem;
+    font-weight: 600;
+  }
+  .stat-value.success { color: var(--success); }
+  .stat-change {
+    font-size: 0.8rem;
+    color: var(--gray-500);
+    margin-top: 0.25rem;
+  }
+  
+  /* Tabs */
+  .tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--gray-200);
+    margin-bottom: 1.5rem;
+  }
+  .tab {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.9rem;
+    color: var(--gray-500);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: all 0.15s;
+  }
+  .tab:hover {
+    color: var(--gray-700);
+  }
+  .tab.active {
+    color: var(--primary);
+    border-bottom-color: var(--primary);
+    font-weight: 500;
+  }
+  
+  /* Page sections */
+  .page { display: none; }
+  .page.active { display: block; }
+  
+  /* Schema table */
+  .schema-table td:first-child {
+    font-family: 'SF Mono', Monaco, monospace;
+    font-size: 0.85rem;
+  }
+  
+  /* Version badge */
+  .version-badge {
+    background: var(--gray-100);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--gray-700);
+  }
+  
+  /* Alert */
+  .alert {
+    padding: 1rem 1.25rem;
+    border-radius: 6px;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  .alert-info {
+    background: #e6f0ff;
+    border: 1px solid #b3d1ff;
+    color: #004080;
+  }
+  .alert-icon {
+    font-size: 1.1rem;
+  }
+  
+  /* Connection test */
+  .connection-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    background: var(--gray-50);
+    border-radius: 6px;
+    font-size: 0.85rem;
+  }
+  .connection-status.success {
+    background: #e6f7ed;
+    color: var(--success);
+  }
+  
+  /* Footer */
+  .proto-footer {
+    text-align: center;
+    padding: 2rem;
+    color: var(--gray-500);
+    font-size: 0.8rem;
+    border-top: 1px solid var(--gray-200);
+    margin-top: 2rem;
+  }
+  .proto-footer a {
+    color: var(--primary);
+  }
+</style>
+</head>
+<body>
+
+<!-- Top bar -->
+<div class="topbar">
+  <div class="topbar-logo">
+    <span>plentific</span> Data Delivery
+  </div>
+  <div class="topbar-user">
+    <span>Notting Hill Genesis</span>
+    <div class="avatar">NH</div>
+  </div>
+</div>
+
+<!-- Layout -->
+<div class="layout">
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <div class="sidebar-section">Data Export</div>
+    <a href="#" class="sidebar-link active" data-page="dashboard">Dashboard</a>
+    <a href="#" class="sidebar-link" data-page="settings">Settings</a>
+    <a href="#" class="sidebar-link" data-page="history">Export history</a>
+    <a href="#" class="sidebar-link" data-page="schema">Schema documentation</a>
+    
+    <div class="sidebar-section" style="margin-top: 1.5rem;">Support</div>
+    <a href="#" class="sidebar-link" data-page="api">API reference</a>
+    <a href="#" class="sidebar-link">Contact support</a>
+  </nav>
+  
+  <!-- Main content -->
+  <main class="main">
+    
+    <!-- Dashboard page -->
+    <div class="page active" id="page-dashboard">
+      <div class="page-header">
+        <h1 class="page-title">Dashboard</h1>
+        <p class="page-subtitle">Overview of your data exports</p>
+      </div>
+      
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Exports this month</div>
+          <div class="stat-value">14</div>
+          <div class="stat-change">Daily at 02:00 UTC</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Success rate</div>
+          <div class="stat-value success">100%</div>
+          <div class="stat-change">Last 30 days</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Total rows exported</div>
+          <div class="stat-value">1.2M</div>
+          <div class="stat-change">This month</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Data volume</div>
+          <div class="stat-value">4.8 GB</div>
+          <div class="stat-change">This month</div>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Recent exports</span>
+          <button class="btn btn-secondary btn-sm" onclick="showPage('history')">View all</button>
+        </div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Status</th>
+              <th>Datasets</th>
+              <th>Rows</th>
+              <th>Size</th>
+              <th>Duration</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>15 Sep 2026, 02:00</td>
+              <td><span class="badge badge-success">Complete</span></td>
+              <td>repairs, properties, compliance</td>
+              <td>48,291</td>
+              <td>12.4 MB</td>
+              <td>4m 32s</td>
+            </tr>
+            <tr>
+              <td>14 Sep 2026, 02:00</td>
+              <td><span class="badge badge-success">Complete</span></td>
+              <td>repairs, properties, compliance</td>
+              <td>48,105</td>
+              <td>12.3 MB</td>
+              <td>4m 28s</td>
+            </tr>
+            <tr>
+              <td>13 Sep 2026, 02:00</td>
+              <td><span class="badge badge-success">Complete</span></td>
+              <td>repairs, properties, compliance</td>
+              <td>47,892</td>
+              <td>12.1 MB</td>
+              <td>4m 15s</td>
+            </tr>
+            <tr>
+              <td>12 Sep 2026, 02:00</td>
+              <td><span class="badge badge-success">Complete</span></td>
+              <td>repairs, properties, compliance</td>
+              <td>47,654</td>
+              <td>12.0 MB</td>
+              <td>4m 21s</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Schema version</span>
+          <span class="version-badge">v2023-02-01</span>
+        </div>
+        <div class="card-body">
+          <p style="color: var(--gray-500); font-size: 0.9rem; margin-bottom: 1rem;">
+            Your exports use schema version <strong>v2023-02-01</strong>. This version is fully supported.
+          </p>
+          <div class="alert alert-info">
+            <span class="alert-icon">ℹ️</span>
+            <div>
+              <strong>Upcoming change:</strong> A new column <code>uprn</code> will be added to the <code>properties</code> dataset on 1 Oct 2026. This is an additive change — no action required.
+              <a href="#" onclick="showPage('schema'); return false;">View changelog</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Settings page -->
+    <div class="page" id="page-settings">
+      <div class="page-header">
+        <h1 class="page-title">Export settings</h1>
+        <p class="page-subtitle">Configure your data export destination and schedule</p>
+      </div>
+      
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Destination</span>
+        </div>
+        <div class="card-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Storage type</label>
+              <select class="form-select">
+                <option selected>Amazon S3</option>
+                <option>Azure Blob Storage</option>
+                <option>Google Cloud Storage</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Bucket name</label>
+              <input type="text" class="form-input" value="nhg-data-imports">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Path prefix</label>
+            <input type="text" class="form-input" value="/plentific/daily/">
+            <p class="form-hint">Files will be written to: <code>s3://nhg-data-imports/plentific/daily/2026-09-15/repairs.parquet</code></p>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">AWS Access Key ID</label>
+              <input type="text" class="form-input" value="AKIA••••••••••••">
+            </div>
+            <div class="form-group">
+              <label class="form-label">AWS Secret Access Key</label>
+              <input type="password" class="form-input" value="••••••••••••••••••••">
+            </div>
+          </div>
+          <div class="connection-status success">
+            ✓ Connection verified 14 Sep 2026, 14:32
+          </div>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Schedule</span>
+        </div>
+        <div class="card-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Frequency</label>
+              <select class="form-select">
+                <option selected>Daily</option>
+                <option>Hourly (Advanced tier)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Time (UTC)</label>
+              <select class="form-select">
+                <option>00:00</option>
+                <option>01:00</option>
+                <option selected>02:00</option>
+                <option>03:00</option>
+                <option>04:00</option>
+                <option>05:00</option>
+                <option>06:00</option>
+              </select>
+            </div>
+          </div>
+          <p class="form-hint">Exports typically complete within 5-10 minutes of the scheduled time.</p>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Datasets</span>
+        </div>
+        <div class="card-body">
+          <p style="color: var(--gray-500); font-size: 0.9rem; margin-bottom: 1rem;">
+            Select which datasets to include in your export.
+          </p>
+          <div class="checkbox-group">
+            <label class="checkbox-item">
+              <input type="checkbox" checked>
+              <span class="checkbox-label"><code>repairs</code> — Repair jobs, status, appointments</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" checked>
+              <span class="checkbox-label"><code>properties</code> — Properties, addresses, attributes</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" checked>
+              <span class="checkbox-label"><code>compliance</code> — Compliance events, certificates, inspections</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox">
+              <span class="checkbox-label"><code>work_orders</code> — Work orders, contractors, costs</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox">
+              <span class="checkbox-label"><code>appointments</code> — Scheduled appointments, completions</span>
+            </label>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Notifications</span>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <label class="form-label">Email addresses for export notifications</label>
+            <input type="text" class="form-input" value="data-team@nhg.org.uk, analytics@nhg.org.uk">
+            <p class="form-hint">Comma-separated. You'll receive notifications for failures and schema changes.</p>
+          </div>
+        </div>
+      </div>
+      
+      <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+        <button class="btn btn-primary">Save changes</button>
+        <button class="btn btn-secondary">Test connection</button>
+      </div>
+    </div>
+    
+    <!-- History page -->
+    <div class="page" id="page-history">
+      <div class="page-header">
+        <h1 class="page-title">Export history</h1>
+        <p class="page-subtitle">Complete history of all data exports</p>
+      </div>
+      
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">September 2026</span>
+          <button class="btn btn-primary btn-sm" onclick="alert('Manual export triggered. This will run your export now and deliver files to your bucket within 10 minutes.')">Trigger manual export</button>
+        </div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Status</th>
+              <th>Datasets</th>
+              <th>Rows</th>
+              <th>Size</th>
+              <th>Duration</th>
+              <th>Manifest</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>15 Sep 2026, 02:00</td>
+              <td><span class="badge badge-success">Complete</span></td>
+              <td>repairs, properties, compliance</td>
+              <td>48,291</td>
+              <td>12.4 MB</td>
+              <td>4m 32s</td>
+              <td><a href="#">manifest.json</a></td>
+            </tr>
+            <tr>
+              <td>14 Sep 2026, 02:00</td>
+              <td><span class="badge badge-success">Complete</span></td>
+              <td>repairs, properties, compliance</td>
+              <td>48,105</td>
+              <td>12.3 MB</td>
+              <td>4m 28s</td>
+              <td><a href="#">manifest.json</a></td>
+            </tr>
+            <tr>
+              <td>13 Sep 2026, 02:00</td>
+              <td><span class="badge badge-success">Complete</span></td>
+              <td>repairs, properties, compliance</td>
+              <td>47,892</td>
+              <td>12.1 MB</td>
+              <td>4m 15s</td>
+              <td><a href="#">manifest.json</a></td>
+            </tr>
+            <tr>
+              <td>12 Sep 2026, 02:00</td>
+              <td><span class="badge badge-success">Complete</span></td>
+              <td>repairs, properties, compliance</td>
+              <td>47,654</td>
+              <td>12.0 MB</td>
+              <td>4m 21s</td>
+              <td><a href="#">manifest.json</a></td>
+            </tr>
+            <tr>
+              <td>11 Sep 2026, 02:00</td>
+              <td><span class="badge badge-success">Complete</span></td>
+              <td>repairs, properties, compliance</td>
+              <td>47,501</td>
+              <td>11.9 MB</td>
+              <td>4m 18s</td>
+              <td><a href="#">manifest.json</a></td>
+            </tr>
+            <tr>
+              <td>10 Sep 2026, 02:00</td>
+              <td><span class="badge badge-success">Complete</span></td>
+              <td>repairs, properties, compliance</td>
+              <td>47,322</td>
+              <td>11.8 MB</td>
+              <td>4m 12s</td>
+              <td><a href="#">manifest.json</a></td>
+            </tr>
+            <tr>
+              <td>09 Sep 2026, 02:00</td>
+              <td><span class="badge badge-warning">Delayed</span></td>
+              <td>repairs, properties, compliance</td>
+              <td>47,198</td>
+              <td>11.7 MB</td>
+              <td>12m 45s</td>
+              <td><a href="#">manifest.json</a></td>
+            </tr>
+            <tr>
+              <td>08 Sep 2026, 02:00</td>
+              <td><span class="badge badge-success">Complete</span></td>
+              <td>repairs, properties, compliance</td>
+              <td>47,012</td>
+              <td>11.6 MB</td>
+              <td>4m 09s</td>
+              <td><a href="#">manifest.json</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+    <!-- Schema page -->
+    <div class="page" id="page-schema">
+      <div class="page-header">
+        <h1 class="page-title">Schema documentation</h1>
+        <p class="page-subtitle">Data contract for version <span class="version-badge">v2023-02-01</span></p>
+      </div>
+      
+      <div class="tabs">
+        <div class="tab active" data-tab="repairs">repairs</div>
+        <div class="tab" data-tab="properties">properties</div>
+        <div class="tab" data-tab="compliance">compliance</div>
+        <div class="tab" data-tab="changelog">Changelog</div>
+      </div>
+      
+      <div class="card" id="tab-repairs">
+        <div class="card-header">
+          <span class="card-title">repairs</span>
+          <span style="color: var(--gray-500); font-size: 0.85rem;">Repair jobs, status, appointments</span>
+        </div>
+        <table class="table schema-table">
+          <thead>
+            <tr>
+              <th>Column</th>
+              <th>Type</th>
+              <th>Nullable</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>repair_id</td>
+              <td><code>string</code></td>
+              <td>No</td>
+              <td>Primary key. Stable identifier for the repair job</td>
+            </tr>
+            <tr>
+              <td>property_id</td>
+              <td><code>string</code></td>
+              <td>No</td>
+              <td>Foreign key to properties.property_id</td>
+            </tr>
+            <tr>
+              <td>status</td>
+              <td><code>string</code></td>
+              <td>No</td>
+              <td>Current status. Values: OPEN, IN_PROGRESS, COMPLETED, CANCELLED</td>
+            </tr>
+            <tr>
+              <td>priority</td>
+              <td><code>integer</code></td>
+              <td>No</td>
+              <td>Priority level 1-5 (1 = emergency, 5 = planned)</td>
+            </tr>
+            <tr>
+              <td>category</td>
+              <td><code>string</code></td>
+              <td>No</td>
+              <td>Repair category (e.g., PLUMBING, ELECTRICAL, HEATING)</td>
+            </tr>
+            <tr>
+              <td>description</td>
+              <td><code>string</code></td>
+              <td>Yes</td>
+              <td>Short description of the repair (PII redacted)</td>
+            </tr>
+            <tr>
+              <td>reported_at</td>
+              <td><code>timestamp</code></td>
+              <td>No</td>
+              <td>When the repair was first reported (UTC)</td>
+            </tr>
+            <tr>
+              <td>completed_at</td>
+              <td><code>timestamp</code></td>
+              <td>Yes</td>
+              <td>When the repair was completed (UTC). Null if not complete</td>
+            </tr>
+            <tr>
+              <td>created_at</td>
+              <td><code>timestamp</code></td>
+              <td>No</td>
+              <td>Record creation time in source system (UTC)</td>
+            </tr>
+            <tr>
+              <td>updated_at</td>
+              <td><code>timestamp</code></td>
+              <td>No</td>
+              <td>Last business-data update (UTC)</td>
+            </tr>
+            <tr>
+              <td>exported_at</td>
+              <td><code>timestamp</code></td>
+              <td>No</td>
+              <td>When this record was exported (UTC)</td>
+            </tr>
+            <tr>
+              <td>is_deleted</td>
+              <td><code>boolean</code></td>
+              <td>No</td>
+              <td>Tombstone flag. True if record was deleted in source</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="card" id="tab-changelog" style="display: none;">
+        <div class="card-header">
+          <span class="card-title">Schema changelog</span>
+        </div>
+        <div class="card-body">
+          <div style="margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--gray-200);">
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+              <span class="badge badge-info">Upcoming</span>
+              <strong>1 Oct 2026</strong>
+            </div>
+            <p style="margin-bottom: 0.5rem;"><strong>Additive change:</strong> New column <code>uprn</code> added to <code>properties</code></p>
+            <p style="color: var(--gray-500); font-size: 0.9rem;">Type: string, nullable. Unique Property Reference Number. No action required — your pipelines will ignore this column until you choose to use it.</p>
+          </div>
+          
+          <div style="margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--gray-200);">
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+              <span class="badge badge-success">Released</span>
+              <strong>1 Feb 2023</strong>
+            </div>
+            <p style="margin-bottom: 0.5rem;"><strong>New version:</strong> v2023-02-01 released</p>
+            <p style="color: var(--gray-500); font-size: 0.9rem;">Initial schema version. Previous version v2020-06-01 deprecated and will be retired on 1 Aug 2023.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- API page -->
+    <div class="page" id="page-api">
+      <div class="page-header">
+        <h1 class="page-title">API reference</h1>
+        <p class="page-subtitle">Programmatic access to your data export configuration and status</p>
+      </div>
+      
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Authentication</span>
+        </div>
+        <div class="card-body">
+          <p style="margin-bottom: 1rem;">All API requests require an API key in the header:</p>
+          <pre style="background: var(--gray-100); padding: 1rem; border-radius: 6px; overflow-x: auto; font-size: 0.85rem;">Authorization: Bearer your-api-key-here</pre>
+          <p style="margin-top: 1rem; color: var(--gray-500); font-size: 0.9rem;">
+            <a href="#">Generate API key</a> in your account settings.
+          </p>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Endpoints</span>
+        </div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Method</th>
+              <th>Endpoint</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code style="background: #e6f7ed; color: var(--success);">GET</code></td>
+              <td><code>/v1/exports/latest</code></td>
+              <td>Get status of the most recent export</td>
+            </tr>
+            <tr>
+              <td><code style="background: #e6f7ed; color: var(--success);">GET</code></td>
+              <td><code>/v1/exports/history</code></td>
+              <td>List all exports with pagination</td>
+            </tr>
+            <tr>
+              <td><code style="background: #fff7e6; color: #d48806;">POST</code></td>
+              <td><code>/v1/exports/trigger</code></td>
+              <td>Trigger a manual export</td>
+            </tr>
+            <tr>
+              <td><code style="background: #e6f7ed; color: var(--success);">GET</code></td>
+              <td><code>/v1/config</code></td>
+              <td>Get current export configuration</td>
+            </tr>
+            <tr>
+              <td><code style="background: #e6f0ff; color: var(--primary);">PUT</code></td>
+              <td><code>/v1/config/destination</code></td>
+              <td>Update destination configuration</td>
+            </tr>
+            <tr>
+              <td><code style="background: #e6f7ed; color: var(--success);">GET</code></td>
+              <td><code>/v1/schema/{dataset}</code></td>
+              <td>Get schema for a specific dataset</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Example: Get latest export</span>
+        </div>
+        <div class="card-body">
+          <pre style="background: var(--gray-100); padding: 1rem; border-radius: 6px; overflow-x: auto; font-size: 0.85rem;">curl -H "Authorization: Bearer $API_KEY" \
+  https://data.plentific.com/v1/exports/latest</pre>
+          <p style="margin: 1rem 0 0.5rem; font-weight: 500;">Response:</p>
+          <pre style="background: var(--gray-100); padding: 1rem; border-radius: 6px; overflow-x: auto; font-size: 0.85rem;">{
+  "export_id": "exp_2026091502",
+  "status": "complete",
+  "started_at": "2026-09-15T02:00:00Z",
+  "completed_at": "2026-09-15T02:04:32Z",
+  "datasets": ["repairs", "properties", "compliance"],
+  "row_count": 48291,
+  "file_size_bytes": 13004800,
+  "manifest_url": "s3://nhg-data-imports/plentific/daily/2026-09-15/manifest.json"
+}</pre>
+        </div>
+      </div>
+    </div>
+    
+  </main>
+</div>
+
+<div class="proto-footer">
+  <strong>Prototype</strong> — Plentific Data Delivery client portal<br>
+  <a href="final-presentation.html">Back to presentation</a>
+</div>
+
+<script>
+  // Page navigation
+  function showPage(pageId) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+    
+    document.getElementById('page-' + pageId).classList.add('active');
+    document.querySelector('.sidebar-link[data-page="' + pageId + '"]').classList.add('active');
+  }
+  
+  document.querySelectorAll('.sidebar-link[data-page]').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      showPage(link.dataset.page);
+    });
+  });
+  
+  // Tab navigation (schema page)
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      
+      // Show/hide appropriate content
+      if (tab.dataset.tab === 'changelog') {
+        document.getElementById('tab-repairs').style.display = 'none';
+        document.getElementById('tab-changelog').style.display = 'block';
+      } else {
+        document.getElementById('tab-repairs').style.display = 'block';
+        document.getElementById('tab-changelog').style.display = 'none';
+      }
+    });
+  });
+</script>
+</body>
+</html>
