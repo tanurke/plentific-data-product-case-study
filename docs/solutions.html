@@ -459,26 +459,6 @@
       <li>Clients want to query, not receive files &mdash; data sharing (Option 2) may be better fit</li>
     </ul>
 
-    <h3>Technical: multitenancy and APIs</h3>
-    <ul>
-      <li><strong>Multitenancy:</strong> Each export job has <code>WHERE client_id = 'nhg'</code> baked in. One query per client. Never a shared query that filters later &mdash; that's how breaches happen</li>
-      <li><strong>Tenant isolation:</strong> Must pass security review. Unit tests that prove cross-client queries return nothing</li>
-      <li><strong>APIs for clients:</strong> Check export status, view history (what files, when, how big), trigger manual re-export, update destination config</li>
-      <li><strong>APIs for ops:</strong> Pause a client's export, view all failures, retry failed jobs</li>
-    </ul>
-
-    <h3>User journey example</h3>
-    <ol>
-      <li>Client signs contract including data export add-on</li>
-      <li>Client's IT provides an S3 bucket ARN with write permissions for Plentific's IAM role</li>
-      <li>Plentific ops adds config: tables = repairs, bookings, inspections. Schedule = 2am UTC. Destination = client's bucket</li>
-      <li>Test export runs. Client's data engineer confirms files appeared</li>
-      <li>Production export starts running nightly</li>
-      <li>Client builds pipeline in dbt/Airflow to load files into Snowflake</li>
-      <li>Every morning, fresh data is in their warehouse, ready for dashboards</li>
-      <li>When schema changes: client gets email, updates their pipeline if needed, no disruption</li>
-    </ol>
-
     <h3 id="presentation">Presentation summary</h3>
 
     <h4>How we cover all 4 areas</h4>
