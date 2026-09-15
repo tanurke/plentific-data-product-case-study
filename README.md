@@ -4,9 +4,11 @@ Personal reference notes for the Plentific **Data Product Manager** case study.
 
 The task: design how Plentific gives clients their data in the client's own data warehouse, and the path to get there.
 
-**Notes:** https://tanurke.github.io/plentific-data-product-case-study/
+**Final submission:** https://tanurke.github.io/plentific-data-product-case-study/final-solution.html
 
-Single page. Only what matters for understanding the problem and building an answer — customers, who owns what, what data exists, what breaks today, the facts that shape the solution, the landmines, and what I still need to ask.
+**Working notes:** https://tanurke.github.io/plentific-data-product-case-study/
+
+The final submission is the executive case-study recommendation: product thesis, architecture, MVP, sequencing, version/change control, governance, commercial model, success measures, and a forward-looking AI / agent / MCP extension. The rest of the site contains the underlying research and drill-down notes used to shape that answer.
 
 ## Sources
 
