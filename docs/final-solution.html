@@ -1,0 +1,553 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Final proposal — Plentific Data Delivery</title>
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  .hero {
+    padding: 38px 0 12px;
+    max-width: 980px;
+  }
+  .hero h1 { max-width: 20ch; font-size: clamp(38px, 6vw, 66px); line-height: 1.02; }
+  .hero .lede { max-width: 64ch; font-size: 21px; }
+  .decision-strip {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    margin: 28px 0 38px;
+  }
+  .decision-item {
+    background: var(--c-surface);
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius-lg);
+    padding: 18px;
+  }
+  .decision-item span { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--c-ink-faint); font-weight: 700; margin-bottom: 5px; }
+  .decision-item strong { display: block; line-height: 1.32; }
+  .exec-box {
+    background: var(--c-ink);
+    color: #fff;
+    border-radius: var(--radius-lg);
+    padding: 26px 28px;
+    margin: 0 0 34px;
+  }
+  .exec-box p { max-width: 78ch; margin: 0; font-size: 18px; line-height: 1.55; }
+  .exec-box strong { color: #fff; }
+  .arch {
+    display: grid;
+    grid-template-columns: minmax(0,1fr) 44px minmax(0,1.15fr) 44px minmax(0,1fr);
+    gap: 10px;
+    align-items: stretch;
+    margin: 24px 0;
+  }
+  .arch-box {
+    background: var(--c-surface);
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius-lg);
+    padding: 18px;
+  }
+  .arch-box.primary { border: 2px solid var(--c-accent); background: var(--c-accent-soft); }
+  .arch-box h4 { margin: 0 0 8px; }
+  .arch-box p, .arch-box ul { margin-bottom: 0; font-size: 14px; }
+  .arch-arrow { align-self: center; text-align: center; font-size: 26px; color: var(--c-ink-faint); }
+  .principles {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    margin: 22px 0 30px;
+  }
+  .principle { padding: 18px; border-top: 3px solid var(--c-accent); background: var(--c-surface); border-radius: 0 0 var(--radius) var(--radius); }
+  .principle strong { display: block; margin-bottom: 5px; }
+  .phase-line { display: grid; grid-template-columns: 95px 1fr 1fr; gap: 10px; padding: 13px 0; border-bottom: 1px solid var(--c-line); }
+  .phase-line:last-child { border-bottom: 0; }
+  .phase-tag { font-weight: 700; color: var(--c-accent-ink); }
+  .metric-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 12px; margin: 18px 0 28px; }
+  .metric { background: var(--c-surface); border: 1px solid var(--c-line); border-radius: var(--radius); padding: 16px; }
+  .metric strong { display: block; font-size: 20px; margin-bottom: 4px; }
+  .metric span { color: var(--c-ink-soft); font-size: 13.5px; }
+  .future {
+    background: linear-gradient(135deg, var(--c-accent-soft), #fff 72%);
+    border: 1px solid #cbd8ef;
+    border-radius: var(--radius-lg);
+    padding: 26px;
+    margin: 24px 0;
+  }
+  .future h3 { margin-top: 0; }
+  .guardrail { border-left: 3px solid var(--c-good); padding-left: 14px; margin: 14px 0; }
+  details { background: var(--c-surface); border: 1px solid var(--c-line); border-radius: var(--radius); padding: 13px 16px; margin-bottom: 9px; max-width: 90ch; }
+  summary { cursor: pointer; font-weight: 660; }
+  details p, details ul { margin-top: 12px; }
+  .small { font-size: 13px; color: var(--c-ink-faint); }
+  .topline { border-bottom: 1px solid var(--c-line); background: var(--c-surface); }
+  .topline-inner { max-width: var(--maxw); margin: 0 auto; padding: 13px 24px; display:flex; justify-content:space-between; gap:16px; align-items:center; }
+  .topline a { font-size: 13px; font-weight: 650; text-decoration:none; }
+  @media (max-width: 850px) {
+    .decision-strip, .principles, .metric-grid { grid-template-columns: 1fr 1fr; }
+    .arch { grid-template-columns: 1fr; }
+    .arch-arrow { transform: rotate(90deg); }
+    .phase-line { grid-template-columns: 80px 1fr; }
+    .phase-line > :last-child { grid-column: 2; }
+  }
+  @media (max-width: 560px) {
+    .decision-strip, .principles, .metric-grid { grid-template-columns: 1fr; }
+    .hero { padding-top: 20px; }
+  }
+  @media print {
+    .topline, .toc { display:none; }
+    body { background:#fff; }
+    .shell { padding-top: 0; }
+    details { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <p class="masthead-title">Plentific · Data Product Manager case study</p>
+    <p class="masthead-meta">Final proposal · September 2026</p>
+  </div>
+</header>
+<div class="topline">
+  <div class="topline-inner">
+    <strong>Plentific Data Delivery</strong>
+    <a href="#appendix">Drill-down appendix ↓</a>
+  </div>
+</div>
+
+<div class="shell shell-wide">
+<main class="content" id="main">
+
+<section class="hero">
+  <p class="eyebrow">Executive recommendation</p>
+  <h1>Build a stable data contract, not a bigger export.</h1>
+  <p class="lede">
+    Large clients do not fundamentally need “a nightly full export”. They need dependable, governed access to
+    Plentific data that their own data platforms can build against without Plentific's product velocity becoming
+    their outage. My recommendation is to create a client-facing <strong>Plentific Data Delivery</strong> product,
+    enabled by an internal publication layer that deliberately decouples external contracts from internal data structures.
+  </p>
+</section>
+
+<div class="decision-strip" aria-label="Key decisions">
+  <div class="decision-item"><span>First delivery</span><strong>Daily incremental Parquet + initial snapshot</strong></div>
+  <div class="decision-item"><span>Boundary</span><strong>Versioned external data contracts</strong></div>
+  <div class="decision-item"><span>Commercial</span><strong>Enterprise module + usage guardrails</strong></div>
+  <div class="decision-item"><span>Deliberately later</span><strong>Native sharing, higher cadence, AI/MCP</strong></div>
+</div>
+
+<div class="exec-box">
+  <p><strong>The product decision:</strong> keep Plentific free to change internally, while making the external publication model deliberately boring, stable and trustworthy. Transport can evolve; the contract is the durable product.</p>
+</div>
+
+<nav class="toc" aria-label="Contents">
+  <a href="#problem">1. Reframe the problem</a>
+  <a href="#product">2. Product & architecture</a>
+  <a href="#mvp">3. MVP</a>
+  <a href="#change">4. Change control</a>
+  <a href="#security">5. Governance & security</a>
+  <a href="#commercial">6. Commercial model</a>
+  <a href="#roadmap">7. Sequence & validation</a>
+  <a href="#metrics">8. Success</a>
+  <a href="#future">9. AI / agents / MCP</a>
+  <a href="#appendix">10. Drill-down</a>
+</nav>
+
+<h2 id="problem">1. Reframe the problem</h2>
+<p>
+  Today Plentific controls the client experience: fixed dashboards, fixed-column downloads and transactional APIs.
+  A warehouse feed changes that relationship. The moment a client builds production pipelines against Plentific data,
+  the schema becomes an interface with a contract attached.
+</p>
+
+<div class="principles">
+  <div class="principle"><strong>Client job</strong>Join Plentific repairs/compliance data to housing, finance and CRM data and answer questions Plentific cannot anticipate.</div>
+  <div class="principle"><strong>Plentific constraint</strong>Continue shipping product changes quickly; internal implementation cannot become an external compatibility promise.</div>
+  <div class="principle"><strong>Product implication</strong>Create a stable publication boundary and standardise delivery, rather than creating a bespoke export per enterprise client.</div>
+</div>
+
+<div class="callout">
+  <span class="callout-label">What I would push back on</span>
+  <p><strong>Yes</strong> to a complete, dependable view every morning. <strong>No</strong> to retransmitting all history every night by default. Start with a full snapshot, then publish inserts, updates and deletions incrementally; retain a controlled reload/backfill capability for recovery.</p>
+</div>
+
+<h3>The two products</h3>
+<div class="table-wrap">
+<table>
+  <thead><tr><th></th><th>Product A — Client-ready data foundation</th><th>Product B — Plentific Data Delivery</th></tr></thead>
+  <tbody>
+    <tr><th>Purpose</th><td>Make external publication safe, stable and governable</td><td>Give clients a dependable machine-to-machine data feed</td></tr>
+    <tr><th>Core capabilities</th><td>External models, tenant policy, data contracts, quality, lineage, versioning, audit</td><td>Snapshot/incremental delivery, schedules, manifests, monitoring, reloads, docs</td></tr>
+    <tr><th>Value</th><td>Enables enterprise revenue and reduces breach/change risk</td><td>Direct client value and a productised commercial proposition</td></tr>
+    <tr><th>Funding story</th><td colspan="2">Fund the minimum foundation through 2–3 strategic design partners and an explicit enterprise revenue case — not as an open-ended warehouse rebuild.</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2 id="product">2. Product & architecture</h2>
+<p>
+  I would <strong>not expose the existing internal warehouse directly</strong>. It is an input to the product, not the product contract.
+  Plentific needs an external publication layer whose semantics can remain stable even when internal tables, services and workflows change.
+</p>
+
+<div class="arch" aria-label="Proposed architecture">
+  <div class="arch-box">
+    <h4>Internal Plentific</h4>
+    <ul>
+      <li>Product services</li>
+      <li>Operational data</li>
+      <li>Internal warehouse</li>
+      <li>Free to evolve quickly</li>
+    </ul>
+  </div>
+  <div class="arch-arrow">→</div>
+  <div class="arch-box primary">
+    <h4>External publication layer</h4>
+    <ul>
+      <li>Canonical client-facing entities</li>
+      <li>Tenant policy / isolation</li>
+      <li>Versioned contracts</li>
+      <li>Quality + lineage + classification</li>
+      <li>Incremental change semantics</li>
+    </ul>
+  </div>
+  <div class="arch-arrow">→</div>
+  <div class="arch-box">
+    <h4>Client delivery</h4>
+    <ul>
+      <li>Parquet + manifest</li>
+      <li>Dedicated secure destination</li>
+      <li>Client loads Snowflake / Databricks / BigQuery / Synapse / lake</li>
+      <li>Later: native shares / agent tools</li>
+    </ul>
+  </div>
+</div>
+
+<p><strong>Where I build:</strong> Plentific owns the external semantic contract, tenancy rules, compatibility, quality and observability — these are differentiating trust capabilities.</p>
+<p><strong>Where I use managed capability:</strong> object storage, encryption/KMS, secrets, identity, orchestration and monitoring should use existing cloud/platform capabilities where practical. Do not build commodity infrastructure for its own sake.</p>
+
+<h3>Delivery mechanism decision</h3>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Option</th><th>Why it is attractive</th><th>Why not first</th><th>Decision</th></tr></thead>
+  <tbody>
+    <tr><th>Object storage + Parquet</th><td>Warehouse-neutral, typed, compressed, cheap, easy to automate, works for warehouses and lakes</td><td>Client still needs ingestion</td><td><strong>Start here</strong></td></tr>
+    <tr><th>SFTP / CSV</th><td>Universally familiar</td><td>Weak typing, larger payloads, more brittle analytical pipelines</td><td>Compatibility fallback</td></tr>
+    <tr><th>Warehouse-native sharing</th><td>Excellent UX, low-copy, fresher data</td><td>Platform-specific; risks fragmenting the product by client stack</td><td>Phase 2 for proven strategic demand</td></tr>
+    <tr><th>Bulk analytical API</th><td>Client controls pull cadence</td><td>Compute/load and pagination complexity; current public APIs were built for transactions</td><td>Later where pull is a real job</td></tr>
+    <tr><th>Direct warehouse access</th><td>Maximum SQL flexibility</td><td>Highest security, performance, support and coupling risk</td><td><strong>Do not offer initially</strong></td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2 id="mvp">3. First shippable version</h2>
+<div class="card">
+  <p class="card-title">MVP proposition</p>
+  <p><strong>Initial historical snapshot + daily incremental, versioned Parquet datasets delivered to a dedicated secure cloud-storage boundary, with a machine-readable manifest and a documented contract.</strong></p>
+</div>
+
+<h3>What is in</h3>
+<ul>
+  <li><strong>Small standard domain set</strong> chosen with design partners — likely work orders/repairs, assets/locations, bookings/appointments, compliance/inspections and selected financial/work-order attributes. Exact scope is a discovery decision, not something I would invent from the brief.</li>
+  <li><strong>Initial backfill</strong> followed by changed records only: inserts, updates and explicit deletion/tombstone events.</li>
+  <li><strong>Idempotent ingestion semantics:</strong> stable business key + revision/update timestamp so a client can safely replay a batch.</li>
+  <li><strong>Manifest per delivery:</strong> dataset, contract version, extraction time, watermark, file/row counts, checksums and completion state.</li>
+  <li><strong>Operational controls:</strong> retries, replay/backfill, audit log, freshness monitoring and client-visible incident communication.</li>
+  <li><strong>Documentation:</strong> field meaning, type, nullability, identifiers, timestamp semantics, enumerations, delete/correction behaviour and examples.</li>
+</ul>
+
+<h3>What I explicitly do not build yet</h3>
+<ul>
+  <li>Per-client schemas or transformations</li>
+  <li>Streaming / CDC as the default</li>
+  <li>Every field, attachment, photo or free-text note</li>
+  <li>Dozens of warehouse-specific connectors</li>
+  <li>Arbitrary client SQL against Plentific infrastructure</li>
+  <li>A self-service semantic modeller</li>
+  <li>AI-generated decisions inside the MVP</li>
+</ul>
+
+<h2 id="change">4. Change control: the part that makes or breaks the product</h2>
+<p>
+  My highest-weighted design decision is the <strong>external contract boundary</strong>. An internal schema change should only become a client change if Plentific deliberately changes the external contract.
+</p>
+
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Change</th><th>Example</th><th>Policy</th></tr></thead>
+  <tbody>
+    <tr><th>Compatible additive</th><td>New nullable field</td><td>Same major contract; changelog and automated compatibility tests</td></tr>
+    <tr><th>Semantic risk</th><td>New enum/status value</td><td>Contract test + impact review; document unknown-value behaviour</td></tr>
+    <tr><th>Breaking</th><td>Rename/remove field, type change, key semantics change, meaning changes</td><td>New major contract version</td></tr>
+    <tr><th>Correction/restatement</th><td>Yesterday's completed repair is corrected today</td><td>Publish a new record revision; do not silently rewrite a previously delivered batch</td></tr>
+    <tr><th>Deletion</th><td>Record must no longer appear</td><td>Explicit tombstone/delete event and documented handling</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="callout is-good">
+  <span class="callout-label">Proposed operating policy — validate in pilot</span>
+  <p>Support current and previous major contract versions only (N / N−1), dual-run breaking versions during migration, and start with a <strong>minimum 180-day deprecation window</strong> for enterprise clients unless security/legal requires faster action. These are product-policy hypotheses, not facts from the brief.</p>
+</div>
+
+<h3>How I avoid slowing engineering down</h3>
+<p>
+  I would not create a governance meeting every time a team changes a table. The contract is enforced as code:
+  schema/semantic contract tests run in CI/CD; teams get a clear failure only when a change affects an external promise.
+</p>
+<ul>
+  <li><strong>Domain engineering</strong> owns source meaning and flags intended behavioural changes.</li>
+  <li><strong>Data/platform engineering</strong> owns the publication mechanism, quality controls and compatibility tooling.</li>
+  <li><strong>Data Product</strong> owns external scope, contract lifecycle, deprecation policy and client communication.</li>
+</ul>
+<p>This turns governance from “more process” into protection from client incidents, emergency migrations and support escalations.</p>
+
+<h2 id="security">5. Governance, security & data protection</h2>
+<p><strong>No row leaves Plentific until the tenant boundary is demonstrably safe.</strong> RLS can be an important control, but it is not the whole tenancy strategy.</p>
+
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Control</th><th>Position</th></tr></thead>
+  <tbody>
+    <tr><th>Tenant isolation</th><td>Dedicated tenant-scoped export execution and delivery destinations/credentials; RLS/policy enforcement as defence in depth, not a single WHERE clause</td></tr>
+    <tr><th>Authentication</th><td>Short-lived/rotatable machine credentials, least privilege and separation of duties</td></tr>
+    <tr><th>Cross-tenant testing</th><td>Automated negative tests deliberately attempt to retrieve another tenant's records; external security testing before GA</td></tr>
+    <tr><th>Encryption</th><td>In transit and at rest; cloud-native key management; agreed regional residency</td></tr>
+    <tr><th>Auditability</th><td>Who/what generated each delivery, contract version, row/file counts, destination, retries and replays</td></tr>
+    <tr><th>Lineage</th><td>Published field → transformation/publication model → source domain, sufficient to investigate disputes and quality issues</td></tr>
+    <tr><th>Data minimisation</th><td>Publish what is needed for the agreed analytical purpose; free text, photos/attachments and high-risk personal fields excluded by default unless justified</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>Responsibility boundary</h3>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Plentific is accountable for</th><th>Client is accountable for after receipt</th></tr></thead>
+  <tbody>
+    <tr><td>Correct tenant extraction; secure delivery; documented schema; contract compatibility; Plentific-side data quality; delivery audit; incident handling</td><td>Warehouse access controls; internal sharing; downstream joins; retention in their environment; derived metrics/reports; secondary processing and their own data-engineering operations</td></tr>
+  </tbody>
+</table>
+</div>
+<p class="small">Exact controller/processor obligations, retention and erasure mechanics must be confirmed against Plentific's existing contracts, DPA and legal position before launch.</p>
+
+<h2 id="commercial">6. What I would sell</h2>
+<div class="card">
+  <p class="card-title">Commercial recommendation</p>
+  <p><strong>Enterprise Data Delivery add-on</strong> (or included in the highest enterprise tier) with a predictable annual platform fee, daily delivery and an agreed volume/backfill envelope. Higher cadence, exceptional reloads, unusually high egress and native warehouse sharing become premium allowances/add-ons — not hidden cross-subsidies.</p>
+</div>
+
+<p><strong>The client conversation:</strong> “You are not paying to own your data. You are paying for a managed, secure, versioned and supported interface that continuously publishes it in a form your production data platform can safely consume.”</p>
+
+<h3>Why not pure usage pricing?</h3>
+<p>
+  Enterprise customers need budget predictability, while Plentific needs protection from outlier cost-to-serve. I would therefore price the commercial proposition predictably and use usage as a <strong>guardrail</strong>, not make every GB or query the buying experience.
+</p>
+
+<h3>Unit economics</h3>
+<p>Measure COGS per client before final pricing:</p>
+<pre>COGS / client / month =
+  transformation compute
++ retained delivery storage
++ network egress
++ orchestration + observability
++ support / on-call allocation
++ security & compliance allocation
++ backfill / replay cost</pre>
+
+<div class="callout">
+  <span class="callout-label">Illustrative economics — not Plentific actuals</span>
+  <p>If measured all-in COGS is £400/month and the target gross margin is 80%, the price floor is £2,000/month: <code>£400 ÷ (1−0.80)</code>. I would then test willingness-to-pay and strategic value rather than treating this formula as the final price.</p>
+</div>
+
+<p><strong>The metric I would watch hardest:</strong> human support minutes per client. Cloud storage can be cheap; bespoke schemas, custom schedules and manual recovery destroy margin. Standardisation is therefore both an architecture strategy and a gross-margin strategy.</p>
+
+<h2 id="roadmap">7. Sequence: validate, de-risk, then scale</h2>
+<p>I would use evidence gates rather than pretend I know the exact engineering calendar before discovery.</p>
+
+<div class="card">
+  <div class="phase-line"><div class="phase-tag">Gate 0</div><div><strong>Prove a repeated problem</strong><br>Interview strategic clients; analyse API/download/manual-extract behaviour; map warehouse stacks and top requested domains.</div><div><strong>Exit:</strong> repeated need across multiple clients + credible willingness to pay.</div></div>
+  <div class="phase-line"><div class="phase-tag">Gate 1</div><div><strong>Make publication safe</strong><br>Tenant isolation, classification/minimisation, external contract model, quality/lineage, audit and security evidence.</div><div><strong>Exit:</strong> security/data review passes; no known cross-tenant path.</div></div>
+  <div class="phase-line"><div class="phase-tag">Gate 2</div><div><strong>Paid/design-partner pilot</strong><br>Small domain set, snapshot + daily incremental Parquet, manifests, replay, docs.</div><div><strong>Exit:</strong> 2–3 clients ingest automatically and use the data for real downstream work.</div></div>
+  <div class="phase-line"><div class="phase-tag">Gate 3</div><div><strong>Repeatable beta</strong><br>Onboarding playbook, observability, change lifecycle, operational ownership and commercial package.</div><div><strong>Exit:</strong> new client onboarding does not require new code.</div></div>
+  <div class="phase-line"><div class="phase-tag">Gate 4</div><div><strong>GA</strong><br>Entitlements, support model, published SLO/SLA, version policy and measured unit economics.</div><div><strong>Exit:</strong> healthy gross margin and reliable operation at growing client count.</div></div>
+  <div class="phase-line"><div class="phase-tag">Later</div><div><strong>Expand by evidence</strong><br>Higher cadence, native warehouse sharing, bulk pull options, AI/agent access.</div><div><strong>Trigger:</strong> repeated demand and economics justify added product surface.</div></div>
+</div>
+
+<h3>What if the demand is one loud customer?</h3>
+<p>
+  I do not build a platform product from one feature request. I validate the underlying job with other strategic clients and usage evidence.
+  If the need is genuinely unique, I either treat it as separately funded bespoke work with a clear maintenance boundary, offer a safe interim extract, or say no.
+  I would not create permanent product complexity disguised as “enterprise flexibility”.
+</p>
+
+<h2 id="metrics">8. Success measures and commitments</h2>
+<div class="metric-grid">
+  <div class="metric"><strong>Reliability</strong><span>On-time delivery, freshness, replay success, MTTR, zero unannounced breaking changes</span></div>
+  <div class="metric"><strong>Client value</strong><span>Time to first usable dataset, downstream adoption, time saved vs API/manual extraction, renewal/expansion</span></div>
+  <div class="metric"><strong>Business</strong><span>Attach rate, ARR, gross margin, onboarding effort, support minutes/client</span></div>
+  <div class="metric"><strong>Data trust</strong><span>Quality failures, reconciliation issues, lineage coverage, contract-test coverage</span></div>
+  <div class="metric"><strong>Security</strong><span>Cross-tenant incidents: zero; access-control test pass rate; audit completeness</span></div>
+  <div class="metric"><strong>Change health</strong><span>Clients per contract version, migration lead time, deprecated-version tail, change-related incidents</span></div>
+</div>
+
+<h3>What I would contract — and what I would not</h3>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Commit</th><th>Do not commit</th></tr></thead>
+  <tbody>
+    <tr><td>Named datasets and documented semantics</td><td>Internal tables or implementation details</td></tr>
+    <tr><td>Delivery/freshness target once measured in pilot</td><td>“Real time” unless a product tier is explicitly designed for it</td></tr>
+    <tr><td>Version/deprecation policy</td><td>Permanent support for every historical schema</td></tr>
+    <tr><td>Security controls and auditability</td><td>Client downstream correctness after they transform/join data</td></tr>
+    <tr><td>Defined incident/recovery process</td><td>Unlimited bespoke backfills or arbitrary transformations</td></tr>
+  </tbody>
+</table>
+</div>
+<p class="small">I would run SLOs internally through pilot/beta before converting them into contractual SLAs. A plausible starting hypothesis is 99.5% on-time daily delivery, but I would only sell a number after measuring the operating system.</p>
+
+<h2 id="future">9. Forward-looking: make the data contract agent-ready</h2>
+<div class="future">
+  <p class="eyebrow">After the foundation is trusted</p>
+  <h3>The next interface may be an agent, not another ETL pipeline.</h3>
+  <p>
+    The same governed publication layer can become a safe source of context and tools for AI agents. The key is not to let an LLM bypass the controls we just built. <strong>MCP should sit on top of the external contract, not on top of raw internal tables.</strong>
+  </p>
+</div>
+
+<h3>What MCP adds</h3>
+<p>
+  Model Context Protocol (MCP) is an open standard for exposing tools and context to AI applications. That creates a future path for a Plentific MCP service that makes approved repair/compliance capabilities available to agents without every client inventing a bespoke AI connector.
+</p>
+
+<div class="arch" aria-label="Future agent architecture">
+  <div class="arch-box"><h4>Governed publication layer</h4><p>Same tenant policy, semantics, quality, lineage and version lifecycle as the data product.</p></div>
+  <div class="arch-arrow">→</div>
+  <div class="arch-box primary"><h4>Plentific MCP / agent tools</h4><p>Read-only, scoped tools and resources — not unrestricted SQL.</p></div>
+  <div class="arch-arrow">→</div>
+  <div class="arch-box"><h4>Client or Plentific agents</h4><p>Reason across repairs, compliance and approved client context; actions remain governed.</p></div>
+</div>
+
+<h3>High-value agent use cases</h3>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Use case</th><th>Example</th><th>Why the data product matters first</th></tr></thead>
+  <tbody>
+    <tr><th>Compliance risk triage</th><td>“Which open damp/mould cases are approaching a required service deadline, and what evidence is missing?”</td><td>Agent needs trusted timestamps, status semantics, lineage and tenant-safe access</td></tr>
+    <tr><th>Repair investigation</th><td>“Why was this repair delayed?” Agent gathers status history, appointments, contractor events and exceptions and produces a traceable summary.</td><td>Stable identifiers and versioned meanings prevent hallucination-by-data-drift</td></tr>
+    <tr><th>Data onboarding assistant</th><td>Explain fields, generate example dbt mapping, diagnose a failed load from the manifest and contract.</td><td>The contract and operational metadata become agent-readable documentation</td></tr>
+    <tr><th>Schema migration assistant</th><td>Compare v1 → v2 and generate a proposed client migration/test plan.</td><td>Explicit contract diffs give the model deterministic evidence</td></tr>
+    <tr><th>Natural-language analytics</th><td>“Show emergency repair completion trends by region.”</td><td>Queries should resolve against curated semantics rather than raw operational schema</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>Agent guardrails from day one</h3>
+<div class="guardrail"><strong>Read-only first.</strong> Start with retrieval/explanation tools. Do not let the first agent close a repair, alter compliance state or publish a regulatory return.</div>
+<div class="guardrail"><strong>Deterministic policy for deterministic obligations.</strong> Deadline calculations, tenancy filters and entitlement decisions remain coded rules; AI can explain or prioritise them, not redefine them.</div>
+<div class="guardrail"><strong>Least privilege + tenant-scoped auth.</strong> The agent sees exactly what the calling principal is allowed to see. Tool calls are logged and rate-limited.</div>
+<div class="guardrail"><strong>Human approval for high-impact actions.</strong> If action tools arrive later, sensitive state changes require explicit approval and a complete audit trail.</div>
+<div class="guardrail"><strong>Evaluate before scaling.</strong> Build a domain evaluation set: factual accuracy, source traceability, missed-risk rate, false-alert rate and permission-boundary tests.</div>
+
+<p>
+  This future path is deliberately <strong>not in the MVP</strong>. It is an option created by getting the boring fundamentals right now. The stronger the external contract, the easier it becomes to support files, native warehouse sharing, APIs and agent tooling without creating four inconsistent versions of Plentific data.
+</p>
+<p class="small">Technology note: the current MCP specification and major agent SDKs support remote MCP tool integration and emphasise explicit authorization/approval boundaries. Any production design would be validated against the protocol/security guidance in force at implementation time.</p>
+
+<h2 id="appendix">10. Drill-down appendix — choices I expect to defend</h2>
+
+<details open>
+  <summary>Why not just expose the existing warehouse?</summary>
+  <p>Because then internal implementation becomes a public API. Internal refactors, data-model clean-up and product workflow changes become breaking client changes. It also puts the highest-risk tenancy/security surface closest to a warehouse never designed for external scrutiny. I would expose a deliberate publication layer instead.</p>
+</details>
+
+<details>
+  <summary>How important is RLS for tenancy?</summary>
+  <p>Important, but not sufficient alone. I want tenant-scoped publication and delivery boundaries, least-privilege credentials and negative isolation tests. RLS/policy enforcement is defence in depth; I would not make one filter the sole barrier between two housing associations' resident data.</p>
+</details>
+
+<details>
+  <summary>Engineering does not want more process. How do you get buy-in?</summary>
+  <p>Automate it. Put contract compatibility tests in CI/CD and make the external boundary clear. Engineers keep changing internals freely; they only need to engage when a change would break a sold client promise. The pitch is fewer incidents and emergency migrations, not “more governance”.</p>
+</details>
+
+<details>
+  <summary>Is object-storage delivery the only solution?</summary>
+  <p>No. Native sharing, bulk APIs and managed pipelines can all be right in different contexts. I choose files first because they are the broadest interoperable option and keep the irreversible decision — the data contract — independent from a warehouse vendor. I would change the mechanism when measured demand proves a better option.</p>
+</details>
+
+<details>
+  <summary>What if Snowflake clients strongly prefer zero-copy sharing?</summary>
+  <p>Keep the same external contract and add Snowflake-native sharing as a premium delivery adapter once enough strategic demand exists. The schema, security policy and version lifecycle should not be rewritten for Snowflake.</p>
+</details>
+
+<details>
+  <summary>What if the client insists on a nightly full export?</summary>
+  <p>I would confirm the underlying requirement: “Do you need a complete reconstructable state every morning, or does your ingestion technology literally require every historical row to be resent?” I can guarantee reconstructable state through snapshot + increments. If their technology genuinely requires full snapshots, support it as a bounded compatibility option and price its cost rather than make it the platform default.</p>
+</details>
+
+<details>
+  <summary>How do we know a 3am failure is ours or theirs?</summary>
+  <p>Each delivery has a manifest, checksum, watermark, row/file count, contract version and completion state. Plentific monitors production and delivery; the client can independently verify what landed. The support boundary becomes observable rather than anecdotal.</p>
+</details>
+
+<details>
+  <summary>How do late corrections and restatements work?</summary>
+  <p>Publish a new revision of the same business entity with an updated revision/update timestamp. Client upserts idempotently. For exceptional historical restatement, issue a versioned replay/backfill with a reason and audit record. Never silently mutate a file the client may already have reported from.</p>
+</details>
+
+<details>
+  <summary>Who pays when a client wants hourly instead of daily?</summary>
+  <p>The client asking for the higher service level. Cadence changes compute, operational load and incident expectations, so it belongs in a premium allowance/tier. Daily clients should not subsidise hourly clients.</p>
+</details>
+
+<details>
+  <summary>What happens at 100 clients?</summary>
+  <p>The architecture survives only if a client is configuration, not code. One contract per supported version, automated tenant policy, standard destinations/adapters, automated onboarding checks, shared observability and explicit support/version limits. If each client gets a custom schema, the product has already failed before client 100.</p>
+</details>
+
+<details>
+  <summary>What would make you stop or change direction?</summary>
+  <ul>
+    <li>Demand does not repeat beyond one or two bespoke accounts.</li>
+    <li>Willingness to pay does not cover measured cost-to-serve and platform investment.</li>
+    <li>Clients overwhelmingly need a different freshness/mechanism than the proposed MVP.</li>
+    <li>Security isolation cannot be demonstrated to an enterprise standard on the current foundation.</li>
+    <li>Support effort per client remains high because the supposedly standard product is actually bespoke.</li>
+  </ul>
+</details>
+
+<hr>
+<h2>Decision in one sentence</h2>
+<div class="exec-box">
+  <p><strong>Make Plentific's internal product fast-moving and its external data contract slow-moving:</strong> build the governed publication boundary first, launch a standard daily incremental data-delivery product on top, prove the economics with design partners, and then reuse that same contract for richer warehouse and agent interfaces.</p>
+</div>
+
+<h3>Assumptions I would validate before committing</h3>
+<ul>
+  <li>How many strategic clients have the same job, their warehouse/lake technologies and acceptable freshness.</li>
+  <li>Actual data volumes, change rates, retention/backfill needs and current manual/API cost-to-serve.</li>
+  <li>Existing tenancy controls in the warehouse and whether a separate publication store/account is warranted.</li>
+  <li>Which fields are genuinely required, which contain personal/special-category/high-risk free text, and the lawful/contractual basis for export.</li>
+  <li>Current cloud platform, orchestration/observability capabilities and whether cross-cloud egress is material.</li>
+  <li>Willingness to pay, current commercial entitlements and what existing contracts imply about data access.</li>
+</ul>
+
+<p class="small">
+  Basis: supplied Plentific case-study brief plus public-domain research captured in the accompanying working notes. Pricing, margin, deprecation windows and SLO figures on this page are explicitly illustrative hypotheses for validation, not claimed Plentific facts. Forward-looking MCP/agent material is a strategic extension, not part of the proposed MVP.
+</p>
+
+</main>
+</div>
+
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <p>Plentific Data Product Manager case study · final proposal · no confidential implementation assumptions presented as fact.</p>
+  </div>
+</footer>
+</body>
+</html>
