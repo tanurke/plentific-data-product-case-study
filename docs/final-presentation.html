@@ -1,0 +1,873 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Final Presentation &mdash; Plentific Data Delivery</title>
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  .highlight-box {
+    background: #f0f7ff;
+    border-left: 4px solid #0066cc;
+    padding: 1rem 1.5rem;
+    margin: 1.5rem 0;
+  }
+  .highlight-box.warning {
+    background: #fff8f0;
+    border-left-color: #cc6600;
+  }
+  .highlight-box.success {
+    background: #f0fff4;
+    border-left-color: #00cc66;
+  }
+  .killer-line {
+    font-size: 1.15em;
+    font-style: italic;
+    color: #333;
+    border-left: 3px solid #0066cc;
+    padding-left: 1rem;
+    margin: 1.5rem 0;
+  }
+  .slide-marker {
+    background: #0066cc;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 3px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: inline-block;
+    margin-bottom: 0.5rem;
+  }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <p class="masthead-title">Plentific &middot; Data PM case study</p>
+    <p class="masthead-meta">Final presentation &mdash; Plentific Data Delivery</p>
+  </div>
+</header>
+
+<nav class="site-nav" aria-label="Main">
+  <div class="site-nav-inner">
+    <a href="index.html">Problem understanding</a>
+    <a href="solutions.html">Solution options</a>
+    <a href="how-versioning-works.html">How versioning works</a>
+    <a href="pm-interview-prep.html">PM interview prep</a>
+    <a href="final-presentation.html" aria-current="page">Final presentation</a>
+  </div>
+</nav>
+
+<div class="shell shell-wide">
+  <main class="content" id="main">
+
+    <h1>Plentific Data Delivery</h1>
+    <p class="lede">
+      Trusted data in the client's warehouse. A stable interface between a product that changes quickly and clients who need pipelines that change slowly.
+    </p>
+
+    <nav class="toc" aria-label="Contents">
+      <a href="#opening">Opening statement</a>
+      <a href="#recommendation">My recommendation</a>
+      <a href="#two-products">Two products, sequenced</a>
+      <a href="#why-this">Why this approach</a>
+      <a href="#contract">The schema contract</a>
+      <a href="#versioning">Version and change control</a>
+      <a href="#security">Security model</a>
+      <a href="#commercial">Commercial model</a>
+      <a href="#sequence">Sequence and gates</a>
+      <a href="#pushback">Pushing back on "full export"</a>
+      <a href="#economics">Unit economics</a>
+      <a href="#metrics">Success metrics</a>
+      <a href="#not-building">What I won't build</a>
+      <a href="#questions">Expected questions</a>
+      <a href="#final">Final recommendation</a>
+    </nav>
+
+    <!-- ============================================================ -->
+    <h2 id="opening">Opening statement</h2>
+    <p class="slide-marker">SLIDE 1</p>
+
+    <div class="highlight-box">
+      <p><strong>How I'd open the presentation:</strong></p>
+      <p>
+        "When I read the brief, I don't think the core product question is 'how do we batch export the warehouse?'
+      </p>
+      <p>
+        I think the question is: <strong>how do we let clients build long-lived analytical pipelines against Plentific data without turning every future Plentific product change into a client outage?</strong>
+      </p>
+      <p>
+        That leads me to separate the problem into two products.
+      </p>
+      <p>
+        First, Plentific needs an internal publication layer that turns fast-changing internal data into governed, tenant-safe, stable external contracts.
+      </p>
+      <p>
+        Second, on top of that, I would launch a client-facing Data Delivery product.
+      </p>
+      <p>
+        The biggest mistake would be to interpret this as a file-transfer feature. The product isn't an export. The product is a <strong>stable data interface</strong>."
+      </p>
+    </div>
+
+    <p class="killer-line">
+      "The external schema is an API, even if the transport happens to be a file."
+    </p>
+
+    <!-- ============================================================ -->
+    <h2 id="recommendation">My recommendation</h2>
+    <p class="slide-marker">SLIDE 2</p>
+
+    <p>Clients are asking for "a nightly batch export." Their actual need is <strong>dependable, governed access to Plentific data that their own pipelines can safely depend on.</strong></p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Decision</th><th>Recommendation</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Product name</strong></td><td>Plentific Data Delivery</td></tr>
+          <tr><td><strong>First customer</strong></td><td>Large housing associations with a data team + warehouse (e.g., Notting Hill Genesis, Peabody)</td></tr>
+          <tr><td><strong>MVP delivery</strong></td><td>Initial historical snapshot + daily incremental Parquet files to secure cloud object storage</td></tr>
+          <tr><td><strong>Data scope</strong></td><td>Governed, lightly modelled client-facing datasets: repairs, properties, compliance, work orders</td></tr>
+          <tr><td><strong>Contract</strong></td><td>Stable external schema, explicitly versioned, 180-day deprecation for breaking changes</td></tr>
+          <tr><td><strong>Internal prerequisite</strong></td><td>Tenant isolation (RLS), governance, lineage, quality, contract layer</td></tr>
+          <tr><td><strong>Commercial model</strong></td><td>Paid module (~&pound;2k/month standard) with included usage/cadence, not pure consumption</td></tr>
+          <tr><td><strong>Explicitly avoid</strong></td><td>Exposing internal warehouse, bespoke schemas, direct DB replicas, unlimited historical versions</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ============================================================ -->
+    <h2 id="two-products">Two products, sequenced deliberately</h2>
+    <p class="slide-marker">SLIDE 3</p>
+
+    <p>The brief says: <em>"There are really two products here, and part of what we are testing is whether you can see both and sequence them."</em></p>
+
+    <pre>
+             PRODUCT A: INTERNAL FOUNDATION
+ +------------------------------------------------------+
+ | Product data / Internal warehouse                    |
+ |               |                                      |
+ |               v                                      |
+ | External publication models (client-facing schema)   |
+ |               |                                      |
+ |               v                                      |
+ | Data contracts + quality + lineage + tenant controls |
+ +------------------------------------------------------+
+                         |
+                    STABLE BOUNDARY
+                         |
+                         v
+             PRODUCT B: CLIENT PRODUCT
+ +------------------------------------------------------+
+ | Versioned datasets                                   |
+ | --> Secure delivery (S3, Azure Blob)                 |
+ | --> Manifests / monitoring                           |
+ | --> Documentation                                    |
+ | --> Backfill / recovery                              |
+ +------------------------------------------------------+
+                         |
+                         v
+                 Client warehouse
+                (Snowflake, Databricks, BigQuery, etc.)
+    </pre>
+
+    <p><strong>Product A enables Product B.</strong> The internal warehouse is an asset, but I would <strong>not expose it directly</strong>.</p>
+
+    <div class="highlight-box warning">
+      <p><strong>Why not expose the internal warehouse?</strong></p>
+      <p>Because its schema represents Plentific's internal implementation. The moment clients depend on that schema:</p>
+      <p><em>Internal refactoring becomes an externally breaking product change.</em></p>
+      <p>That directly contradicts the brief's requirement that Plentific should remain able to ship rapidly.</p>
+    </div>
+
+    <h3>How I fund invisible platform work</h3>
+    <p>I would not ask: "Can we spend six months rebuilding our data platform?"</p>
+    <p>I would find <strong>2-3 paid design partners</strong>, agree the product proposition and price with them, and fund the minimum platform capability required to fulfil those commitments.</p>
+    <p>That turns: <strong>platform investment &rarr; enterprise revenue enablement</strong></p>
+    <p>Rather than: <strong>platform investment &rarr; internal technical programme</strong></p>
+
+    <!-- ============================================================ -->
+    <h2 id="why-this">Why this approach</h2>
+    <p class="slide-marker">SLIDE 4</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Option</th><th>Strength</th><th>Problem</th><th>Decision</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Object storage + Parquet</strong></td>
+            <td>Cheap, scalable, typed, warehouse-neutral</td>
+            <td>Client needs ingestion pipeline</td>
+            <td><strong>MVP &mdash; start here</strong></td>
+          </tr>
+          <tr>
+            <td>SFTP + CSV</td>
+            <td>Familiar / legacy compatible</td>
+            <td>Weak typing, larger files, awkward scaling</td>
+            <td>Fallback only</td>
+          </tr>
+          <tr>
+            <td>Snowflake/BigQuery native share</td>
+            <td>Great client UX</td>
+            <td>Platform-specific lock-in</td>
+            <td>Phase 2 for matching clients</td>
+          </tr>
+          <tr>
+            <td>Managed pipeline into client DB</td>
+            <td>Minimal client work</td>
+            <td>Credentials, support, connector explosion</td>
+            <td>Not yet</td>
+          </tr>
+          <tr>
+            <td>Public API for bulk</td>
+            <td>Already exists</td>
+            <td>Transactional, inefficient for analytics</td>
+            <td>Wrong tool</td>
+          </tr>
+          <tr>
+            <td>Direct internal warehouse access</td>
+            <td>Fastest to launch</td>
+            <td>Exposes internals + tenant/security/change risk</td>
+            <td><strong>Never</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="killer-line">
+      "I deliberately choose a boring transport and put the product differentiation into the contract, trust, governance and operability."
+    </p>
+
+    <h3>Why API is wrong for bulk extraction</h3>
+    <p>The brief says: <em>"The APIs are transactional: built for integration and workflow, not for bulk analytical extraction. Using them that way is slow and expensive for both sides."</em></p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Method</th><th>How it works</th><th>Time</th><th>Calls</th><th>Cost</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>API</strong></td>
+            <td><code>GET /repairs?page=1</code>, ... page 10,000</td>
+            <td>7+ hours (with rate limits)</td>
+            <td>10,000</td>
+            <td>High (compute per call)</td>
+          </tr>
+          <tr>
+            <td><strong>File drop</strong></td>
+            <td>One scheduled job writes <code>repairs.parquet</code></td>
+            <td>5 minutes</td>
+            <td>1 job</td>
+            <td>Low (one query)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ============================================================ -->
+    <h2 id="contract">The schema contract is the product</h2>
+    <p class="slide-marker">SLIDE 5</p>
+
+    <p>Each published dataset gets an explicit contract:</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Contract element</th><th>Example</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Stable entity</td><td><code>work_order</code></td></tr>
+          <tr><td>Stable primary key</td><td><code>work_order_id</code></td></tr>
+          <tr><td>Business meaning</td><td>Documented</td></tr>
+          <tr><td>Type</td><td>Explicit (integer, string, timestamp)</td></tr>
+          <tr><td>Nullability</td><td>Explicit</td></tr>
+          <tr><td>Timestamp semantics</td><td><code>created_at</code> = source creation, <code>updated_at</code> = last business update, <code>exported_at</code> = publication time</td></tr>
+          <tr><td>Delete handling</td><td>Tombstone / deleted flag</td></tr>
+          <tr><td>Version</td><td><code>v1</code></td></tr>
+          <tr><td>Quality checks</td><td>Documented</td></tr>
+          <tr><td>Lineage</td><td>Source &rarr; published field</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <pre>
+Internal model
+      |
+can change frequently
+      |
+      v
+Translation/publication layer
+      |
+--------------------------------
+     DATA CONTRACT
+--------------------------------
+      |
+must change deliberately
+      |
+      v
+Client
+    </pre>
+
+    <p>The client's contract lives <strong>at the publication boundary</strong>, not inside every source application.</p>
+
+    <!-- ============================================================ -->
+    <h2 id="versioning">Version and change control</h2>
+    <p class="slide-marker">SLIDE 6 &mdash; This is the slide I'd spend the most time on</p>
+
+    <p>The brief says: <em>"This is the part that quietly decides whether the product survives, and given how often our product changes it is the one we will push hardest on."</em></p>
+
+    <h3>Change classification</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Change type</th><th>Example</th><th>Policy</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Safe additive</td><td>New nullable field</td><td>Same version + notification</td></tr>
+          <tr><td>Compatibility risk</td><td>New enum value</td><td>Announce + contract testing</td></tr>
+          <tr><td>Breaking</td><td>Rename/remove field</td><td><strong>New major version</strong></td></tr>
+          <tr><td>Breaking</td><td>Type change</td><td><strong>New major version</strong></td></tr>
+          <tr><td>Breaking</td><td>Primary-key semantics change</td><td><strong>New major version</strong></td></tr>
+          <tr><td>Breaking</td><td>Meaning of a field changes</td><td><strong>New major version</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>My versioning policy</h3>
+    <p><strong>v1 stays v1.</strong> If Plentific wants to make a breaking change:</p>
+    <pre>
+v1 -------------------------+
+                           | dual run (both versions active)
+v2              -----------+
+
+       client migration period (180 days)
+    </pre>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Policy</th><th>Decision</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Deprecation window</td><td><strong>180 days</strong> for breaking changes</td></tr>
+          <tr><td>Versions supported</td><td><strong>N and N-1 only</strong> (current + previous)</td></tr>
+          <tr><td>Why N/N-1?</td><td>Indefinite backwards compatibility becomes a tax on every future engineering change. Clients get predictable migration time; Plentific doesn't promise to support every historical schema forever</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>How this avoids becoming a bureaucracy</h3>
+    <p>Engineering should not have to ask a data committee for permission to change an internal table.</p>
+    <p>Instead: <strong>contract compatibility is automated.</strong></p>
+    <ul>
+      <li>CI detects whether source changes affect published contracts</li>
+      <li>PR template checkbox: "Does this change exported schema?" &mdash; if yes, requires Data PM review</li>
+      <li>Domain team owns meaning</li>
+      <li>Data platform owns publishing infrastructure</li>
+      <li>Data Product (me) owns the client contract and lifecycle</li>
+    </ul>
+
+    <p class="killer-line">
+      "I tie schema review to outcomes engineering cares about: fewer 3am pages, fewer angry client calls, fewer 'why did this break?' investigations."
+    </p>
+
+    <h3>Corrections and late-arriving data</h3>
+    <p>A stable schema doesn't mean the underlying data never changes.</p>
+    <p>If yesterday we exported <code>work_order_123 status = complete</code> and today an operational correction says <code>status = cancelled</code>:</p>
+    <ul>
+      <li>I wouldn't silently mutate yesterday's delivered file</li>
+      <li>The new batch contains a new version of the record</li>
+      <li>Client ingestion is idempotent using: <code>business primary key + updated_at/revision</code></li>
+      <li>Deletions get explicit tombstones</li>
+    </ul>
+
+    <p>Each delivery also gets a <strong>manifest</strong>:</p>
+    <pre>
+{
+  "dataset": "repairs",
+  "schema_version": "v1",
+  "extract_timestamp": "2026-09-15T02:00:00Z",
+  "row_count": 48291,
+  "file_count": 1,
+  "checksum": "sha256:abc123...",
+  "watermark": "2026-09-15T01:45:00Z",
+  "status": "complete"
+}
+    </pre>
+
+    <p>This solves the brief's question: <em>"At 3am, whose pipeline is broken?"</em> The manifest lets both sides establish whether Plentific produced the expected batch successfully.</p>
+
+    <h3>Contractual commitments vs refusals</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>We commit to</th><th>We refuse to commit to</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Schema stability within version</td><td>Data never needing correction</td></tr>
+          <tr><td>180-day deprecation notice for breaking changes</td><td>Custom schemas per client</td></tr>
+          <tr><td>99.5% on-time delivery SLA</td><td>Real-time (sub-minute) freshness</td></tr>
+          <tr><td>Audit trail of what was sent</td><td>Helping debug their pipeline</td></tr>
+          <tr><td>Encryption in transit and at rest</td><td>Data accuracy beyond platform SLA</td></tr>
+          <tr><td>Support N and N-1 versions</td><td>Indefinite backwards compatibility</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ============================================================ -->
+    <h2 id="security">Security model</h2>
+    <p class="slide-marker">SLIDE 7</p>
+
+    <p>My security model is <strong>tenant-isolated by construction</strong>.</p>
+
+    <pre>
+Client A                          Client B
+   |                                 |
+   v                                 v
+A-only export job                 B-only export job
+   |                                 |
+   v                                 v
+A-only storage boundary           B-only storage boundary
+   |                                 |
+   v                                 v
+A-only credentials                B-only credentials
+    </pre>
+
+    <p>I would <strong>not rely only</strong> on <code>WHERE tenant_id = x</code> as the security model.</p>
+    <p>For an external product, I want:</p>
+    <ul>
+      <li>Separate access boundaries</li>
+      <li>Least-privilege credentials</li>
+      <li>Encryption in transit and at rest</li>
+      <li>Auditable exports</li>
+      <li>Automated tests specifically looking for cross-tenant leakage</li>
+      <li>External penetration testing</li>
+    </ul>
+
+    <h3>Data minimisation</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Class</th><th>Default</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Operational non-personal data</td><td>Include where useful</td></tr>
+          <tr><td>Stable business IDs</td><td>Include</td></tr>
+          <tr><td>Necessary personal information</td><td>Controlled dataset, requires justification</td></tr>
+          <tr><td>Free-text repair notes</td><td><strong>Exclude by default</strong></td></tr>
+          <tr><td>Attachments/images</td><td><strong>Out of scope initially</strong></td></tr>
+          <tr><td>Sensitive personal fields (bank details, phone)</td><td>Mask/withhold unless justified</td></tr>
+          <tr><td>Vulnerable tenant flags</td><td>Encrypted or excluded</td></tr>
+          <tr><td>Internal-only metadata</td><td>Exclude</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Responsibility boundary (explicit in contract)</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Responsibility</th><th>Plentific</th><th>Client</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Correct tenant extraction</td><td>&check;</td><td></td></tr>
+          <tr><td>Secure delivery</td><td>&check;</td><td></td></tr>
+          <tr><td>Schema documentation</td><td>&check;</td><td></td></tr>
+          <tr><td>Contract compatibility</td><td>&check;</td><td></td></tr>
+          <tr><td>Delivery monitoring</td><td>&check;</td><td></td></tr>
+          <tr><td>Plentific-side audit logs</td><td>&check;</td><td></td></tr>
+          <tr><td>Warehouse permissions after ingestion</td><td></td><td>&check;</td></tr>
+          <tr><td>Internal client-user access</td><td></td><td>&check;</td></tr>
+          <tr><td>Client-side retention</td><td></td><td>&check;</td></tr>
+          <tr><td>Downstream joins and transformations</td><td></td><td>&check;</td></tr>
+          <tr><td>Client-created reports/regulatory submissions</td><td></td><td>&check;</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ============================================================ -->
+    <h2 id="commercial">Commercial model</h2>
+    <p class="slide-marker">SLIDE 8</p>
+
+    <div class="highlight-box">
+      <p><strong>The key framing:</strong></p>
+      <p>"Clients already own or have rights to their data. I am not charging them for ownership of it.</p>
+      <p>I am charging for a managed product that continuously publishes, secures, versions, documents, monitors and supports that data in a form their warehouse can safely consume."</p>
+    </div>
+
+    <h3>Pricing recommendation</h3>
+    <p>I would <strong>not</strong> use pure usage-based pricing. Most clients want predictable procurement, and the expensive part is operational/support complexity, not just storage bytes.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th></th><th>Standard</th><th>Advanced</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Price hypothesis</strong></td><td>~&pound;2,000/month</td><td>~&pound;4,000-6,000/month</td></tr>
+          <tr><td>Delivery</td><td>Daily</td><td>Hourly available</td></tr>
+          <tr><td>Backfill</td><td>12 months included</td><td>Extended history</td></tr>
+          <tr><td>Volume</td><td>Included threshold</td><td>Higher threshold</td></tr>
+          <tr><td>Schema contract</td><td>&check;</td><td>&check;</td></tr>
+          <tr><td>Support</td><td>Standard (4-hour response)</td><td>Enhanced</td></tr>
+          <tr><td>Native sharing (Snowflake)</td><td>&mdash;</td><td>Included</td></tr>
+          <tr><td>Overage</td><td>Per-GB for exceptional usage</td><td>Higher allowance</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p><strong>One-time onboarding fee</strong> (~&pound;2-5k) for initial backfill/integration work.</p>
+
+    <p>These are <strong>pricing hypotheses</strong>, not Plentific data. I would validate through willingness-to-pay conversations with design partners before locking packaging.</p>
+
+    <h3>How it fits with current tiers</h3>
+    <ul>
+      <li>Data Delivery is a <strong>separate add-on</strong>, not included in current tiers</li>
+      <li>Existing clients who want it pay extra</li>
+      <li>New enterprise deals can bundle it</li>
+      <li>No cannibalisation &mdash; this serves a need current tiers don't address</li>
+    </ul>
+
+    <h3>The "already paid for data" conversation</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Client says</th><th>I say</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>"We already pay for our data"</td>
+            <td>"You pay for the platform. And you can download CSVs anytime &mdash; that's included. This product is different: automated delivery to your bucket, versioned schema, SLA, machine-readable format. That's the value-add with real costs behind it"</td>
+          </tr>
+          <tr>
+            <td>"But it's OUR data"</td>
+            <td>"Absolutely. This product is about <em>how</em> you get it: automated, reliable, with a contract you can depend on. That's what we're charging for"</td>
+          </tr>
+          <tr>
+            <td>"We'll just use the API"</td>
+            <td>"You can. But for bulk analytics, it's slow and expensive for both of us. The brief literally says 'using them that way is slow and expensive.' This product solves that"</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ============================================================ -->
+    <h2 id="sequence">Sequence and gates</h2>
+    <p class="slide-marker">SLIDE 9</p>
+
+    <p>I frame the roadmap as <strong>gates</strong>, not a feature wishlist.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Stage</th><th>What I do</th><th>Gate to proceed</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>0. Validate</strong></td>
+            <td>Interview clients, analyse usage, test price, secure 2-3 design partners</td>
+            <td>Repeated need + willingness to pay (5+ confirmed)</td>
+          </tr>
+          <tr>
+            <td><strong>1. Foundation</strong></td>
+            <td>External contract layer, tenant isolation (RLS), lineage, quality, export pipeline</td>
+            <td>Security/data review passed, pen test passed</td>
+          </tr>
+          <tr>
+            <td><strong>2. Pilot</strong></td>
+            <td>A few high-value domains (repairs, properties), initial backfill + daily incremental</td>
+            <td>Reliable ingestion by real clients, 30 days no major issues</td>
+          </tr>
+          <tr>
+            <td><strong>3. Beta</strong></td>
+            <td>Better observability, recovery, docs, operational support</td>
+            <td>Repeatable onboarding (&lt;5 days), support load acceptable</td>
+          </tr>
+          <tr>
+            <td><strong>4. GA</strong></td>
+            <td>Productised entitlement, pricing, SLA, support</td>
+            <td>Sustainable economics (margin &gt;40%)</td>
+          </tr>
+          <tr>
+            <td><strong>5. Expand</strong></td>
+            <td>Native sharing, higher cadence, more datasets</td>
+            <td>Revenue justifies complexity</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ============================================================ -->
+    <h2 id="pushback">Pushing back on "nightly full export"</h2>
+    <p class="slide-marker">SLIDE 10</p>
+
+    <p>The brief asks: <em>"If you think part of that request is the wrong answer to their real problem, say so and tell us what you would offer instead."</em></p>
+
+    <h3>What the client says</h3>
+    <blockquote>"Our requirement is a complete export every night."</blockquote>
+
+    <h3>What I translate that into</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>What they say</th><th>What they really need</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>"Export everything"</td><td>Access to useful analytical domains</td></tr>
+          <tr><td>"Every night"</td><td>Predictable freshness</td></tr>
+          <tr><td>"Full export"</td><td>Ability to reconstruct correct current state</td></tr>
+          <tr><td>"Into my warehouse"</td><td>Easy, automatable ingestion</td></tr>
+          <tr><td>"Don't change it"</td><td>Stable schema contract</td></tr>
+          <tr><td>"Raw data"</td><td>Enough granularity to answer questions Plentific hasn't anticipated</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>My response</h3>
+    <div class="highlight-box success">
+      <p>"I can meet the underlying requirement that you have a complete and dependable view of your Plentific data every morning.</p>
+      <p>I wouldn't recommend retransmitting the entire history every night.</p>
+      <p>We would give you an <strong>initial full snapshot</strong> and then a <strong>versioned incremental feed</strong> containing inserts, updates and deletions. You can reconstruct the full current state at any point, but the process is faster, cheaper and significantly easier to recover.</p>
+      <p>If your current ingestion platform genuinely requires a full snapshot, I'd understand that constraint and explore a transitional full-snapshot option. But I wouldn't make that the architecture for the product."</p>
+    </div>
+
+    <p>That answer is strong because I'm <strong>pushing back without telling the customer they're wrong</strong>.</p>
+
+    <!-- ============================================================ -->
+    <h2 id="economics">Unit economics</h2>
+    <p class="slide-marker">SLIDE 11</p>
+
+    <p>I don't pretend to know Plentific's AWS/Azure bill. But I show I know <strong>how to calculate it</strong>.</p>
+
+    <h3>Cost per client (illustrative)</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Monthly cost component</th><th>Illustrative assumption</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Transform compute (export jobs)</td><td>&pound;60</td></tr>
+          <tr><td>Storage/retention</td><td>&pound;20</td></tr>
+          <tr><td>Egress</td><td>&pound;20</td></tr>
+          <tr><td>Orchestration/monitoring</td><td>&pound;30</td></tr>
+          <tr><td>Operational/support allocation</td><td>&pound;120</td></tr>
+          <tr><td>Security/platform allocation</td><td>&pound;70</td></tr>
+          <tr><td><strong>Illustrative COGS</strong></td><td><strong>~&pound;320/client/month</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>At &pound;2,000/month price: <strong>Illustrative gross margin &asymp; 84%</strong> before shared product/engineering fixed costs.</p>
+
+    <p class="killer-line">
+      "The number I care about even more than cloud cost is <strong>support minutes per client</strong>. If every client gets a different schema, schedule and recovery process, &pound;50 of infrastructure can turn into &pound;2,000 of human cost. Standardisation is not only an architecture decision. It is the gross-margin strategy."
+    </p>
+
+    <h3>At scale (50 clients, 1 year)</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Cost</th><th>Annual estimate</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Compute (export jobs)</td><td>&pound;6k</td></tr>
+          <tr><td>Egress (50 clients &times; 20GB/month)</td><td>&pound;18k</td></tr>
+          <tr><td>Storage</td><td>Negligible</td></tr>
+          <tr><td>Tooling (Airflow, Datadog, etc.)</td><td>&pound;5k</td></tr>
+          <tr><td>Human (0.5 FTE support, PM time)</td><td>&pound;50k</td></tr>
+          <tr><td><strong>Total</strong></td><td><strong>~&pound;80k/year</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Revenue needed at 40% margin: &pound;130k/year = <strong>&pound;220/client/month minimum</strong>. At &pound;2k/month, we're well above that.</p>
+
+    <!-- ============================================================ -->
+    <h2 id="metrics">Success metrics</h2>
+    <p class="slide-marker">SLIDE 12</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Client outcome</th><th>Product reliability</th><th>Business outcome</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Time to first usable dataset</td><td>Successful delivery rate (target: 99.5%)</td><td>ARR / attach rate</td></tr>
+          <tr><td>Data freshness achieved</td><td>Freshness SLO met</td><td>Gross margin (&gt;40%)</td></tr>
+          <tr><td>Client ingestion failures</td><td>Data quality failures</td><td>Support cost/client (&lt;2 tickets/month)</td></tr>
+          <tr><td>Schema-related incidents</td><td>Cross-tenant incidents (target: zero)</td><td>Renewal/expansion rate</td></tr>
+          <tr><td>Time to adapt to new version</td><td>Recovery time</td><td>Time to onboard (&lt;5 days)</td></tr>
+          <tr><td>NPS of data teams</td><td>Contract-test coverage</td><td>Deals unblocked</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p><strong>Before GA, I need strong evidence of:</strong></p>
+    <ul>
+      <li><strong>Zero</strong> cross-tenant leakage</li>
+      <li>Predictable delivery</li>
+      <li>Repeatable onboarding</li>
+      <li>Controlled schema changes</li>
+      <li>Healthy per-client economics</li>
+    </ul>
+
+    <!-- ============================================================ -->
+    <h2 id="not-building">What I deliberately won't build (yet)</h2>
+    <p class="slide-marker">SLIDE 13</p>
+
+    <p>The brief asks: <em>"What is explicitly out of scope for now?"</em></p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Not MVP</th><th>Why</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Live streaming / CDC</td><td>Different architecture, different cost model. Prove daily works first</td></tr>
+          <tr><td>Custom client schemas</td><td>Destroys gross margin. Standardisation is the product</td></tr>
+          <tr><td>Dozens of warehouse-specific connectors</td><td>Parquet works everywhere. Add native sharing for Snowflake/BigQuery later if demand proves it</td></tr>
+          <tr><td>Arbitrary transformations</td><td>We deliver governed datasets. They transform in their warehouse</td></tr>
+          <tr><td>Self-service data modeller</td><td>Complexity explosion. Start with curated datasets</td></tr>
+          <tr><td>Every field in Plentific</td><td>Start with repairs, properties, compliance. Expand based on demand</td></tr>
+          <tr><td>Direct internal warehouse access</td><td>Never. Exposes implementation, creates security risk, blocks internal changes</td></tr>
+          <tr><td>Unlimited historical versions</td><td>N/N-1 only. Indefinite compatibility is unsustainable</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ============================================================ -->
+    <h2 id="questions">Expected questions and answers</h2>
+    <p class="slide-marker">BACKUP SLIDES / Q&amp;A</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Panel challenge</th><th>My answer</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Why not Snowflake sharing?</strong></td>
+            <td>Fantastic for Snowflake clients, but bad first abstraction for a multi-warehouse customer base. Prove demand first, add it behind the same data contract later</td>
+          </tr>
+          <tr>
+            <td><strong>Why not just expose the existing warehouse?</strong></td>
+            <td>Because then internal implementation becomes a public API. Security and schema evolution become coupled to every client. We lose the ability to refactor</td>
+          </tr>
+          <tr>
+            <td><strong>Why not use the API?</strong></td>
+            <td>It's transactional, not analytical. 10,000 API calls vs 1 file export. The brief already says it's slow and expensive for both sides</td>
+          </tr>
+          <tr>
+            <td><strong>Why Parquet rather than CSV?</strong></td>
+            <td>Typed, compressed, analytical, cheap to process, broadly compatible. CSV/SFTP can remain an exception for legacy clients</td>
+          </tr>
+          <tr>
+            <td><strong>What if clients insist on hourly?</strong></td>
+            <td>Make freshness an explicit product tier. Don't make every customer subsidise the operating cost of hourly delivery</td>
+          </tr>
+          <tr>
+            <td><strong>What happens when engineering removes a field?</strong></td>
+            <td>Internal field changes freely; published contract doesn't. Translate internally, or release v2 and dual-run with 180-day migration</td></tr>
+          <tr>
+            <td><strong>What if supporting v1 gets expensive?</strong></td>
+            <td>Explicit support lifetime and N/N-1 policy. Compatibility is a promise, not immortality</td>
+          </tr>
+          <tr>
+            <td><strong>Who owns schema?</strong></td>
+            <td>Data Product (me) owns external contract and lifecycle. Domain teams own source semantics. Data Platform owns publishing infrastructure</td>
+          </tr>
+          <tr>
+            <td><strong>What scares you most?</strong></td>
+            <td>Not cloud compute. Cross-tenant leakage first; uncontrolled bespoke variation second; unbounded backwards compatibility third</td>
+          </tr>
+          <tr>
+            <td><strong>What would cause you to stop the project?</strong></td>
+            <td>If discovery shows demand is a handful of bespoke requests with insufficient willingness to pay for a standardised product</td>
+          </tr>
+          <tr>
+            <td><strong>Why should clients pay for their own data?</strong></td>
+            <td>They're not paying for ownership. They're paying for the managed interface, delivery, reliability, security and backwards compatibility</td>
+          </tr>
+          <tr>
+            <td><strong>What would you validate first?</strong></td>
+            <td>Demand concentration, top datasets, acceptable latency, client warehouse technologies, security expectations, volumes, willingness to pay, current cost of bespoke work</td>
+          </tr>
+          <tr>
+            <td><strong>Our eng team hates process. How do you make this stick?</strong></td>
+            <td>Don't frame it as process. Frame it as protection. "This PR check saves you from a 3am page." Tie it to outcomes they care about. Keep it lightweight</td>
+          </tr>
+          <tr>
+            <td><strong>What if we tried versioning before and it failed?</strong></td>
+            <td>Usually it's process failure, not tech failure. No enforcement = people bypass it. The fix is tying schema review to outcomes: fewer incidents, fewer support calls</td>
+          </tr>
+          <tr>
+            <td><strong>A client wants custom fields. Now what?</strong></td>
+            <td>Three options: (1) If useful to many, add to standard scope. (2) If truly custom, quote separately. (3) If not feasible, say no. We don't expand scope for free</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ============================================================ -->
+    <h2 id="final">Final recommendation</h2>
+    <p class="slide-marker">FINAL SLIDE</p>
+
+    <pre>
+DON'T
+  Expose Plentific's warehouse
+        |
+        v
+DO
+  Create a stable external data contract
+        |
+        v
+DELIVER
+  Daily incremental open-format datasets
+        |
+        v
+PROTECT
+  Tenant isolation + governance + versioning
+        |
+        v
+MONETISE
+  Platform module with cadence/volume allowances
+        |
+        v
+EXPAND
+  Native sharing and higher freshness only when demand proves it
+    </pre>
+
+    <div class="highlight-box success">
+      <p style="font-size: 1.2em; text-align: center; margin: 0;">
+        <strong>Plentific keeps moving quickly.<br>
+        Clients get an interface they can trust.</strong>
+      </p>
+    </div>
+
+    <h3>Why I weighted version control highest</h3>
+    <ul>
+      <li>Least reversible decision</li>
+      <li>Already proven in Plentific's API (dated versions: 2020, 2021, 2023)</li>
+      <li>Touches all four registers (product, engineering, commercial, governance)</li>
+      <li>The question that decides if the product survives</li>
+    </ul>
+
+    <h3>Competitor context</h3>
+    <p>Competitors (Fixflo, Civica, MRI, Yardi) offer manual CSV downloads and transactional APIs. <strong>No one offers automated file drops with versioned schemas and SLAs.</strong> Plentific already has API versioning &mdash; extending it to bulk data is a 6-12 month head start.</p>
+
+  </main>
+</div>
+
+<footer class="site-footer">
+  <p>&copy; 2026 Tanu Jain &middot; Plentific Data PM case study</p>
+</footer>
+</body>
+</html>

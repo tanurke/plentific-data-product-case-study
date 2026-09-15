@@ -23,6 +23,7 @@
     <a href="solutions.html" aria-current="page">Solution options</a>
     <a href="how-versioning-works.html">How versioning works</a>
     <a href="pm-interview-prep.html">PM interview prep</a>
+    <a href="final-presentation.html">Final presentation</a>
   </div>
 </nav>
 
@@ -37,6 +38,7 @@
     <nav class="toc" aria-label="Contents">
       <a href="#customer-need">What the customer actually needs</a>
       <a href="#real-problems">The real problems to solve</a>
+      <a href="#competitor-discovery">Competitor discovery</a>
       <a href="#phases">Phased approach</a>
       <a href="#option-1">Delivery: Nightly file drop</a>
       <a href="#option-2">Delivery: Data sharing (zero-copy)</a>
@@ -110,6 +112,134 @@
         </tbody>
       </table>
     </div>
+
+    <!-- ============================================================ -->
+    <h2 id="competitor-discovery">Competitor discovery</h2>
+
+    <p>What do competitors offer today for data export? And where is the opportunity?</p>
+
+    <h3>What competitors offer (including Plentific today)</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Company</th>
+            <th>CSV Export (manual)</th>
+            <th>Transactional API</th>
+            <th>Bulk/Extract API</th>
+            <th>File Drop (automated)</th>
+            <th>Versioning</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Plentific</strong></td>
+            <td>Yes (fixed columns, on-demand)</td>
+            <td>Yes (<code>dev.plentific.com</code>)</td>
+            <td>No</td>
+            <td>No</td>
+            <td><strong>Yes (API only)</strong></td>
+          </tr>
+          <tr>
+            <td>Fixflo</td>
+            <td>Yes</td>
+            <td>Yes (REST v2)</td>
+            <td>No</td>
+            <td>No</td>
+            <td>No</td>
+          </tr>
+          <tr>
+            <td>Civica Cx</td>
+            <td>Yes (SSRS)</td>
+            <td>Yes (SOAP)</td>
+            <td>No</td>
+            <td>FTP (manual setup)</td>
+            <td>No</td>
+          </tr>
+          <tr>
+            <td>MRI Software</td>
+            <td>Yes</td>
+            <td>Yes (MIX APIs)</td>
+            <td>Enterprise only</td>
+            <td>FTP (Enterprise)</td>
+            <td>No</td>
+          </tr>
+          <tr>
+            <td>Yardi</td>
+            <td>Yes</td>
+            <td>Yes</td>
+            <td>Paid add-on</td>
+            <td>Unknown</td>
+            <td>Unknown</td>
+          </tr>
+          <tr>
+            <td>Arthur Online</td>
+            <td>Yes</td>
+            <td>Limited</td>
+            <td>No</td>
+            <td>No</td>
+            <td>No</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p><strong>Key distinction:</strong></p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th></th><th>Transactional API (in-app)</th><th>Bulk/Extract API</th></tr>
+        </thead>
+        <tbody>
+          <tr><th>Purpose</th><td>Real-time lookups, integrations</td><td>Warehouse loading, analytics</td></tr>
+          <tr><th>Example</th><td><code>GET /repairs/12345</code> &mdash; one repair</td><td><code>GET /bulk/repairs?since=2026-09-01</code> &mdash; all repairs</td></tr>
+          <tr><th>Who uses it</th><td>Their app, live integrations</td><td>Their data engineers</td></tr>
+          <tr><th>Volume</th><td>One record at a time</td><td>Thousands/millions at once</td></tr>
+          <tr><th>Rate limits</th><td>Strict (protect the app)</td><td>Relaxed (designed for bulk)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p><strong>Everyone has transactional APIs. Almost no one has bulk/extract APIs or automated file drops.</strong></p>
+
+    <h3>Plentific's opportunity with Solution 1 (File Drop)</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Gap today</th><th>Solution 1 fills it</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>CSV is manual, on-demand</td><td>Automated nightly file drop to client's bucket</td></tr>
+          <tr><td>Fixed columns, not configurable</td><td>Client chooses tables from standard scope</td></tr>
+          <tr><td>API is transactional (slow for bulk)</td><td>File drop is built for bulk &mdash; no rate limits</td></tr>
+          <tr><td>No schema contract</td><td>Versioned schema, 90-day deprecation notice</td></tr>
+          <tr><td>No SLA</td><td>"Data arrives by 2am" guarantee</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      <strong>From the brief:</strong> <em>"Using them [the APIs] that way is slow and expensive for both sides."</em>
+      Solution 1 solves exactly that.
+    </p>
+
+    <h3>What competitors would have to build to catch up</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Capability</th><th>Effort for competitor</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Versioning layer</td><td>3-6 months (they don't have it)</td></tr>
+          <tr><td>Automated S3/Azure file drop</td><td>2-3 months</td></tr>
+          <tr><td>Self-service config UI</td><td>2-3 months</td></tr>
+          <tr><td>RLS/multitenancy</td><td>3-6 months (if not already done)</td></tr>
+          <tr><td>Monitoring + SLAs</td><td>1-2 months</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p><strong>Plentific already has versioning for the API.</strong> Extending it to file exports is 80% of the work done. That's a 6-12 month head start over competitors.</p>
 
     <!-- ============================================================ -->
     <h2 id="phases">Phased approach</h2>

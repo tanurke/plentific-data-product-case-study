@@ -23,6 +23,7 @@
     <a href="solutions.html">Solution options</a>
     <a href="how-versioning-works.html">How versioning works</a>
     <a href="pm-interview-prep.html" aria-current="page">PM interview prep</a>
+    <a href="final-presentation.html">Final presentation</a>
   </div>
 </nav>
 
@@ -36,6 +37,10 @@
 
     <nav class="toc" aria-label="Contents">
       <a href="#matrix">Risk/revenue matrix</a>
+      <a href="#brief-gaps">Brief gaps and answers</a>
+      <a href="#unexpected-questions">Unexpected questions</a>
+      <a href="#already-paid">The "already paid" conversation</a>
+      <a href="#why-not-api">Why API is bad for bulk extraction</a>
       <a href="#phase0-pm">Phase 0 &mdash; PM-level questions</a>
       <a href="#phase1">Phase 1 &mdash; scope questions</a>
       <a href="#phase0-technical">Phase 0 &mdash; technical questions</a>
@@ -151,6 +156,347 @@ RISK     │                     │                     │      RISK
 
     <p><strong>Reading this:</strong> Phase 0 is top-right (high risk if skipped, high revenue impact). That's why it's priority 1. 
     Dashboards are bottom-left (low risk, low revenue for this brief) &mdash; do last or not at all.</p>
+
+    <!-- ============================================================ -->
+    <h2 id="brief-gaps">Brief gaps and answers</h2>
+
+    <p>What the brief explicitly asks that you might miss, and how to answer.</p>
+
+    <h3>1. Cost and commercial</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Brief asks</th><th>Answer</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>"Cost of the humans who keep it running"</strong></td>
+            <td>Estimate 0.5 FTE support at scale (&pound;30k/year). Schema review: 2 hours/week PM time. On-call rotation shared with platform team. Total human cost at 50 clients: ~&pound;50k/year</td>
+          </tr>
+          <tr>
+            <td><strong>"Who pays when a client triples their query volume or asks for hourly instead of daily?"</strong></td>
+            <td>Overage pricing. Base tier = nightly + 50GB/month. Above that, &pound;X per GB. Hourly = premium tier at 2x price. Volume spike mid-contract: we alert, they upgrade or we throttle</td>
+          </tr>
+          <tr>
+            <td><strong>"How does it interact with the tiers and modules we sell today?"</strong></td>
+            <td>New add-on, not included in current tiers. Existing clients pay extra. New enterprise deals can bundle it. No cannibalisation &mdash; this serves a need current tiers don't</td>
+          </tr>
+          <tr>
+            <td><strong>"A data product with attractive gross margin at ten clients and none at a hundred"</strong></td>
+            <td>At 10 clients: ~60% margin (low egress, shared support). At 100: risk is egress + support load. Need overage pricing + self-service to stay above 40%. If margin drops below 30%, pricing is wrong</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>2. Technical</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Brief asks</th><th>Answer</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>"Clients with no warehouse"</strong></td>
+            <td>Offer Solution 4 (direct access) &mdash; they connect Tableau/Power BI directly. Or: we host dashboards for them (future phase). Or: they use CSV downloads (current state, free)</td>
+          </tr>
+          <tr>
+            <td><strong>"Historical backfill and reload"</strong></td>
+            <td>Quoted separately. Estimate &pound;2-5k per year of history. One-time job outside normal SLA. <strong>Contract language:</strong> "Base product includes trailing 12 months. Additional years quoted separately. Backfill requests within 30 days of contract signature"</td>
+          </tr>
+          <tr>
+            <td><strong>"What happens when a client's pipeline breaks at 3am and they cannot tell whether the problem is ours or theirs?"</strong></td>
+            <td>Clear boundary: if file landed in their bucket with correct checksum, it's theirs. If not, it's ours. We publish to status page, PagerDuty alerts on-call, client portal shows export status. Support SLA: acknowledge within 4 hours during business hours</td>
+          </tr>
+          <tr>
+            <td><strong>"Where would you build, and where would you buy?"</strong></td>
+            <td><strong>Build:</strong> export jobs (our data, our logic), versioning layer (core IP), config UI (product surface). <strong>Buy:</strong> scheduler (Airflow Cloud), monitoring (Datadog), object storage (AWS S3), alerting (PagerDuty)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>3. Version and change control</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Brief asks</th><th>Answer</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>"Where does that boundary live, who owns it?"</strong></td>
+            <td>Boundary = the versioned views. Data PM owns the version policy. Eng owns implementation. Schema changes that touch export tables need Data PM sign-off before merge. Weekly sync: Eng + Data PM</td>
+          </tr>
+          <tr>
+            <td><strong>"What does it cost to maintain?"</strong></td>
+            <td>~4 hours/week PM time (schema review, changelog, client comms). ~2 hours/week eng time (view maintenance, testing). At scale: may need dedicated Data PM (0.5-1 FTE)</td>
+          </tr>
+          <tr>
+            <td><strong>"Restatements or late-arriving corrections to data a client has already consumed"</strong></td>
+            <td>Issue correction file with <code>_correction_YYYYMMDD</code> suffix. Client's pipeline must handle this (documented in onboarding). We do NOT guarantee data is final &mdash; we guarantee schema and timing. Corrections are normal business, not SLA breaches</td>
+          </tr>
+          <tr>
+            <td><strong>"What has to change in how engineering teams work, and how do you make that stick?"</strong></td>
+            <td>PR template checkbox: "Does this change exported schema?" If yes, requires Data PM review. Enforced by CI check. Make it stick by tying to outcomes they care about: no 3am pages, no angry client calls, no "why did this break?" investigations</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Contractual commitments vs refusals</h4>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>We commit to</th><th>We refuse to commit to</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Schema stability within version</td><td>Data never needing correction</td></tr>
+          <tr><td>90-day deprecation notice for breaking changes</td><td>Custom schemas per client</td></tr>
+          <tr><td>99.5% on-time delivery SLA</td><td>Real-time (sub-minute) freshness</td></tr>
+          <tr><td>Audit trail of what was sent</td><td>Helping debug their pipeline</td></tr>
+          <tr><td>Encryption in transit and at rest</td><td>Data accuracy beyond platform SLA</td></tr>
+          <tr><td>4-hour support acknowledgment (business hours)</td><td>24/7 support for data export issues</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>4. Governance</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Brief asks</th><th>Answer</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>"Minimisation and what you would withhold or mask"</strong></td>
+            <td>Default masked: resident phone, email, bank details. Photos: separate add-on, not in base. Vulnerable tenant flags: encrypted or excluded. Client can request unmasked PII with explicit DPA clause accepting responsibility</td>
+          </tr>
+          <tr>
+            <td><strong>"The obligations that come with social housing data"</strong></td>
+            <td>Awaab's Law: damp/mould data must be trackable &mdash; we include this. Regulator returns: we can provide in RSH format as custom engagement. Vulnerable tenant data: highest sensitivity, explicit justification required</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Responsibility handoff (in contract)</h4>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Our responsibility</th><th>Their responsibility</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Data correct at time of export</td><td>Data correct after they transform it</td></tr>
+          <tr><td>Tenant isolation in our systems</td><td>Access control in their warehouse</td></tr>
+          <tr><td>Audit trail of what we sent</td><td>Audit trail of what they did with it</td></tr>
+          <tr><td>GDPR compliance up to handoff</td><td>GDPR compliance after handoff</td></tr>
+          <tr><td>Encryption in transit</td><td>Encryption at rest in their bucket</td></tr>
+          <tr><td>Responding to our data breach</td><td>Responding to their data breach</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>5. Making it real</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Brief asks</th><th>Answer</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>"How you would validate demand beyond the loudest client"</strong></td>
+            <td>Survey top 20 clients: "Would you pay &pound;X/month for automated data export?" Need 10+ yes. Talk to churned clients: was data a factor? Check lost deals: did competitor win on data access? <strong>If only one client wants it:</strong> don't build a product. Quote it as custom work for them. They fund it, they get it first. Only productise if 5+ confirmed buyers</td>
+          </tr>
+          <tr>
+            <td><strong>"How you would measure whether it works for us and for them"</strong></td>
+            <td><strong>For us:</strong> gross margin &gt;40%, support tickets &lt;2/client/month, onboarding &lt;5 days. <strong>For them:</strong> export arrives on time 99.5%, &lt;1 schema-break complaint per quarter, NPS for data product &gt;40</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Rollout phases</h4>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Phase</th><th>Clients</th><th>Gate to proceed</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Pilot</td><td>1</td><td>Data arrives, pipelines work, no major issues for 30 days</td></tr>
+          <tr><td>Limited</td><td>5</td><td>Support load &lt;2 tickets/client/month, margin positive, no security findings</td></tr>
+          <tr><td>GA</td><td>10+</td><td>Self-service config works, docs complete, sales trained, pricing validated</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ============================================================ -->
+    <h2 id="unexpected-questions">Unexpected questions they might ask</h2>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Question</th><th>What they're testing</th><th>Answer</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>"What if we tried versioning before and it failed?"</strong></td>
+            <td>Can you diagnose org problems, not just tech?</td>
+            <td>Ask: was it a tech failure (views broke) or a process failure (people bypassed it)? Usually it's process. The fix isn't better views &mdash; it's tying schema review to outcomes eng cares about: fewer incidents, fewer support calls. No enforcement = failure</td>
+          </tr>
+          <tr>
+            <td><strong>"Our eng team hates process. How do you make this stick?"</strong></td>
+            <td>Do you understand eng culture?</td>
+            <td>Don't frame it as process. Frame it as protection. "This PR check saves you from a 3am page when a client's pipeline breaks." Tie it to outcomes they want. Keep it lightweight &mdash; one checkbox, not a 10-step approval chain</td>
+          </tr>
+          <tr>
+            <td><strong>"A client wants their custom fields in the export. Now what?"</strong></td>
+            <td>Can you say no? Can you scope?</td>
+            <td>Three options: (1) If useful for others, add to standard scope &mdash; free. (2) If truly custom, quote separately &mdash; client funds it. (3) If not feasible, say no. Push back: "Here's standard scope. Custom is quoted work. What's the business need?"</td>
+          </tr>
+          <tr>
+            <td><strong>"What if a client's pipeline breaks and they blame us?"</strong></td>
+            <td>Do you understand SLA boundaries?</td>
+            <td>Audit trail proves exactly what we sent, when, what format, what checksum. If file landed correctly, it's their pipeline. We don't debug their dbt. Clear SLA: "We guarantee delivery. We don't guarantee your transformation works." This is in contract and onboarding</td>
+          </tr>
+          <tr>
+            <td><strong>"How do you handle a correction to data we already exported?"</strong></td>
+            <td>Do you understand real-world data ops?</td>
+            <td>Issue correction file: <code>repairs_correction_20260915.parquet</code>. Their pipeline must handle this &mdash; documented in onboarding. We do NOT re-export full file (expensive, confusing). Corrections are normal. If frequent, that's a platform quality issue</td>
+          </tr>
+          <tr>
+            <td><strong>"What's the 1-year cost to run this at 50 clients?"</strong></td>
+            <td>Can you think commercially?</td>
+            <td><strong>Compute</strong> (export jobs): &pound;6k/year. <strong>Egress</strong> (50 clients &times; 20GB/month): &pound;18k/year. <strong>Storage</strong>: negligible. <strong>Tooling</strong>: &pound;5k/year. <strong>Human</strong> (0.5 FTE): &pound;50k/year. <strong>Total: ~&pound;80k/year.</strong> Revenue needed at 40% margin: &pound;130k = &pound;220/client/month. Plausible for enterprise</td>
+          </tr>
+          <tr>
+            <td><strong>"Why wouldn't we just use Fivetran/Airbyte?"</strong></td>
+            <td>Do you understand the architecture?</td>
+            <td>They <em>pull</em> from sources via our transactional API &mdash; slow and expensive for bulk. We'd pay compute for every API call. Our solution: we <em>push</em> files directly to client buckets. No API load, no rate limits, predictable cost. Different architecture</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ============================================================ -->
+    <h2 id="already-paid">The "already paid for data" conversation</h2>
+
+    <p>This is the hard commercial conversation. Script it.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Client says</th><th>You say</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>"We already pay for our data"</strong></td>
+            <td>"You pay for the platform &mdash; access, features, support. And you CAN download CSVs yourself anytime, that's included. This new product is different: automated delivery to YOUR bucket, versioned schema, SLA, machine-readable format. That's the value-add with real costs behind it"</td>
+          </tr>
+          <tr>
+            <td><strong>"But it's OUR data"</strong></td>
+            <td>"Absolutely. And you can access it anytime via the platform. This product is about <em>how</em> you get it: automated, reliable, machine-readable, with a schema contract. That's the value-add"</td>
+          </tr>
+          <tr>
+            <td><strong>"Competitor X includes it"</strong></td>
+            <td>"Do they? What's the SLA? Is it versioned? Do they support your warehouse? Happy to compare. If they genuinely offer this, that's a pricing conversation &mdash; but I'd want to validate the comparison is apples to apples"</td>
+          </tr>
+          <tr>
+            <td><strong>"We'll just use the API"</strong></td>
+            <td>"You can. It's included. But the API is transactional &mdash; one record at a time. For bulk analytics, it's slow and expensive for both of us. The brief literally says 'using them that way is slow and expensive.' This product solves that"</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>CSV download (free) vs data export product (paid)</h4>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>CSV download (current, free)</th><th>Data export product (new, paid)</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Client clicks button in UI</td><td>Automated, arrives in their bucket</td></tr>
+          <tr><td>Fixed columns</td><td>Configurable scope</td></tr>
+          <tr><td>Manual, whenever they remember</td><td>Scheduled, reliable, SLA</td></tr>
+          <tr><td>No versioning</td><td>Versioned schema with deprecation policy</td></tr>
+          <tr><td>No audit trail</td><td>Full audit trail</td></tr>
+          <tr><td>Their problem if they forget</td><td>Our problem if it doesn't arrive</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ============================================================ -->
+    <h2 id="why-not-api">Why API is bad for bulk extraction</h2>
+
+    <p>The brief says: <em>"The APIs are transactional: built for integration and workflow, not for bulk analytical extraction. Using them that way is slow and expensive for both sides."</em></p>
+
+    <p>Here's why:</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Problem</th><th>What happens</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Rate limits</strong></td>
+            <td>API has limits (e.g., 100 requests/minute) to protect the platform. At 100 req/min, getting 1 million records = 10,000 minutes = <strong>7 days</strong></td>
+          </tr>
+          <tr>
+            <td><strong>Pagination</strong></td>
+            <td>API returns 50-100 records per call. 1 million records = 10,000+ API calls</td>
+          </tr>
+          <tr>
+            <td><strong>Latency per call</strong></td>
+            <td>Each API call takes ~200ms network round-trip. 10,000 calls &times; 200ms = 33 minutes just waiting</td>
+          </tr>
+          <tr>
+            <td><strong>Authentication overhead</strong></td>
+            <td>Each call validates token, checks permissions, logs access. That overhead &times; 10,000 calls</td>
+          </tr>
+          <tr>
+            <td><strong>Server load</strong></td>
+            <td>10,000 API calls = 10,000 times the server wakes up, runs a query, formats JSON, sends response</td>
+          </tr>
+          <tr>
+            <td><strong>Cost to us</strong></td>
+            <td>Every API call costs compute. Bulk extraction via API = massive compute bill</td>
+          </tr>
+          <tr>
+            <td><strong>Cost to them</strong></td>
+            <td>They need to write code to handle pagination, retries, rate limit backoff, reassembly</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Example: Getting all repairs for a year</h4>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Method</th><th>How it works</th><th>Time</th><th>Calls</th><th>Cost</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>API</strong></td>
+            <td><code>GET /repairs?page=1</code>, <code>GET /repairs?page=2</code>, ... page 10,000</td>
+            <td>7+ hours (with rate limits)</td>
+            <td>10,000</td>
+            <td>High (compute per call)</td>
+          </tr>
+          <tr>
+            <td><strong>File drop</strong></td>
+            <td>One scheduled job writes <code>repairs.parquet</code> to S3</td>
+            <td>5 minutes</td>
+            <td>1 job</td>
+            <td>Low (one query)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p><strong>Interview answer:</strong> "The API is transactional &mdash; built for 'get me this one repair.' Using it for bulk extraction means 10,000+ API calls, hitting rate limits, hours of runtime, and high compute costs on both sides. File drop runs one query, writes one file, delivers gigabytes in minutes. It's the right tool for the job."</p>
 
     <!-- ============================================================ -->
     <h2 id="phase0-pm">Phase 0 &mdash; PM-level questions</h2>
