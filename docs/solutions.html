@@ -43,6 +43,7 @@
       <a href="#option-3">Delivery: Bulk API endpoints</a>
       <a href="#option-4">Delivery: Read-only warehouse access</a>
       <a href="#comparison">Quick comparison</a>
+      <a href="#when-to-use">When to use which</a>
       <a href="#forward">Forward-looking: AI and automation</a>
     </nav>
 
@@ -920,6 +921,243 @@
         </tbody>
       </table>
     </div>
+
+    <!-- ============================================================ -->
+    <h2 id="when-to-use">When to use which solution</h2>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Client situation</th><th>Best solution</th><th>Why</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Wants daily/hourly batch loads</td>
+            <td><strong>1: File Drop</strong></td>
+            <td>Predictable, simple, files just appear</td>
+          </tr>
+          <tr>
+            <td>Wants to pull data on their schedule</td>
+            <td><strong>3: Bulk API</strong></td>
+            <td>They control timing, incremental easy</td>
+          </tr>
+          <tr>
+            <td>Just wants to query, not own data</td>
+            <td><strong>2: Data Share</strong></td>
+            <td>No ETL, live data, zero-copy</td>
+          </tr>
+          <tr>
+            <td>Is on same platform as us (Snowflake/BQ)</td>
+            <td><strong>2: Data Share</strong></td>
+            <td>Seamless, appears in their warehouse</td>
+          </tr>
+          <tr>
+            <td>Is on different platform than us</td>
+            <td><strong>1: File Drop</strong></td>
+            <td>Works with anything</td>
+          </tr>
+          <tr>
+            <td>Has no engineering team</td>
+            <td><strong>1: File Drop</strong></td>
+            <td>Simplest to consume</td>
+          </tr>
+          <tr>
+            <td>Already uses our API</td>
+            <td><strong>3: Bulk API</strong></td>
+            <td>Familiar, extends what they know</td>
+          </tr>
+          <tr>
+            <td>Wants real-time data</td>
+            <td><strong>2: Data Share</strong> or <strong>4: Direct Access</strong></td>
+            <td>Live queries</td>
+          </tr>
+          <tr>
+            <td>Wants to connect Tableau/Power BI directly</td>
+            <td><strong>4: Direct Access</strong></td>
+            <td>Just a connection string, no pipeline</td>
+          </tr>
+          <tr>
+            <td>Small client, just wants dashboards</td>
+            <td><strong>4: Direct Access</strong></td>
+            <td>No data engineering needed</td>
+          </tr>
+          <tr>
+            <td>Wants to own/archive/transform data</td>
+            <td><strong>1: File Drop</strong></td>
+            <td>They get a copy, fully theirs</td>
+          </tr>
+          <tr>
+            <td>Enterprise, complex needs</td>
+            <td><strong>1: File Drop</strong></td>
+            <td>Full control, works everywhere</td>
+          </tr>
+          <tr>
+            <td>We want predictable costs</td>
+            <td><strong>1: File Drop</strong></td>
+            <td>Fixed schedule = predictable</td>
+          </tr>
+          <tr>
+            <td>We're worried about performance/security</td>
+            <td><strong>NOT 4: Direct Access</strong></td>
+            <td>They're inside our system</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Decision tree</h3>
+
+    <pre>
+Does the client want to OWN a copy of the data?
+│
+├─ YES → Are they technical enough to build a pipeline?
+│         │
+│         ├─ YES, want control over timing → 3: Bulk API
+│         │
+│         └─ YES, want simple batch loads → 1: File Drop
+│
+└─ NO, just want to query → 
+         │
+         ├─ Are they on same platform as us?
+         │   │
+         │   ├─ YES → 2: Data Share (cleanest)
+         │   │
+         │   └─ NO → Do they just want to connect BI tools directly?
+         │            │
+         │            ├─ YES → 4: Direct Access (give them a login)
+         │            │
+         │            └─ NO → 1: File Drop (they load it somewhere)
+         │
+         └─ Do they want maximum simplicity, no ETL at all?
+             │
+             └─ YES → 4: Direct Access (connect Tableau, done)
+    </pre>
+
+    <h3>Summary</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Solution</th><th>Best for</th><th>Not for</th><th>Our risk</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>1: File Drop</strong></td>
+            <td>Most clients, any platform, batch loads</td>
+            <td>Real-time needs</td>
+            <td>Low</td>
+          </tr>
+          <tr>
+            <td><strong>2: Data Share</strong></td>
+            <td>Same-platform clients, live queries, low-effort</td>
+            <td>Different platforms, owning data</td>
+            <td>Low</td>
+          </tr>
+          <tr>
+            <td><strong>3: Bulk API</strong></td>
+            <td>Tech-savvy clients, on-demand pulls, incremental</td>
+            <td>Non-technical clients</td>
+            <td>Medium (scaling)</td>
+          </tr>
+          <tr>
+            <td><strong>4: Direct Access</strong></td>
+            <td>Small clients, BI tool users, no-ETL simplicity</td>
+            <td>Large clients, security-sensitive</td>
+            <td>High (security, performance)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Cost comparison</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Cost</th><th>1: File Drop</th><th>2: Data Share</th><th>3: Bulk API</th><th>4: Direct Access</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Our compute</strong></td>
+            <td>Export job (scheduled)</td>
+            <td>None</td>
+            <td>Every API call</td>
+            <td>Every query they run</td>
+          </tr>
+          <tr>
+            <td><strong>Our storage</strong></td>
+            <td>Temp files</td>
+            <td>Data in our warehouse</td>
+            <td>Minimal</td>
+            <td>Data in our warehouse</td>
+          </tr>
+          <tr>
+            <td><strong>Our egress</strong></td>
+            <td>We push files</td>
+            <td>Minimal (same cloud)</td>
+            <td>They pull</td>
+            <td>They pull query results</td>
+          </tr>
+          <tr>
+            <td><strong>Their compute</strong></td>
+            <td>Load files</td>
+            <td>They pay Snowflake/BQ</td>
+            <td>Call API + load</td>
+            <td>None (they use ours)</td>
+          </tr>
+          <tr>
+            <td><strong>Scaling risk</strong></td>
+            <td>Predictable</td>
+            <td>Low</td>
+            <td>Medium (abuse)</td>
+            <td>High (heavy queries)</td>
+          </tr>
+          <tr>
+            <td><strong>Security risk</strong></td>
+            <td>Low</td>
+            <td>Low</td>
+            <td>Medium</td>
+            <td>High (in our DB)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>What changes for data lakes</h3>
+
+    <p>Most examples assume SQL-based warehouses (Snowflake, BigQuery). Data lakes work differently:</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Solution</th><th>SQL Warehouse</th><th>Data Lake</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>1: File Drop</strong></td>
+            <td>Works &check;</td>
+            <td><strong>Works best</strong> &check; &mdash; lakes are built for files (Parquet, CSV)</td>
+          </tr>
+          <tr>
+            <td><strong>2: Data Share</strong></td>
+            <td>Snowflake-to-Snowflake, BQ-to-BQ</td>
+            <td>Databricks Delta Sharing exists, but less common</td>
+          </tr>
+          <tr>
+            <td><strong>3: Bulk API</strong></td>
+            <td>They load JSON into warehouse</td>
+            <td>They load JSON into lake &mdash; same thing</td>
+          </tr>
+          <tr>
+            <td><strong>4: Direct Access</strong></td>
+            <td>SQL login</td>
+            <td>Doesn't apply &mdash; lakes don't have "logins" the same way</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p><strong>Bottom line:</strong> File drop (Solution 1) works for everything &mdash; SQL warehouses AND data lakes. That's why it's the safest starting point.</p>
 
     <!-- ============================================================ -->
     <h2 id="forward">Forward-looking: AI and automation</h2>
