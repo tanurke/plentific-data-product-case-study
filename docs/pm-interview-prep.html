@@ -337,6 +337,78 @@ RISK     │                     │                     │      RISK
       </table>
     </div>
 
+    <h3>Difficult Phase 1 questions</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Question</th><th>What they're testing</th><th>How to answer</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Client wants hourly exports but we only support daily. Do you say no or build it?</strong></td>
+            <td>Prioritisation, saying no, understanding cost</td>
+            <td>"Depends on how many clients want it. If one client, they can fund custom. If it's a pattern, it goes on the roadmap. We don't over-engineer for one request."</td>
+          </tr>
+          <tr>
+            <td><strong>Client says the settings UI is confusing. How do you decide what to fix?</strong></td>
+            <td>User research, prioritisation</td>
+            <td>"Talk to them. What's confusing? Watch them use it. Fix high-impact issues. A settings page used once per quarter doesn't need to be perfect."</td>
+          </tr>
+          <tr>
+            <td><strong>Engineering says the API will take 6 weeks. Sales says clients need it in 2. What do you do?</strong></td>
+            <td>Managing expectations, negotiation</td>
+            <td>"What's the minimum? Maybe we ship /exports/latest in 2 weeks, the rest later. Negotiate scope, not timelines."</td>
+          </tr>
+          <tr>
+            <td><strong>Client's data engineer says our API is missing a feature. Do you add it?</strong></td>
+            <td>Scope discipline, product vs custom</td>
+            <td>"What feature? If useful to many clients, consider it. If one client's edge case, that's custom work &mdash; quoted separately."</td>
+          </tr>
+          <tr>
+            <td><strong>What if client enters invalid S3 credentials in the settings page?</strong></td>
+            <td>Edge cases, error handling, UX</td>
+            <td>"Validate on save. Test the connection before accepting. Show clear error. Don't let them save broken config."</td>
+          </tr>
+          <tr>
+            <td><strong>Client wants to export data outside standard scope. How do you handle it?</strong></td>
+            <td>Scope discipline, commercial thinking</td>
+            <td>"Outside standard scope. Two options: add to roadmap if others want it, or they fund custom. We don't expand scope for free."</td>
+          </tr>
+          <tr>
+            <td><strong>How do you decide which tables are in standard scope?</strong></td>
+            <td>Product thinking, prioritisation</td>
+            <td>"Start with what the brief asked for: repairs, properties, compliance. Validate with 3-5 clients. Add tables based on demand."</td>
+          </tr>
+          <tr>
+            <td><strong>The API has 5 endpoints. A client wants 10 more. What's your process?</strong></td>
+            <td>Saying no, roadmap management</td>
+            <td>"What are the 10? Most API expansion is nice-to-have. We ship the 5 that cover 90% of use cases, add more based on real demand."</td>
+          </tr>
+          <tr>
+            <td><strong>How do you know if the settings UI is working?</strong></td>
+            <td>Metrics, success criteria</td>
+            <td>"Track: clients completing setup without support tickets. Config errors. Manual exports triggered (sign of broken automation)."</td>
+          </tr>
+          <tr>
+            <td><strong>Client's pipeline fails because our export was late. Who's responsible?</strong></td>
+            <td>SLAs, ownership</td>
+            <td>"Depends on SLA. If we promised 2am and delivered 4am, that's on us. If we delivered on time and their pipeline failed, that's on them. Clear SLAs prevent blame games."</td>
+          </tr>
+          <tr>
+            <td><strong>A competitor has more features. How do you respond?</strong></td>
+            <td>Competitive positioning</td>
+            <td>"What features? Are clients actually asking? We focus on what our clients need, not feature parity."</td>
+          </tr>
+          <tr>
+            <td><strong>A client keeps triggering manual exports 10 times a day. What do you do?</strong></td>
+            <td>Edge cases, abuse, product limits</td>
+            <td>"That's abuse. Options: rate limiting, charge per export, or ask why. Maybe they need real-time &mdash; that's a different tier."</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
     <!-- ============================================================ -->
     <h2 id="phase0-technical">Phase 0 &mdash; technical questions</h2>
 
