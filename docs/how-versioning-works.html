@@ -41,6 +41,7 @@
       <a href="#q4">What about adding a new column?</a>
       <a href="#q5">What about new workflow states?</a>
       <a href="#q6">How does one schema per version work in real life?</a>
+      <a href="#tighter-contract">When versioning isn't enough</a>
     </nav>
 
     <!-- ============================================================ -->
@@ -355,6 +356,109 @@ SELECT * FROM repairs_v2023_02_01 WHERE client_id = 'nhg'
       <span class="callout-label">Why scope discipline matters</span>
       <p>The more columns and tables you expose, the more views you have to maintain when things change.</p>
       <p>Every field you promise is a field you must protect forever. That's why saying "no" to fields is how the product stays maintainable.</p>
+    </div>
+
+    <!-- ============================================================ -->
+    <h2 id="tighter-contract">When versioning isn't enough: tighter contracts</h2>
+
+    <p>Versioning says: "The STRUCTURE won't change." But clients also depend on:</p>
+    <ul>
+      <li>Data types staying the same</li>
+      <li>Value ranges staying the same</li>
+      <li>Nullability staying the same</li>
+      <li>Enum values not expanding unexpectedly</li>
+    </ul>
+
+    <h3>Schema versioning vs contract versioning</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Schema versioning (loose)</th><th>Contract versioning (tight)</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Column names and types are stable</td>
+            <td>Column names, types, AND behaviour are stable</td>
+          </tr>
+          <tr>
+            <td>New columns can appear</td>
+            <td>New columns only in new version</td>
+          </tr>
+          <tr>
+            <td>Enum values can expand</td>
+            <td>Enum values locked per version</td>
+          </tr>
+          <tr>
+            <td>Nullability can change</td>
+            <td>Nullability locked per version</td>
+          </tr>
+          <tr>
+            <td>"We won't break you" (vague)</td>
+            <td>"Here's exactly what will never change" (explicit)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>What a tighter contract looks like</h3>
+
+    <pre>
+# Contract for v2023-02-01
+
+repairs:
+  columns:
+    id:
+      type: integer
+      nullable: false
+    status:
+      type: string
+      nullable: false
+      allowed_values: [OPEN, IN_PROGRESS, COMPLETED, CANCELLED]
+      # No new values will be added to this version
+    priority:
+      type: integer
+      nullable: false
+      range: 1-5
+      # Will not change to 1-10 in this version
+    completed_at:
+      type: timestamp
+      nullable: true  # Explicitly documented as nullable
+
+guarantees:
+  - No new columns added to this version
+  - No columns removed
+  - No type changes
+  - No nullability changes
+  - No enum expansion
+    </pre>
+
+    <h3>When you need a tighter contract</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Situation</th><th>What to do</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Clients with strict ETL tools</strong></td>
+            <td>Document everything, no surprises</td>
+          </tr>
+          <tr>
+            <td><strong>Regulated industries</strong></td>
+            <td>They need to prove to auditors what changed</td>
+          </tr>
+          <tr>
+            <td><strong>Clients with brittle pipelines</strong></td>
+            <td>They can't handle ANY change, even additive</td>
+          </tr>
+          <tr>
+            <td><strong>After multiple incidents</strong></td>
+            <td>Trust is broken, need to rebuild with explicit guarantees</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
 
   </main>
