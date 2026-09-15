@@ -442,6 +442,9 @@
     <a href="#" class="sidebar-link" data-page="history">Export history</a>
     <a href="#" class="sidebar-link" data-page="schema">Schema documentation</a>
     
+    <div class="sidebar-section" style="margin-top: 1.5rem;">Security</div>
+    <a href="#" class="sidebar-link" data-page="security">Tenant isolation</a>
+    
     <div class="sidebar-section" style="margin-top: 1.5rem;">Support</div>
     <a href="#" class="sidebar-link" data-page="api">API reference</a>
     <a href="#" class="sidebar-link">Contact support</a>
@@ -455,6 +458,15 @@
       <div class="page-header">
         <h1 class="page-title">Dashboard</h1>
         <p class="page-subtitle">Overview of your data exports</p>
+      </div>
+      
+      <div class="alert" style="background: #f0fff4; border: 1px solid #b7eb8f; color: #135200; margin-bottom: 1.5rem;">
+        <span class="alert-icon">🔒</span>
+        <div>
+          <strong>Tenant-isolated data</strong> — You are viewing data for <strong>Notting Hill Genesis</strong> only. 
+          All exports contain exclusively your organisation's records. 
+          <a href="#" onclick="showPage('security'); return false;" style="color: #135200;">View security details</a>
+        </div>
       </div>
       
       <div class="stats-grid">
@@ -471,7 +483,7 @@
         <div class="stat-card">
           <div class="stat-label">Total rows exported</div>
           <div class="stat-value">1.2M</div>
-          <div class="stat-change">This month</div>
+          <div class="stat-change">This month (your data only)</div>
         </div>
         <div class="stat-card">
           <div class="stat-label">Data volume</div>
@@ -813,6 +825,12 @@
             </tr>
           </thead>
           <tbody>
+            <tr style="background: #f0fff4;">
+              <td>tenant_id</td>
+              <td><code>string</code></td>
+              <td>No</td>
+              <td>Your organisation ID (<code>nhg-001</code>). Same on every row — confirms data isolation</td>
+            </tr>
             <tr>
               <td>repair_id</td>
               <td><code>string</code></td>
@@ -911,6 +929,180 @@
             <p style="margin-bottom: 0.5rem;"><strong>New version:</strong> v2023-02-01 released</p>
             <p style="color: var(--gray-500); font-size: 0.9rem;">Initial schema version. Previous version v2020-06-01 deprecated and will be retired on 1 Aug 2023.</p>
           </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Security page -->
+    <div class="page" id="page-security">
+      <div class="page-header">
+        <h1 class="page-title">Tenant isolation</h1>
+        <p class="page-subtitle">How we ensure you only receive your organisation's data</p>
+      </div>
+      
+      <div class="alert" style="background: #f0fff4; border: 1px solid #b7eb8f; color: #135200;">
+        <span class="alert-icon">✓</span>
+        <div>
+          <strong>Your data is isolated</strong> — Every export job runs with your tenant ID (<code>nhg-001</code>) enforced at the database level. Cross-tenant data access is technically impossible.
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">How tenant isolation works</span>
+        </div>
+        <div class="card-body">
+          <div style="background: var(--gray-100); padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem; font-family: 'SF Mono', Monaco, monospace; font-size: 0.85rem;">
+            <div style="color: var(--gray-500); margin-bottom: 0.5rem;">-- Your export query (simplified)</div>
+            <div><span style="color: #0066cc;">SELECT</span> * <span style="color: #0066cc;">FROM</span> repairs</div>
+            <div><span style="color: #0066cc;">WHERE</span> tenant_id = <span style="color: #00a854;">'nhg-001'</span>  <span style="color: var(--gray-500);">-- Enforced by Row-Level Security</span></div>
+            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--gray-300); color: var(--gray-500);">
+              ✓ This filter is applied automatically at the database level<br>
+              ✓ Cannot be bypassed by application code<br>
+              ✓ Verified by automated tests on every deployment
+            </div>
+          </div>
+          
+          <table class="table">
+            <thead>
+              <tr><th>Security control</th><th>How it protects you</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Row-Level Security (RLS)</strong></td>
+                <td>Database enforces tenant filter on every query. Even if application code has a bug, wrong data cannot be returned</td>
+              </tr>
+              <tr>
+                <td><strong>Separate export jobs</strong></td>
+                <td>Your export runs as a dedicated job with your tenant credentials. Never shared with other organisations</td>
+              </tr>
+              <tr>
+                <td><strong>Isolated storage</strong></td>
+                <td>Files are written directly to YOUR bucket using YOUR credentials. No shared staging area</td>
+              </tr>
+              <tr>
+                <td><strong>Automated isolation tests</strong></td>
+                <td>Every deployment runs tests that attempt cross-tenant access and verify it fails</td>
+              </tr>
+              <tr>
+                <td><strong>External penetration testing</strong></td>
+                <td>Independent security firm tests for tenant isolation bypasses quarterly</td>
+              </tr>
+              <tr>
+                <td><strong>Audit logging</strong></td>
+                <td>Every export is logged: what data, when, where it was sent. Available on request</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Your tenant details</span>
+        </div>
+        <div class="card-body">
+          <table class="table">
+            <tbody>
+              <tr>
+                <td style="width: 200px;"><strong>Organisation</strong></td>
+                <td>Notting Hill Genesis</td>
+              </tr>
+              <tr>
+                <td><strong>Tenant ID</strong></td>
+                <td><code>nhg-001</code></td>
+              </tr>
+              <tr>
+                <td><strong>Data isolation</strong></td>
+                <td><span class="badge badge-success">Active</span> Row-Level Security enforced</td>
+              </tr>
+              <tr>
+                <td><strong>Last security audit</strong></td>
+                <td>12 Aug 2026 — <span style="color: var(--success);">Passed</span></td>
+              </tr>
+              <tr>
+                <td><strong>Encryption in transit</strong></td>
+                <td>TLS 1.3</td>
+              </tr>
+              <tr>
+                <td><strong>Encryption at rest</strong></td>
+                <td>AES-256 (your S3 bucket settings)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Responsibility boundary</span>
+        </div>
+        <div class="card-body">
+          <p style="color: var(--gray-500); margin-bottom: 1rem;">Clear separation of who is responsible for what:</p>
+          <table class="table">
+            <thead>
+              <tr><th>Responsibility</th><th>Plentific</th><th>Your organisation</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Correct tenant extraction</td>
+                <td style="color: var(--success);">✓</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Secure delivery to your bucket</td>
+                <td style="color: var(--success);">✓</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Audit trail of what was sent</td>
+                <td style="color: var(--success);">✓</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Data Processing Agreement (DPA)</td>
+                <td style="color: var(--success);">✓</td>
+                <td style="color: var(--success);">✓</td>
+              </tr>
+              <tr>
+                <td>Access control in your warehouse</td>
+                <td></td>
+                <td style="color: var(--success);">✓</td>
+              </tr>
+              <tr>
+                <td>Retention in your systems</td>
+                <td></td>
+                <td style="color: var(--success);">✓</td>
+              </tr>
+              <tr>
+                <td>Downstream transformations</td>
+                <td></td>
+                <td style="color: var(--success);">✓</td>
+              </tr>
+              <tr>
+                <td>Reports/submissions you create</td>
+                <td></td>
+                <td style="color: var(--success);">✓</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Security questionnaire</span>
+        </div>
+        <div class="card-body">
+          <p style="margin-bottom: 1rem;">Need to complete a security review? We can provide:</p>
+          <ul style="color: var(--gray-700); line-height: 1.8;">
+            <li>Completed security questionnaire (most common frameworks)</li>
+            <li>SOC 2 Type II report</li>
+            <li>Penetration test summary</li>
+            <li>Data Processing Agreement (DPA)</li>
+            <li>Architecture documentation</li>
+          </ul>
+          <button class="btn btn-secondary" style="margin-top: 1rem;">Request security documentation</button>
         </div>
       </div>
     </div>
