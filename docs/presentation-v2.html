@@ -1,0 +1,999 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plentific Data Delivery — Presentation</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  :root {
+    --primary: #0052cc;
+    --primary-light: #e6f0ff;
+    --success: #00875a;
+    --warning: #ff991f;
+    --error: #de350b;
+    --gray-50: #fafbfc;
+    --gray-100: #f4f5f7;
+    --gray-200: #dfe1e6;
+    --gray-500: #6b778c;
+    --gray-700: #42526e;
+    --gray-900: #172b4d;
+  }
+  
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--gray-100);
+    color: var(--gray-900);
+    line-height: 1.6;
+  }
+  
+  /* Navigation */
+  .nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    border-bottom: 1px solid var(--gray-200);
+    padding: 0.75rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 100;
+  }
+  .nav-title {
+    font-weight: 600;
+    color: var(--gray-900);
+  }
+  .nav-title span { color: var(--primary); }
+  .nav-controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .nav-progress {
+    font-size: 0.85rem;
+    color: var(--gray-500);
+  }
+  .nav-btn {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--gray-200);
+    background: white;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.15s;
+  }
+  .nav-btn:hover { background: var(--gray-50); }
+  .nav-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .nav-btn.primary { background: var(--primary); color: white; border-color: var(--primary); }
+  
+  /* Slide container */
+  .slides-container {
+    margin-top: 60px;
+    min-height: calc(100vh - 60px);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 2rem;
+    box-sizing: border-box;
+  }
+  
+  /* Slide */
+  .slide {
+    display: none;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    width: 100%;
+    max-width: 1000px;
+    padding: 2.5rem;
+    margin: 0 auto;
+    animation: fadeIn 0.3s ease;
+    overflow-x: auto;
+  }
+  .slide.active { display: block; margin: 0 auto; }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  /* Slide header */
+  .slide-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 2px solid var(--gray-100);
+  }
+  .slide-number {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+  }
+  .slide-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--gray-900);
+    line-height: 1.3;
+  }
+  .slide-subtitle {
+    font-size: 1rem;
+    color: var(--gray-500);
+    margin-top: 0.5rem;
+  }
+  
+  /* Content styles */
+  .slide-content h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--gray-900);
+    margin: 1.5rem 0 0.75rem;
+  }
+  .slide-content h3:first-child { margin-top: 0; }
+  
+  .slide-content p {
+    color: var(--gray-700);
+    margin-bottom: 1rem;
+  }
+  
+  .slide-content ul {
+    margin: 0 0 1rem 1.5rem;
+    color: var(--gray-700);
+  }
+  .slide-content li { margin-bottom: 0.5rem; }
+  
+  /* Key insight box */
+  .insight {
+    background: var(--primary-light);
+    border-left: 4px solid var(--primary);
+    padding: 1.25rem 1.5rem;
+    margin: 1.5rem 0;
+    border-radius: 0 8px 8px 0;
+  }
+  .insight p { margin: 0; color: var(--gray-900); }
+  .insight strong { color: var(--primary); }
+  
+  /* Decision box */
+  .decision {
+    background: #e3fcef;
+    border-left: 4px solid var(--success);
+    padding: 1.25rem 1.5rem;
+    margin: 1.5rem 0;
+    border-radius: 0 8px 8px 0;
+  }
+  .decision p { margin: 0; }
+  
+  /* Warning box */
+  .warning {
+    background: #fffae6;
+    border-left: 4px solid var(--warning);
+    padding: 1.25rem 1.5rem;
+    margin: 1.5rem 0;
+    border-radius: 0 8px 8px 0;
+  }
+  .warning p { margin: 0; }
+  
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+  th, td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--gray-200);
+  }
+  th {
+    background: var(--gray-50);
+    font-weight: 600;
+    color: var(--gray-700);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  
+  /* Two column layout */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+  
+  /* Diagram */
+  .diagram {
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    border-radius: 8px;
+    padding: 1.5rem;
+    font-family: 'SF Mono', Monaco, monospace;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    white-space: pre;
+    overflow-x: auto;
+  }
+  
+  /* Badge */
+  .badge {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  .badge-green { background: #e3fcef; color: var(--success); }
+  .badge-yellow { background: #fffae6; color: #974f0c; }
+  .badge-red { background: #ffebe6; color: var(--error); }
+  .badge-blue { background: var(--primary-light); color: var(--primary); }
+  
+  /* Killer line */
+  .killer {
+    font-size: 1.15rem;
+    font-style: italic;
+    color: var(--gray-900);
+    border-left: 3px solid var(--primary);
+    padding: 0.75rem 1.25rem;
+    margin: 1.5rem 0;
+    background: var(--gray-50);
+  }
+  
+  /* Footer note */
+  .slide-footer {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--gray-200);
+    font-size: 0.85rem;
+    color: var(--gray-500);
+  }
+  
+  /* Code */
+  code {
+    background: var(--gray-100);
+    padding: 0.15rem 0.4rem;
+    border-radius: 3px;
+    font-size: 0.85em;
+  }
+  
+  /* Slide index */
+  .slide-index {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 0.5rem;
+    background: white;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  }
+  .slide-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--gray-200);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .slide-dot:hover { background: var(--gray-500); }
+  .slide-dot.active { background: var(--primary); }
+  
+  /* Links */
+  .links {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  .links a {
+    color: var(--primary);
+    text-decoration: none;
+    font-size: 0.9rem;
+  }
+  .links a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-title"><span>Plentific</span> Data Delivery</div>
+  <div class="nav-controls">
+    <span class="nav-progress"><span id="currentSlide">1</span> / <span id="totalSlides">12</span></span>
+    <button class="nav-btn" id="prevBtn" onclick="prevSlide()">← Previous</button>
+    <button class="nav-btn primary" id="nextBtn" onclick="nextSlide()">Next →</button>
+  </div>
+</nav>
+
+<div class="slides-container">
+
+  <!-- SLIDE 1: Opening -->
+  <div class="slide active" data-slide="1">
+    <div class="slide-header">
+      <div class="slide-number">Opening</div>
+      <h1 class="slide-title">Build a data contract, not a bigger export</h1>
+    </div>
+    <div class="slide-content">
+      <div class="two-col">
+        <div>
+          <h3>What clients say</h3>
+          <p style="font-style: italic; color: var(--gray-600);">"Can you batch export everything into our warehouse every night?"</p>
+          
+          <h3 style="margin-top: 1.5rem;">What they actually need</h3>
+          <p>Dependable, governed data that their pipelines can safely depend on — with a schema that won't break.</p>
+        </div>
+        <div>
+          <h3>What the brief tells us</h3>
+          <p>There are <strong>two products here</strong>:</p>
+          <ul style="margin-top: 0.5rem;">
+            <li><strong>Product A:</strong> Internal foundation</li>
+            <li><strong>Product B:</strong> Client-facing delivery</li>
+          </ul>
+          <p style="margin-top: 1rem;"><strong>The hard problem:</strong> How does Plentific keep shipping fast while clients need stability?</p>
+        </div>
+      </div>
+      
+      <div class="decision" style="margin-top: 1.5rem; text-align: center;">
+        <p><strong>That's why I weighted version/change control highest.</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 2: Recommendation -->
+  <div class="slide" data-slide="2">
+    <div class="slide-header">
+      <div class="slide-number">My Recommendation</div>
+      <h1 class="slide-title">The decision</h1>
+    </div>
+    <div class="slide-content">
+      <table>
+        <tr><th style="width: 200px;"></th><th>Recommendation</th></tr>
+        <tr><td><strong>Product</strong></td><td>Plentific Data Delivery</td></tr>
+        <tr><td><strong>First use case</strong></td><td>Strategic enterprise clients with internal data teams</td></tr>
+        <tr><td><strong>MVP</strong></td><td>Initial historical load + daily incremental files (Parquet)</td></tr>
+        <tr><td><strong>Foundation</strong></td><td>Governed external publication layer with versioned schema</td></tr>
+        <tr><td><strong>Launch gate</strong></td><td>Tenant isolation proven (pen test passed)</td></tr>
+        <tr><td><strong>Commercial</strong></td><td>Enterprise add-on; pricing validated against cost-to-serve and willingness to pay</td></tr>
+        <tr><td><strong>Later</strong></td><td>Native sharing, higher cadence, AI/agent interfaces</td></tr>
+      </table>
+      
+      <div class="two-col" style="margin-top: 1.5rem;">
+        <div>
+          <h3>Why files first?</h3>
+          <ul>
+            <li><strong>Universal</strong> — any warehouse</li>
+            <li><strong>Auditable</strong> — what was sent, when</li>
+            <li><strong>Versionable</strong> — immutable deliveries</li>
+            <li><strong>No lock-in</strong> — client choice</li>
+          </ul>
+        </div>
+        <div>
+          <h3>What I'd push back on</h3>
+          <p>Client asks: "Give us everything, every night."</p>
+          <p style="margin-top: 0.5rem;"><strong>My response:</strong> I can give you complete, dependable data every morning — via incremental delivery. Full re-extraction nightly is slower, costlier, and unnecessary.</p>
+        </div>
+      </div>
+      
+      <div class="links" style="margin-top: 1rem;">
+        <a href="prototype.html" target="_blank">View prototype →</a>
+        <span style="font-size: 0.8rem; color: var(--gray-500); margin-left: 0.5rem;">Optional self-service UI — shows product vision</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 3: Two Products -->
+  <div class="slide" data-slide="3">
+    <div class="slide-header">
+      <div class="slide-number">Architecture</div>
+      <h1 class="slide-title">Two products, sequenced deliberately</h1>
+    </div>
+    <div class="slide-content">
+      <div class="diagram">PRODUCT A: Internal Foundation
+
+  ENGINEERING/PLATFORM              PRODUCT
+  ─────────────────────            ─────────────────────
+  Internal warehouse         →     Define scope (which tables)
+         ↓                               ↓
+  Publication layer (views)  →     Define contract (schema)
+         ↓                               ↓
+  Tenant isolation (RLS)     →     Versioning policy
+         ↓                               ↓
+  Quality + lineage          →     Change classification
+         
+              ━━━━━ STABLE BOUNDARY ━━━━━
+                          ↓
+PRODUCT B: Client Product
+┌─────────────────────────────────────────────┐
+│  Versioned datasets                         │
+│  Secure delivery → S3/Azure/GCS             │
+│  Delivery summary + monitoring              │
+│  Documentation + changelog                  │
+└─────────────────────────────────────────────┘
+                     ↓
+              Client warehouse</div>
+      
+      <div class="warning">
+        <p><strong>Why not expose the internal warehouse directly?</strong></p>
+        <p>Because then internal refactoring becomes an externally breaking change. Engineering loses the freedom to move fast. That contradicts the brief's core constraint.</p>
+      </div>
+      
+      <h3>How to fund invisible platform work</h3>
+      <p>Don't ask for 6 months of platform investment. Find <strong>2-3 paid design partners</strong>, agree price and scope, fund the minimum platform needed to deliver.</p>
+      <p style="margin-top: 0.75rem;">Platform investment becomes <strong>a new data product</strong> — revenue enablement, not internal overhead. <strong>Productise it.</strong></p>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: Options Considered -->
+  <div class="slide" data-slide="4">
+    <div class="slide-header">
+      <div class="slide-number">Options Considered</div>
+      <h1 class="slide-title">Why this approach over alternatives</h1>
+    </div>
+    <div class="slide-content">
+      <table>
+        <tr>
+          <th>Option</th>
+          <th>Why / why not</th>
+          <th>Who pays compute</th>
+          <th>Extra work</th>
+          <th>Decision</th>
+        </tr>
+        <tr>
+          <td>File drop (Parquet)</td>
+          <td>Works with any warehouse, universal</td>
+          <td>We pay</td>
+          <td>Export jobs, scheduling</td>
+          <td><span class="badge badge-green">MVP</span></td>
+        </tr>
+        <tr>
+          <td>Snowflake/BigQuery sharing</td>
+          <td>Great UX for clients on these platforms — but platform-specific</td>
+          <td>They pay</td>
+          <td>Set up share only</td>
+          <td><span class="badge badge-yellow">Phase 2</span></td>
+        </tr>
+        <tr>
+          <td>Bulk API</td>
+          <td>Significant dev work, ongoing cost per call, needs pricing negotiation</td>
+          <td>We pay (per call)</td>
+          <td>Build + manage endpoints</td>
+          <td><span class="badge badge-red">Careful</span></td>
+        </tr>
+        <tr>
+          <td>SFTP + CSV</td>
+          <td>Legacy clients only, weak typing</td>
+          <td>We pay</td>
+          <td>SFTP setup</td>
+          <td><span class="badge badge-yellow">Fallback</span></td>
+        </tr>
+        <tr>
+          <td>Direct warehouse access</td>
+          <td>Security risk, exposes internals, blocks refactoring</td>
+          <td>Shared/unclear</td>
+          <td>Replica, credentials, monitoring</td>
+          <td><span class="badge badge-red">Careful</span></td>
+        </tr>
+        <tr>
+          <td>Real-time streaming</td>
+          <td>Different architecture, different cost model entirely</td>
+          <td>We pay (continuous)</td>
+          <td>CDC, streaming infra</td>
+          <td><span class="badge badge-yellow">Later</span></td>
+        </tr>
+      </table>
+      
+      <div class="insight">
+        <p><strong>Key insight:</strong> Product A (versioned, tenant-isolated views) is the same for all mechanisms. Delivery is just how clients access those views.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5: The Four Areas -->
+  <div class="slide" data-slide="5">
+    <div class="slide-header">
+      <div class="slide-number">Brief Coverage</div>
+      <h1 class="slide-title">Covering all four areas</h1>
+      <p class="slide-subtitle">Prioritised by risk, revenue impact, and dependencies</p>
+    </div>
+    <div class="slide-content">
+      <table>
+        <tr>
+          <th>Area</th>
+          <th>Risk if wrong</th>
+          <th>Revenue impact</th>
+          <th>Effort (eng discussion)</th>
+          <th>Reversible?</th>
+          <th>Depends on</th>
+        </tr>
+        <tr>
+          <td><strong>Governance & tenant safety</strong></td>
+          <td>Catastrophic — data breach, £17M fines, lawsuits, trust destroyed</td>
+          <td>Blocker — can't sell without passing security review</td>
+          <td>4-8 weeks</td>
+          <td>No</td>
+          <td>Nothing — do first</td>
+        </tr>
+        <tr>
+          <td><strong>Version & change control</strong></td>
+          <td>Serious — clients' pipelines break, engineering slows down, support explodes</td>
+          <td>Retention — clients churn if their dashboards break</td>
+          <td>4-6 weeks</td>
+          <td>Partially — but trust is lost</td>
+          <td>Governance</td>
+        </tr>
+        <tr>
+          <td><strong>Delivery mechanism</strong></td>
+          <td>Manageable — wrong format, timing issues, can iterate</td>
+          <td>Enabler — this is what clients buy</td>
+          <td>4-8 weeks</td>
+          <td>Yes</td>
+          <td>Governance + versioning</td>
+        </tr>
+        <tr>
+          <td><strong>Commercial model</strong></td>
+          <td>Recoverable — pricing wrong, adjust based on learnings</td>
+          <td>Validation first — if no one pays, don't build</td>
+          <td>Ongoing</td>
+          <td>Yes</td>
+          <td>Validate early</td>
+        </tr>
+      </table>
+      
+      <div class="insight">
+        <p><strong>Order of work:</strong> Validate commercial (will clients pay?) → Governance (can we isolate tenants?) → Versioning (can we keep contracts stable?) → Delivery (how do we ship it?)</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 6: Version Control Deep Dive -->
+  <div class="slide" data-slide="6">
+    <div class="slide-header">
+      <div class="slide-number">Deep Dive</div>
+      <h1 class="slide-title">Version and change control</h1>
+      <p class="slide-subtitle">How Plentific keeps shipping while clients stay stable</p>
+    </div>
+    <div class="slide-content">
+      <h3>Change types and how we handle them</h3>
+      <table>
+        <tr>
+          <th></th>
+          <th><span class="badge badge-green">Additive</span></th>
+          <th><span class="badge badge-yellow">Deprecation</span></th>
+          <th><span class="badge badge-red">Breaking</span></th>
+        </tr>
+        <tr>
+          <td><strong>Example</strong></td>
+          <td>New column <code>uprn</code> added</td>
+          <td>Column <code>legacy_code</code> will be removed</td>
+          <td>Column renamed, type changed, or column removed</td>
+        </tr>
+        <tr>
+          <td><strong>Version</strong></td>
+          <td><em>Engineering decision</em></td>
+          <td>Warning in current version</td>
+          <td>New version (v2)</td>
+        </tr>
+        <tr>
+          <td><strong>Notice</strong></td>
+          <td>Changelog</td>
+          <td>90 days notice + email</td>
+          <td>90+ days + migration guide</td>
+        </tr>
+        <tr>
+          <td><strong>Client action</strong></td>
+          <td>Review changelog</td>
+          <td>Plan migration before deadline</td>
+          <td>Migrate to new version</td>
+        </tr>
+      </table>
+      
+      
+      <div class="two-col" style="margin-top: 1.5rem;">
+        <div>
+          <h3>My policy</h3>
+          <ul>
+            <li><strong>180-day deprecation</strong> for breaking changes</li>
+            <li><strong>N and N-1 only</strong> — not forever</li>
+            <li><strong>Dual-run</strong> during migration</li>
+            <li><strong>CI checks</strong> if source changes affect contract</li>
+          </ul>
+        </div>
+        <div>
+          <h3>How engineering stays fast</h3>
+          <p>Internal tables change freely. The <strong>publication layer</strong> translates to the stable external contract. Engineers don't need approval to refactor — only when changes affect the published schema.</p>
+        </div>
+      </div>
+      
+      <div class="killer">
+        "Compatibility is a promise, not immortality. Clients get predictable migration time; we don't support every historical schema forever."
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 7: Security -->
+  <div class="slide" data-slide="7">
+    <div class="slide-header">
+      <div class="slide-number">Governance</div>
+      <h1 class="slide-title">Security and tenant isolation</h1>
+      <p class="slide-subtitle">No data leaves until this passes</p>
+    </div>
+    <div class="slide-content">
+      <div class="two-col">
+        <div>
+          <h3>Isolation model</h3>
+          <ul>
+            <li><strong>Row-Level Security (RLS)</strong> at database level</li>
+            <li>Separate storage destination per tenant</li>
+            <li>Automated cross-tenant tests on every deploy</li>
+            <li>External pen test before first client</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Data minimisation suggestions</h3>
+          <table>
+            <tr><td>Operational data</td><td><span class="badge badge-green">Include</span></td></tr>
+            <tr><td>Free-text notes</td><td><span class="badge badge-red">Exclude</span></td></tr>
+            <tr><td>Photos/attachments</td><td><span class="badge badge-red">Out of MVP</span></td></tr>
+            <tr><td>Sensitive PII</td><td><span class="badge badge-yellow">Mask</span></td></tr>
+          </table>
+        </div>
+      </div>
+      
+      <h3>Responsibility boundary (explicit in contract)</h3>
+      <table>
+        <tr><th>Plentific owns</th><th>Client owns</th></tr>
+        <tr><td>Correct tenant extraction, secure delivery, audit trail</td><td>Access control in their warehouse, retention, downstream transforms</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- SLIDE 8: Commercial -->
+  <div class="slide" data-slide="8">
+    <div class="slide-header">
+      <div class="slide-number">Commercial</div>
+      <h1 class="slide-title">Value proposition and pricing</h1>
+    </div>
+    <div class="slide-content">
+      <div class="killer" style="margin-bottom: 1.5rem; font-size: 1rem;">
+        "Trusted Plentific data in your warehouse — versioned, secure, and maintained so your pipelines don't break."
+      </div>
+      
+      <h3>Product positioning</h3>
+      <table>
+        <tr><th>Without Data Delivery</th><th>With Data Delivery</th></tr>
+        <tr><td>Manual exports, ad-hoc requests</td><td>Automated, dependable schedule</td></tr>
+        <tr><td>Schema changes break pipelines</td><td>Versioned, stable contract</td></tr>
+        <tr><td>Weeks to get data into warehouse</td><td>Onboard in days</td></tr>
+        <tr><td>No SLA, best-effort support</td><td>Documented SLA, dedicated support</td></tr>
+        <tr><td>Security/audit questions unanswered</td><td>Pen-tested, auditable, compliant</td></tr>
+      </table>
+      
+      <div class="two-col" style="margin-top: 1.5rem;">
+        <div>
+          <h3>Pricing hypothesis</h3>
+          <table>
+            <tr><th></th><th>Standard</th><th>Advanced</th></tr>
+            <tr><td>Price</td><td>~£2k/mo</td><td>~£4-6k/mo</td></tr>
+            <tr><td>Cadence</td><td>Daily</td><td>Hourly</td></tr>
+            <tr><td>History</td><td>12 months</td><td>Extended</td></tr>
+          </table>
+          <p style="font-size: 0.85rem; color: var(--gray-500); margin-top: 0.5rem;"><strong>Hypothesis</strong> — validate with 3+ design partners before committing</p>
+        </div>
+        <div>
+          <h3>Illustrative COGS (per client)</h3>
+          <table>
+            <tr><td>Compute</td><td>£60/mo</td></tr>
+            <tr><td>Storage</td><td>£20/mo</td></tr>
+            <tr><td>Egress</td><td>£20/mo</td></tr>
+            <tr><td>Orchestration/monitoring</td><td>£30/mo</td></tr>
+            <tr><td>Support allocation</td><td>£120/mo</td></tr>
+            <tr><td>Security/platform allocation</td><td>£70/mo</td></tr>
+            <tr><td><strong>Total COGS</strong></td><td><strong>~£320/mo</strong></td></tr>
+          </table>
+          <p style="font-size: 0.85rem; margin-top: 0.5rem;">At £2k/mo: <strong>~84% gross margin</strong></p>
+        </div>
+      </div>
+      
+      <h3>The "already paid for data" conversation</h3>
+      <p>"You pay for the platform. This is a managed product with real costs: delivery, versioning, SLA, security. That's the value-add."</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 9: Sequence -->
+  <div class="slide" data-slide="9">
+    <div class="slide-header">
+      <div class="slide-number">Roadmap</div>
+      <h1 class="slide-title">Roadmap</h1>
+      <p class="slide-subtitle" style="font-size: 0.85rem; color: var(--gray-500);">Estimates are approximate — validate with engineering</p>
+    </div>
+    <div class="slide-content">
+      <!-- Horizontal timeline -->
+      <div style="overflow-x: auto;">
+        <div style="display: grid; grid-template-columns: 100px repeat(7, 1fr); gap: 4px; min-width: 900px; font-size: 0.75rem;">
+          <!-- Header row - phases -->
+          <div style="font-weight: bold; padding: 8px 4px;"></div>
+          <div style="background: var(--blue-50); padding: 8px 4px; text-align: center; border-radius: 4px 4px 0 0;">
+            <strong>0. Validate</strong><br><span style="color: var(--gray-500);">~4 wks</span>
+          </div>
+          <div style="background: var(--blue-50); padding: 8px 4px; text-align: center; border-radius: 4px 4px 0 0;">
+            <strong>1. Foundation</strong><br><span style="color: var(--gray-500);">~8-12 wks</span>
+          </div>
+          <div style="background: var(--blue-50); padding: 8px 4px; text-align: center; border-radius: 4px 4px 0 0;">
+            <strong>2. Pilot</strong><br><span style="color: var(--gray-500);">~4-6 wks</span>
+          </div>
+          <div style="background: var(--blue-50); padding: 8px 4px; text-align: center; border-radius: 4px 4px 0 0;">
+            <strong>3. Beta</strong><br><span style="color: var(--gray-500);">~6-8 wks</span>
+          </div>
+          <div style="background: var(--blue-50); padding: 8px 4px; text-align: center; border-radius: 4px 4px 0 0;">
+            <strong>4. GA</strong><br><span style="color: var(--gray-500);">~4 wks</span>
+          </div>
+          <div style="background: var(--gray-100); padding: 8px 4px; text-align: center; border-radius: 4px 4px 0 0;">
+            <strong>5. Expand</strong><br><span style="color: var(--gray-500);">Ongoing</span>
+          </div>
+          <div style="background: var(--gray-100); padding: 8px 4px; text-align: center; border-radius: 4px 4px 0 0;">
+            <strong>6-7. Future</strong><br><span style="color: var(--gray-500);">TBD</span>
+          </div>
+          
+          <!-- Engineering track -->
+          <div style="font-weight: bold; padding: 8px 4px; background: var(--orange-100); display: flex; align-items: center;">Engineering</div>
+          <div style="background: var(--orange-50); padding: 6px 4px; border: 1px solid var(--orange-200);">
+            —
+          </div>
+          <div style="background: var(--orange-50); padding: 6px 4px; border: 1px solid var(--orange-200);">
+            RLS implementation<br>
+            Export pipeline<br>
+            Contract layer
+          </div>
+          <div style="background: var(--orange-50); padding: 6px 4px; border: 1px solid var(--orange-200);">
+            First client integration<br>
+            Monitoring setup
+          </div>
+          <div style="background: var(--orange-50); padding: 6px 4px; border: 1px solid var(--orange-200);">
+            Self-service config<br>
+            Scale testing
+          </div>
+          <div style="background: var(--orange-50); padding: 6px 4px; border: 1px solid var(--orange-200);">
+            Production hardening<br>
+            Support tooling
+          </div>
+          <div style="background: var(--gray-50); padding: 6px 4px; border: 1px solid var(--gray-200);">
+            Snowflake/BigQuery<br>
+            Hourly cadence
+          </div>
+          <div style="background: var(--gray-50); padding: 6px 4px; border: 1px solid var(--gray-200);">
+            Real-time CDC<br>
+            AI layer
+          </div>
+          
+          <!-- Product track -->
+          <div style="font-weight: bold; padding: 8px 4px; background: var(--green-100); display: flex; align-items: center;">Product</div>
+          <div style="background: var(--green-50); padding: 6px 4px; border: 1px solid var(--green-200);">
+            Client interviews<br>
+            Price testing<br>
+            Design partners
+          </div>
+          <div style="background: var(--green-50); padding: 6px 4px; border: 1px solid var(--green-200);">
+            Define SLAs<br>
+            Table scope decisions<br>
+            Contract templates
+          </div>
+          <div style="background: var(--green-50); padding: 6px 4px; border: 1px solid var(--green-200);">
+            Pilot feedback<br>
+            Docs & guides<br>
+            Prep beta onboarding
+          </div>
+          <div style="background: var(--green-50); padding: 6px 4px; border: 1px solid var(--green-200);">
+            Onboarding playbook<br>
+            Pricing refinement<br>
+            Support handoff
+          </div>
+          <div style="background: var(--green-50); padding: 6px 4px; border: 1px solid var(--green-200);">
+            Launch materials<br>
+            Sales enablement<br>
+            Success metrics
+          </div>
+          <div style="background: var(--gray-50); padding: 6px 4px; border: 1px solid var(--gray-200);">
+            Upsell playbook<br>
+            Tier packaging
+          </div>
+          <div style="background: var(--gray-50); padding: 6px 4px; border: 1px solid var(--gray-200);">
+            AI use cases<br>
+            Future discovery
+          </div>
+          
+          <!-- Gate row -->
+          <div style="font-weight: bold; padding: 8px 4px; background: var(--red-100); display: flex; align-items: center;">Gate</div>
+          <div style="background: var(--red-50); padding: 6px 4px; border: 1px solid var(--red-200); font-size: 0.7rem;">
+            5+ confirmed buyers
+          </div>
+          <div style="background: var(--red-50); padding: 6px 4px; border: 1px solid var(--red-200); font-size: 0.7rem;">
+            Pen test passed
+          </div>
+          <div style="background: var(--red-50); padding: 6px 4px; border: 1px solid var(--red-200); font-size: 0.7rem;">
+            30 days stable
+          </div>
+          <div style="background: var(--red-50); padding: 6px 4px; border: 1px solid var(--red-200); font-size: 0.7rem;">
+            Onboarding &lt;5 days
+          </div>
+          <div style="background: var(--red-50); padding: 6px 4px; border: 1px solid var(--red-200); font-size: 0.7rem;">
+            Margin &gt;40%
+          </div>
+          <div style="background: var(--gray-50); padding: 6px 4px; border: 1px solid var(--gray-200); font-size: 0.7rem;">
+            Revenue justifies
+          </div>
+          <div style="background: var(--gray-50); padding: 6px 4px; border: 1px solid var(--gray-200); font-size: 0.7rem;">
+            Demand proven
+          </div>
+        </div>
+      </div>
+      
+      <div class="warning" style="margin-top: 1rem;">
+        <p><strong>What would cause me to stop?</strong> If validation shows demand is just 1-2 bespoke requests with no willingness to pay for a standardised product.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 10: What I Won't Build -->
+  <div class="slide" data-slide="10">
+    <div class="slide-header">
+      <div class="slide-number">Discipline</div>
+      <h1 class="slide-title">What I deliberately won't build</h1>
+    </div>
+    <div class="slide-content">
+      <table>
+        <tr><th>Not MVP</th><th>Why</th></tr>
+        <tr><td>Custom schemas per client</td><td>Destroys gross margin. Standardisation is the product</td></tr>
+        <tr><td>Direct warehouse access</td><td>Exposes internals, blocks refactoring, security nightmare</td></tr>
+        <tr><td>Real-time streaming</td><td>Different architecture. Prove daily works first</td></tr>
+        <tr><td>Unlimited historical versions</td><td>N/N-1 only. Indefinite compatibility is unsustainable</td></tr>
+        <tr><td>Every field in Plentific</td><td>Start with repairs, properties, compliance. Expand based on demand</td></tr>
+        <tr><td>Photos/attachments</td><td>High PII, high storage cost. Out of MVP</td></tr>
+      </table>
+      
+      <h3>Pushback on "nightly full export"</h3>
+      <div class="insight">
+        <p>"I can meet your requirement for a complete view every morning. I wouldn't recommend retransmitting entire history nightly.</p>
+        <p style="margin-top: 0.5rem;">We'd give you an <strong>initial snapshot + daily incremental</strong>. You can reconstruct current state anytime. It's faster, cheaper, and easier to recover."</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 11: Validation -->
+  <div class="slide" data-slide="11">
+    <div class="slide-header">
+      <div class="slide-number">Validation</div>
+      <h1 class="slide-title">How I'd validate beyond the loudest client</h1>
+    </div>
+    <div class="slide-content">
+      <div class="two-col">
+        <div>
+          <h3>Before committing engineering</h3>
+          <ul>
+            <li><strong>Demand concentration:</strong> Is this 5 clients or 50?</li>
+            <li><strong>Top datasets:</strong> What do they actually need first?</li>
+            <li><strong>Willingness to pay:</strong> Will they sign at £2k/month?</li>
+            <li><strong>Current cost:</strong> What are we spending on bespoke today?</li>
+            <li><strong>Warehouse tech:</strong> Snowflake, Databricks, BigQuery, on-prem?</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Success metrics</h3>
+          <table>
+            <tr><td>Client outcome</td><td>Time to first usable dataset</td></tr>
+            <tr><td>Reliability</td><td>Successful delivery rate, freshness SLO</td></tr>
+            <tr><td>Business</td><td>ARR, gross margin, support cost/client</td></tr>
+            <tr><td>Security</td><td>Zero cross-tenant incidents</td></tr>
+          </table>
+        </div>
+      </div>
+      
+      <h3 style="margin-top: 1.5rem;">Exit criteria — when I'd stop</h3>
+      <table>
+        <tr><th>Signal</th><th>Decision</th></tr>
+        <tr><td>&lt;3 clients interested after validation interviews</td><td>Don't build — demand isn't real</td></tr>
+        <tr><td>Willing to pay &lt;£500/month</td><td>Don't build — can't cover cost-to-serve</td></tr>
+        <tr><td>Every client needs custom schema</td><td>Don't build — it's services, not product</td></tr>
+        <tr><td>RLS requires major replatform</td><td>Pause — scope foundation work first</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- SLIDE 12: Final -->
+  <div class="slide" data-slide="12">
+    <div class="slide-header">
+      <div class="slide-number">Summary</div>
+      <h1 class="slide-title">My recommendation</h1>
+    </div>
+    <div class="slide-content">
+      <div class="diagram" style="text-align: center;">DON'T  →  Expose Plentific's warehouse
+   ↓
+  DO   →  Create a stable external contract
+   ↓
+DELIVER →  Daily incremental, open format
+   ↓
+PROTECT →  Tenant isolation + versioning
+   ↓
+MONETISE → Paid add-on, pricing validated
+   ↓
+EXPAND  →  Native sharing when demand proves it</div>
+      
+      <div class="decision" style="text-align: center; font-size: 1.1rem;">
+        <p><strong>Plentific keeps moving quickly.<br>Clients get an interface they can trust.</strong></p>
+      </div>
+      
+      <h3>Why this wins</h3>
+      <ul>
+        <li>Competitors offer manual CSV and transactional APIs — no one offers versioned automated delivery</li>
+        <li>Standardisation protects margin at scale</li>
+      </ul>
+      
+      <div class="links">
+        <a href="prototype.html" target="_blank">View prototype →</a>
+        <span style="font-size: 0.8rem; color: var(--gray-500); margin-left: 0.5rem;">Optional self-service UI — shows product vision</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Slide index dots -->
+<div class="slide-index" id="slideIndex"></div>
+
+<script>
+  let currentSlide = 1;
+  const totalSlides = document.querySelectorAll('.slide').length;
+  
+  // Initialize
+  document.getElementById('totalSlides').textContent = totalSlides;
+  buildSlideIndex();
+  updateNav();
+  
+  function buildSlideIndex() {
+    const container = document.getElementById('slideIndex');
+    for (let i = 1; i <= totalSlides; i++) {
+      const dot = document.createElement('div');
+      dot.className = 'slide-dot' + (i === 1 ? ' active' : '');
+      dot.onclick = () => goToSlide(i);
+      container.appendChild(dot);
+    }
+  }
+  
+  function goToSlide(n) {
+    document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.slide-dot').forEach(d => d.classList.remove('active'));
+    
+    currentSlide = n;
+    document.querySelector(`[data-slide="${n}"]`).classList.add('active');
+    document.querySelectorAll('.slide-dot')[n-1].classList.add('active');
+    document.getElementById('currentSlide').textContent = n;
+    updateNav();
+  }
+  
+  function nextSlide() {
+    if (currentSlide < totalSlides) goToSlide(currentSlide + 1);
+  }
+  
+  function prevSlide() {
+    if (currentSlide > 1) goToSlide(currentSlide - 1);
+  }
+  
+  function updateNav() {
+    document.getElementById('prevBtn').disabled = currentSlide === 1;
+    document.getElementById('nextBtn').disabled = currentSlide === totalSlides;
+  }
+  
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+  });
+</script>
+
+</body>
+</html>
