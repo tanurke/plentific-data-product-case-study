@@ -548,17 +548,41 @@ PRODUCT B: Client Product
       <p class="slide-subtitle">How Plentific keeps shipping while clients stay stable</p>
     </div>
     <div class="slide-content">
-      <div class="two-col">
-        <div>
-          <h3>Change classification</h3>
-          <table>
-            <tr><td>New nullable field</td><td><span class="badge badge-green">Same version</span></td></tr>
-            <tr><td>New enum value</td><td><span class="badge badge-yellow">Review</span></td></tr>
-            <tr><td>Rename/remove field</td><td><span class="badge badge-red">New version</span></td></tr>
-            <tr><td>Type change</td><td><span class="badge badge-red">New version</span></td></tr>
-            <tr><td>Meaning change</td><td><span class="badge badge-red">New version</span></td></tr>
-          </table>
-        </div>
+      <h3>Change types and how we handle them</h3>
+      <table>
+        <tr>
+          <th>Change type</th>
+          <th>Example</th>
+          <th>Client notice</th>
+          <th>Action required by client</th>
+        </tr>
+        <tr>
+          <td><span class="badge badge-green">Additive (non-breaking)</span></td>
+          <td>New column <code>uprn</code> added to locations</td>
+          <td>Changelog only, no advance notice needed</td>
+          <td>None — their pipelines ignore new columns</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-yellow">Deprecation</span></td>
+          <td>Column <code>legacy_category_code</code> will be removed in 90 days</td>
+          <td>90 days advance notice, changelog, direct email</td>
+          <td>Update their pipelines before deadline</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-red">Breaking</span></td>
+          <td>Column <code>tenant_name</code> renamed to <code>resident_name</code>, or type changed</td>
+          <td>90+ days notice, changelog, direct email, migration support</td>
+          <td>Must update pipelines or break</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-red">New version</span></td>
+          <td>v2 schema released with restructured tables</td>
+          <td>Changelog, migration guide, support both versions</td>
+          <td>Migrate when ready, within support window</td>
+        </tr>
+      </table>
+      
+      <div class="two-col" style="margin-top: 1.5rem;">
         <div>
           <h3>My policy</h3>
           <ul>
@@ -568,10 +592,11 @@ PRODUCT B: Client Product
             <li><strong>CI checks</strong> if source changes affect contract</li>
           </ul>
         </div>
+        <div>
+          <h3>How engineering stays fast</h3>
+          <p>Internal tables change freely. The <strong>publication layer</strong> translates to the stable external contract. Engineers don't need approval to refactor — only when changes affect the published schema.</p>
+        </div>
       </div>
-      
-      <h3>How engineering stays fast</h3>
-      <p>Internal tables change freely. The <strong>publication layer</strong> translates to the stable external contract. Engineers don't need approval to refactor — only when changes affect the published schema.</p>
       
       <div class="killer">
         "Compatibility is a promise, not immortality. Clients get predictable migration time; we don't support every historical schema forever."
