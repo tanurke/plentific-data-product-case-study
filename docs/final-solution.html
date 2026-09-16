@@ -126,9 +126,9 @@
   <p class="eyebrow">Executive recommendation</p>
   <h1>Build a stable data contract, not a bigger export.</h1>
   <p class="lede">
-    Large clients do not fundamentally need “a nightly full export”. They need dependable, governed access to
-    Plentific data that their own data platforms can build against without Plentific's product velocity becoming
-    their outage. My recommendation is to create a client-facing <strong>Plentific Data Delivery</strong> product,
+    The brief points to a broader client need than simply receiving a nightly full export: large clients need dependable,
+    governed access to Plentific data that their own data platforms can build against without Plentific's product velocity
+    becoming their outage. My recommendation is to create a client-facing <strong>Plentific Data Delivery</strong> product,
     enabled by an internal publication layer that deliberately decouples external contracts from internal data structures.
   </p>
 </section>
@@ -171,8 +171,8 @@
 </div>
 
 <div class="callout">
-  <span class="callout-label">What I would push back on</span>
-  <p><strong>Yes</strong> to a complete, dependable view every morning. <strong>No</strong> to retransmitting all history every night by default. Start with a full snapshot, then publish inserts, updates and deletions incrementally; retain a controlled reload/backfill capability for recovery.</p>
+  <span class="callout-label">Recommended delivery pattern</span>
+  <p>Clients need a complete, dependable view of their Plentific data on a predictable schedule. I would provide an initial historical load followed by scheduled incremental updates covering new, changed and deleted records. This gives clients a reconstructable current view while reducing unnecessary data movement and making recovery easier. Where an existing client system requires a full scheduled extract, that can be supported as an alternative delivery mode rather than being the default for every client.</p>
 </div>
 
 <h3>The two products</h3>
@@ -181,7 +181,7 @@
   <thead><tr><th></th><th>Product A — Client-ready data foundation</th><th>Product B — Plentific Data Delivery</th></tr></thead>
   <tbody>
     <tr><th>Purpose</th><td>Make external publication safe, stable and governable</td><td>Give clients a dependable machine-to-machine data feed</td></tr>
-    <tr><th>Core capabilities</th><td>External models, tenant policy, data contracts, quality, lineage, versioning, audit</td><td>Snapshot/incremental delivery, schedules, manifests, monitoring, reloads, docs</td></tr>
+    <tr><th>Core capabilities</th><td>Client-facing data models, tenant isolation, stable data contracts, quality checks, lineage, version management and audit</td><td>Initial historical load, incremental delivery, scheduling, delivery receipts/manifests, monitoring, replay/recovery and client documentation</td></tr>
     <tr><th>Value</th><td>Enables enterprise revenue and reduces breach/change risk</td><td>Direct client value and a productised commercial proposition</td></tr>
     <tr><th>Funding story</th><td colspan="2">Fund the minimum foundation through 2–3 strategic design partners and an explicit enterprise revenue case — not as an open-ended warehouse rebuild.</td></tr>
   </tbody>
@@ -486,8 +486,8 @@
 </details>
 
 <details>
-  <summary>What if the client insists on a nightly full export?</summary>
-  <p>I would confirm the underlying requirement: “Do you need a complete reconstructable state every morning, or does your ingestion technology literally require every historical row to be resent?” I can guarantee reconstructable state through snapshot + increments. If their technology genuinely requires full snapshots, support it as a bounded compatibility option and price its cost rather than make it the platform default.</p>
+  <summary>How would I support a client that requires a full scheduled extract?</summary>
+  <p>The standard product would be an initial historical load followed by incremental updates, because that is more efficient and easier to recover at scale. If a client's existing ingestion technology genuinely requires a complete scheduled snapshot, I would support that as an alternative delivery mode with clear volume, operational and commercial guardrails rather than force the client to redesign immediately.</p>
 </details>
 
 <details>
