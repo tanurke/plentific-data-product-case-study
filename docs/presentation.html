@@ -488,44 +488,54 @@ PRODUCT B: Client Product
     <div class="slide-header">
       <div class="slide-number">Brief Coverage</div>
       <h1 class="slide-title">Covering all four areas</h1>
-      <p class="slide-subtitle">Weighted by risk and irreversibility</p>
+      <p class="slide-subtitle">Prioritised by risk, revenue impact, and dependencies</p>
     </div>
     <div class="slide-content">
       <table>
         <tr>
           <th>Area</th>
-          <th>My approach</th>
-          <th>Weight</th>
+          <th>Risk if wrong</th>
+          <th>Revenue impact</th>
+          <th>Effort</th>
+          <th>Reversible?</th>
+          <th>Depends on</th>
         </tr>
         <tr>
-          <td><strong>1. Cost & Commercial</strong></td>
-          <td>~£2k/month module. Volume-based overage. "You pay for the managed interface, not ownership of data"</td>
-          <td><span class="badge badge-blue">Medium</span></td>
+          <td><strong>Governance & tenant safety</strong></td>
+          <td>Catastrophic — data breach, £17M fines, lawsuits, trust destroyed</td>
+          <td>Blocker — can't sell without passing security review</td>
+          <td>4-8 weeks</td>
+          <td>No</td>
+          <td>Nothing — do first</td>
         </tr>
         <tr>
-          <td><strong>2. Technical</strong></td>
-          <td>Parquet to S3/Azure. Build export jobs, buy scheduler (Airflow). 8-12 weeks with one engineer</td>
-          <td><span class="badge badge-blue">Medium</span></td>
+          <td><strong>Version & change control</strong></td>
+          <td>Serious — clients' pipelines break, engineering slows down, support explodes</td>
+          <td>Retention — clients churn if their dashboards break</td>
+          <td>4-6 weeks</td>
+          <td>Partially — but trust is lost</td>
+          <td>Governance</td>
         </tr>
         <tr>
-          <td><strong>3. Version & Change</strong></td>
-          <td>Publication layer decouples internal from external. 180-day deprecation. N/N-1 support only</td>
-          <td><span class="badge badge-green">Highest</span></td>
+          <td><strong>Delivery mechanism</strong></td>
+          <td>Manageable — wrong format, timing issues, can iterate</td>
+          <td>Enabler — this is what clients buy</td>
+          <td>4-8 weeks</td>
+          <td>Yes</td>
+          <td>Governance + versioning</td>
         </tr>
         <tr>
-          <td><strong>4. Governance</strong></td>
-          <td>RLS + pen test before first export. Data minimisation by default. Clear handoff boundary</td>
-          <td><span class="badge badge-blue">High</span></td>
+          <td><strong>Commercial model</strong></td>
+          <td>Recoverable — pricing wrong, adjust based on learnings</td>
+          <td>Validation first — if no one pays, don't build</td>
+          <td>Ongoing</td>
+          <td>Yes</td>
+          <td>Validate early</td>
         </tr>
       </table>
       
       <div class="insight">
-        <p><strong>Why version control is weighted highest:</strong></p>
-        <ul style="margin: 0.5rem 0 0 1.5rem;">
-          <li>Least reversible decision — get it wrong and clients' pipelines break</li>
-          <li>Already proven in Plentific's API (dated versions: 2020, 2021, 2023)</li>
-          <li>The brief says "this is the one we will push hardest on"</li>
-        </ul>
+        <p><strong>Order of work:</strong> Validate commercial (will clients pay?) → Governance (can we isolate tenants?) → Versioning (can we keep contracts stable?) → Delivery (how do we ship it?)</p>
       </div>
     </div>
   </div>
