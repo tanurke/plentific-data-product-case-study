@@ -700,53 +700,130 @@ PRODUCT B: Client Product
     <div class="slide-header">
       <div class="slide-number">Roadmap</div>
       <h1 class="slide-title">Sequence with gates</h1>
+      <p class="slide-subtitle" style="font-size: 0.85rem; color: var(--gray-500);">Estimates are approximate — validate with engineering</p>
     </div>
     <div class="slide-content">
-      <table>
-        <tr><th>Stage</th><th>What</th><th>Gate to proceed</th></tr>
-        <tr>
-          <td><strong>0. Validate</strong></td>
-          <td>Interview clients, test price, secure design partners</td>
-          <td>5+ confirmed buyers</td>
-        </tr>
-        <tr>
-          <td><strong>1. Foundation</strong></td>
-          <td>RLS, contract layer, export pipeline</td>
-          <td>Pen test passed</td>
-        </tr>
-        <tr>
-          <td><strong>2. Pilot</strong></td>
-          <td>1 client, core datasets, daily export</td>
-          <td>30 days, no major issues</td>
-        </tr>
-        <tr>
-          <td><strong>3. Beta</strong></td>
-          <td>5 clients, self-service config, docs</td>
-          <td>Onboarding &lt;5 days</td>
-        </tr>
-        <tr>
-          <td><strong>4. GA</strong></td>
-          <td>Pricing live, SLA, support</td>
-          <td>Margin &gt;40%, support sustainable</td>
-        </tr>
-        <tr>
-          <td><strong>5. Expand</strong></td>
-          <td>Native sharing (Snowflake/BigQuery), hourly cadence</td>
-          <td>Revenue justifies complexity</td>
-        </tr>
-        <tr>
-          <td><strong>6. Real-time</strong></td>
-          <td>CDC/streaming for premium tier</td>
-          <td>Demand from 10+ clients</td>
-        </tr>
-        <tr>
-          <td><strong>7. AI layer</strong></td>
-          <td>Anomaly detection, data quality alerts, natural language queries</td>
-          <td>Foundation stable, clear use cases</td>
-        </tr>
-      </table>
+      <!-- Horizontal timeline -->
+      <div style="overflow-x: auto;">
+        <div style="display: grid; grid-template-columns: 100px repeat(7, 1fr); gap: 4px; min-width: 900px; font-size: 0.75rem;">
+          <!-- Header row - phases -->
+          <div style="font-weight: bold; padding: 8px 4px;"></div>
+          <div style="background: var(--blue-50); padding: 8px 4px; text-align: center; border-radius: 4px 4px 0 0;">
+            <strong>0. Validate</strong><br><span style="color: var(--gray-500);">~4 wks</span>
+          </div>
+          <div style="background: var(--blue-50); padding: 8px 4px; text-align: center; border-radius: 4px 4px 0 0;">
+            <strong>1. Foundation</strong><br><span style="color: var(--gray-500);">~8-12 wks</span>
+          </div>
+          <div style="background: var(--blue-50); padding: 8px 4px; text-align: center; border-radius: 4px 4px 0 0;">
+            <strong>2. Pilot</strong><br><span style="color: var(--gray-500);">~4-6 wks</span>
+          </div>
+          <div style="background: var(--blue-50); padding: 8px 4px; text-align: center; border-radius: 4px 4px 0 0;">
+            <strong>3. Beta</strong><br><span style="color: var(--gray-500);">~6-8 wks</span>
+          </div>
+          <div style="background: var(--blue-50); padding: 8px 4px; text-align: center; border-radius: 4px 4px 0 0;">
+            <strong>4. GA</strong><br><span style="color: var(--gray-500);">~4 wks</span>
+          </div>
+          <div style="background: var(--gray-100); padding: 8px 4px; text-align: center; border-radius: 4px 4px 0 0;">
+            <strong>5. Expand</strong><br><span style="color: var(--gray-500);">Ongoing</span>
+          </div>
+          <div style="background: var(--gray-100); padding: 8px 4px; text-align: center; border-radius: 4px 4px 0 0;">
+            <strong>6-7. Future</strong><br><span style="color: var(--gray-500);">TBD</span>
+          </div>
+          
+          <!-- Engineering track -->
+          <div style="font-weight: bold; padding: 8px 4px; background: var(--orange-100); display: flex; align-items: center;">Engineering</div>
+          <div style="background: var(--orange-50); padding: 6px 4px; border: 1px solid var(--orange-200);">
+            —
+          </div>
+          <div style="background: var(--orange-50); padding: 6px 4px; border: 1px solid var(--orange-200);">
+            RLS implementation<br>
+            Export pipeline<br>
+            Contract layer
+          </div>
+          <div style="background: var(--orange-50); padding: 6px 4px; border: 1px solid var(--orange-200);">
+            First client integration<br>
+            Monitoring setup
+          </div>
+          <div style="background: var(--orange-50); padding: 6px 4px; border: 1px solid var(--orange-200);">
+            Self-service config<br>
+            Scale testing
+          </div>
+          <div style="background: var(--orange-50); padding: 6px 4px; border: 1px solid var(--orange-200);">
+            Production hardening<br>
+            Support tooling
+          </div>
+          <div style="background: var(--gray-50); padding: 6px 4px; border: 1px solid var(--gray-200);">
+            Snowflake/BigQuery<br>
+            Hourly cadence
+          </div>
+          <div style="background: var(--gray-50); padding: 6px 4px; border: 1px solid var(--gray-200);">
+            Real-time CDC<br>
+            AI layer
+          </div>
+          
+          <!-- Product track -->
+          <div style="font-weight: bold; padding: 8px 4px; background: var(--green-100); display: flex; align-items: center;">Product</div>
+          <div style="background: var(--green-50); padding: 6px 4px; border: 1px solid var(--green-200);">
+            Client interviews<br>
+            Price testing<br>
+            Design partners
+          </div>
+          <div style="background: var(--green-50); padding: 6px 4px; border: 1px solid var(--green-200);">
+            Define SLAs<br>
+            Table scope decisions<br>
+            Contract templates
+          </div>
+          <div style="background: var(--green-50); padding: 6px 4px; border: 1px solid var(--green-200);">
+            Pilot feedback<br>
+            Docs & guides<br>
+            Prep beta onboarding
+          </div>
+          <div style="background: var(--green-50); padding: 6px 4px; border: 1px solid var(--green-200);">
+            Onboarding playbook<br>
+            Pricing refinement<br>
+            Support handoff
+          </div>
+          <div style="background: var(--green-50); padding: 6px 4px; border: 1px solid var(--green-200);">
+            Launch materials<br>
+            Sales enablement<br>
+            Success metrics
+          </div>
+          <div style="background: var(--gray-50); padding: 6px 4px; border: 1px solid var(--gray-200);">
+            Upsell playbook<br>
+            Tier packaging
+          </div>
+          <div style="background: var(--gray-50); padding: 6px 4px; border: 1px solid var(--gray-200);">
+            AI use cases<br>
+            Future discovery
+          </div>
+          
+          <!-- Gate row -->
+          <div style="font-weight: bold; padding: 8px 4px; background: var(--red-100); display: flex; align-items: center;">Gate</div>
+          <div style="background: var(--red-50); padding: 6px 4px; border: 1px solid var(--red-200); font-size: 0.7rem;">
+            5+ confirmed buyers
+          </div>
+          <div style="background: var(--red-50); padding: 6px 4px; border: 1px solid var(--red-200); font-size: 0.7rem;">
+            Pen test passed
+          </div>
+          <div style="background: var(--red-50); padding: 6px 4px; border: 1px solid var(--red-200); font-size: 0.7rem;">
+            30 days stable
+          </div>
+          <div style="background: var(--red-50); padding: 6px 4px; border: 1px solid var(--red-200); font-size: 0.7rem;">
+            Onboarding &lt;5 days
+          </div>
+          <div style="background: var(--red-50); padding: 6px 4px; border: 1px solid var(--red-200); font-size: 0.7rem;">
+            Margin &gt;40%
+          </div>
+          <div style="background: var(--gray-50); padding: 6px 4px; border: 1px solid var(--gray-200); font-size: 0.7rem;">
+            Revenue justifies
+          </div>
+          <div style="background: var(--gray-50); padding: 6px 4px; border: 1px solid var(--gray-200); font-size: 0.7rem;">
+            Demand proven
+          </div>
+        </div>
+      </div>
       
-      <div class="warning">
+      <div class="warning" style="margin-top: 1rem;">
         <p><strong>What would cause me to stop?</strong> If validation shows demand is just 1-2 bespoke requests with no willingness to pay for a standardised product.</p>
       </div>
     </div>
