@@ -551,34 +551,25 @@ PRODUCT B: Client Product
       <h3>Change types and how we handle them</h3>
       <table>
         <tr>
-          <th>Change type</th>
-          <th>Example</th>
-          <th>Client notice</th>
-          <th>Action required by client</th>
+          <th></th>
+          <th><span class="badge badge-green">Additive</span></th>
+          <th><span class="badge badge-yellow">Deprecation</span></th>
+          <th><span class="badge badge-red">Breaking</span></th>
+          <th><span class="badge badge-red">New version</span></th>
         </tr>
         <tr>
-          <td><span class="badge badge-green">Additive (non-breaking)</span></td>
-          <td>New column <code>uprn</code> added to locations</td>
-          <td>Changelog only, no advance notice needed</td>
-          <td>None — their pipelines ignore new columns</td>
+          <td><strong>Example</strong></td>
+          <td>New column <code>uprn</code> added</td>
+          <td>Column <code>legacy_code</code> removed in 90 days</td>
+          <td>Column renamed or type changed</td>
+          <td>v2 schema with restructured tables</td>
         </tr>
         <tr>
-          <td><span class="badge badge-yellow">Deprecation</span></td>
-          <td>Column <code>legacy_category_code</code> will be removed in 90 days</td>
-          <td>90 days advance notice, changelog, direct email</td>
-          <td>Update their pipelines before deadline</td>
-        </tr>
-        <tr>
-          <td><span class="badge badge-red">Breaking</span></td>
-          <td>Column <code>tenant_name</code> renamed to <code>resident_name</code>, or type changed</td>
-          <td>90+ days notice, changelog, direct email, migration support</td>
-          <td>Must update pipelines or break</td>
-        </tr>
-        <tr>
-          <td><span class="badge badge-red">New version</span></td>
-          <td>v2 schema released with restructured tables</td>
-          <td>Changelog, migration guide, support both versions</td>
-          <td>Migrate when ready, within support window</td>
+          <td><strong>Notice & action</strong></td>
+          <td>Changelog only. No client action needed</td>
+          <td>90 days notice + email. Client updates before deadline</td>
+          <td>90+ days + migration support. Client must update or break</td>
+          <td>Migration guide. Client migrates within support window</td>
         </tr>
       </table>
       
