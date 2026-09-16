@@ -358,7 +358,16 @@
       </table>
       
       <div class="decision">
-        <p><strong>Why files first?</strong> Works with any warehouse (Snowflake, Databricks, BigQuery, on-prem). No lock-in. Parquet is typed, compressed, cheap. Add native sharing later for Snowflake clients who want it.</p>
+        <p><strong>Why files first?</strong></p>
+        <ul style="margin: 0.5rem 0 0 1.25rem;">
+          <li><strong>Universal:</strong> Works with any warehouse (Snowflake, Databricks, BigQuery, on-prem)</li>
+          <li><strong>No lock-in:</strong> Client isn't tied to our platform choice</li>
+          <li><strong>Cheaper:</strong> Files can be compressed, lower egress costs</li>
+          <li><strong>Auditable:</strong> Clear record of what was sent, when, to whom</li>
+          <li><strong>Versionable:</strong> Each delivery is immutable — easy to track schema versions</li>
+          <li><strong>Recoverable:</strong> Client can re-request any past delivery</li>
+        </ul>
+        <p style="margin-top: 0.75rem;">Add native sharing later for Snowflake clients who want it.</p>
       </div>
       
       <div class="links">
