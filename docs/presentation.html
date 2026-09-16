@@ -77,6 +77,7 @@
     align-items: center;
     justify-content: center;
     padding: 2rem;
+    padding: 2rem;
   }
   
   /* Slide */
@@ -855,54 +856,8 @@ PRODUCT B: Client Product
     </div>
   </div>
 
-  <!-- SLIDE 11: Risks -->
+  <!-- SLIDE 11: Final -->
   <div class="slide" data-slide="11">
-    <div class="slide-header">
-      <div class="slide-number">Risks</div>
-      <h1 class="slide-title">What scares me and how I'd mitigate</h1>
-    </div>
-    <div class="slide-content">
-      <table>
-        <tr><th>Risk</th><th>Impact</th><th>Mitigation</th></tr>
-        <tr>
-          <td><strong>Cross-tenant data leak</strong></td>
-          <td>Regulatory, legal, trust destroyed</td>
-          <td>RLS + automated tests + pen test. No launch without passing</td>
-        </tr>
-        <tr>
-          <td><strong>Bespoke creep</strong></td>
-          <td>Margin collapse, support explosion</td>
-          <td>Standard scope is the product. Custom = quoted separately or no</td>
-        </tr>
-        <tr>
-          <td><strong>Schema breaks despite versioning</strong></td>
-          <td>Client outages, trust eroded</td>
-          <td>CI contract tests. PR checkbox for schema changes</td>
-        </tr>
-        <tr>
-          <td><strong>Demand is one loud client</strong></td>
-          <td>Built product no one else buys</td>
-          <td>Validate with 5+ before committing eng</td>
-        </tr>
-        <tr>
-          <td><strong>Support cost exceeds revenue</strong></td>
-          <td>Negative margin at scale</td>
-          <td>Self-service config. Pricing includes support allocation</td>
-        </tr>
-      </table>
-      
-      <h3>What I'd want to validate first</h3>
-      <ul>
-        <li>Demand concentration: is this 5 clients or 50?</li>
-        <li>Top datasets: what do they actually need?</li>
-        <li>Willingness to pay: will they sign at £2k/month?</li>
-        <li>Current cost of bespoke work: what are we spending today?</li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- SLIDE 12: Final -->
-  <div class="slide" data-slide="12">
     <div class="slide-header">
       <div class="slide-number">Summary</div>
       <h1 class="slide-title">My recommendation</h1>
@@ -927,14 +882,12 @@ EXPAND  →  Native sharing when demand proves it</div>
       <h3>Why this wins</h3>
       <ul>
         <li>Competitors offer manual CSV and transactional APIs — no one offers versioned automated delivery</li>
-        <li>Plentific already has API versioning — extend it to bulk data (6-12 month head start)</li>
         <li>Standardisation protects margin at scale</li>
       </ul>
       
       <div class="links">
         <a href="prototype.html" target="_blank">View prototype →</a>
-        <a href="pm-interview-prep.html" target="_blank">Q&A prep →</a>
-        <a href="solutions.html" target="_blank">Detailed analysis →</a>
+        <p style="font-size: 0.8rem; color: var(--gray-500); margin-top: 0.5rem;">Optional UI — not MVP, but shows the self-service goal where data becomes a product</p>
       </div>
     </div>
   </div>
