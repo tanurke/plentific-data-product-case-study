@@ -555,23 +555,38 @@ PRODUCT B: Client Product
           <th><span class="badge badge-green">Additive</span></th>
           <th><span class="badge badge-yellow">Deprecation</span></th>
           <th><span class="badge badge-red">Breaking</span></th>
-          <th><span class="badge badge-red">New version</span></th>
         </tr>
         <tr>
           <td><strong>Example</strong></td>
           <td>New column <code>uprn</code> added</td>
-          <td>Column <code>legacy_code</code> removed in 90 days</td>
-          <td>Column renamed or type changed</td>
-          <td>v2 schema with restructured tables</td>
+          <td>Column <code>legacy_code</code> will be removed</td>
+          <td>Column renamed, type changed, or column removed</td>
         </tr>
         <tr>
-          <td><strong>Notice & action</strong></td>
-          <td>Changelog only. No client action needed</td>
-          <td>90 days notice + email. Client updates before deadline</td>
-          <td>90+ days + migration support. Client must update or break</td>
-          <td>Migration guide. Client migrates within support window</td>
+          <td><strong>Version</strong></td>
+          <td><em>Engineering decision</em></td>
+          <td>Warning in current version</td>
+          <td>New version (v2)</td>
+        </tr>
+        <tr>
+          <td><strong>Notice</strong></td>
+          <td>Changelog</td>
+          <td>90 days notice + email</td>
+          <td>90+ days + migration guide</td>
+        </tr>
+        <tr>
+          <td><strong>Client action</strong></td>
+          <td>Review changelog</td>
+          <td>Plan migration before deadline</td>
+          <td>Migrate to new version</td>
         </tr>
       </table>
+      
+      <div class="insight">
+        <strong>Engineering decision:</strong> Do additive changes go in same version or new version? 
+        Conservative = always new version (safest). Conventional = same version (less churn). 
+        Recommend starting conservative.
+      </div>
       
       <div class="two-col" style="margin-top: 1.5rem;">
         <div>
