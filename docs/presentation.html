@@ -384,23 +384,26 @@
     </div>
     <div class="slide-content">
       <div class="diagram">PRODUCT A: Internal Foundation
-┌────────────────────────────────────────────┐
-│  Internal warehouse (exists, not ready)    │
-│                    ↓                       │
-│  External publication layer (views)        │
-│                    ↓                       │
-│  Tenant isolation + quality + lineage      │
-└────────────────────────────────────────────┘
-                     ↓
-            ━━━ STABLE BOUNDARY ━━━
-                     ↓
+
+  ENGINEERING/PLATFORM              PRODUCT
+  ─────────────────────            ─────────────────────
+  Internal warehouse         →     Define scope (which tables)
+         ↓                               ↓
+  Publication layer (views)  →     Define contract (schema)
+         ↓                               ↓
+  Tenant isolation (RLS)     →     Versioning policy
+         ↓                               ↓
+  Quality + lineage          →     Change classification
+         
+              ━━━━━ STABLE BOUNDARY ━━━━━
+                          ↓
 PRODUCT B: Client Product
-┌────────────────────────────────────────────┐
-│  Versioned datasets                        │
-│  Secure delivery → S3/Azure/GCS            │
-│  Manifest + monitoring                     │
-│  Documentation + changelog                 │
-└────────────────────────────────────────────┘
+┌─────────────────────────────────────────────┐
+│  Versioned datasets                         │
+│  Secure delivery → S3/Azure/GCS             │
+│  Delivery summary + monitoring              │
+│  Documentation + changelog                  │
+└─────────────────────────────────────────────┘
                      ↓
               Client warehouse</div>
       
