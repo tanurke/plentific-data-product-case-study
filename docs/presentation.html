@@ -428,43 +428,57 @@ PRODUCT B: Client Product
       <table>
         <tr>
           <th>Option</th>
-          <th>Why not / why later</th>
+          <th>Why / why not</th>
+          <th>Who pays compute</th>
+          <th>Extra work</th>
           <th>Decision</th>
         </tr>
         <tr>
-          <td>Object storage + Parquet</td>
-          <td>Works with any warehouse, typed, cheap</td>
+          <td>File drop (Parquet)</td>
+          <td>Works with any warehouse, universal</td>
+          <td>We pay</td>
+          <td>Export jobs, scheduling</td>
           <td><span class="badge badge-green">MVP</span></td>
         </tr>
         <tr>
           <td>Snowflake/BigQuery sharing</td>
-          <td>Great UX but platform-specific lock-in</td>
-          <td><span class="badge badge-blue">Phase 2</span></td>
+          <td>Quick win for clients on these platforms — they query our views directly</td>
+          <td>They pay</td>
+          <td>Set up share only</td>
+          <td><span class="badge badge-green">Offer early</span></td>
         </tr>
         <tr>
-          <td>Bulk API endpoints</td>
-          <td>Client builds pipeline; we already have transactional API</td>
-          <td><span class="badge badge-blue">Consider</span></td>
+          <td>Bulk API</td>
+          <td>Only if client specifically wants pull instead of push</td>
+          <td>We pay (per call)</td>
+          <td>Build API endpoints</td>
+          <td><span class="badge badge-yellow">On request</span></td>
         </tr>
         <tr>
           <td>SFTP + CSV</td>
-          <td>Legacy, weak typing, larger files</td>
+          <td>Legacy clients only, weak typing</td>
+          <td>We pay</td>
+          <td>SFTP setup</td>
           <td><span class="badge badge-yellow">Fallback</span></td>
         </tr>
         <tr>
           <td>Direct warehouse access</td>
-          <td>Exposes internals, blocks refactoring, security risk</td>
-          <td><span class="badge badge-red">Never</span></td>
+          <td>Security risk, exposes internals, blocks refactoring</td>
+          <td>Shared/unclear</td>
+          <td>Replica, credentials, monitoring</td>
+          <td><span class="badge badge-red">Careful</span></td>
         </tr>
         <tr>
           <td>Real-time streaming</td>
-          <td>Different architecture, different cost model</td>
+          <td>Different architecture, different cost model entirely</td>
+          <td>We pay (continuous)</td>
+          <td>CDC, streaming infra</td>
           <td><span class="badge badge-yellow">Later</span></td>
         </tr>
       </table>
       
-      <div class="killer">
-        "I deliberately choose a boring transport and put the differentiation into the contract, trust, and operability."
+      <div class="insight">
+        <p><strong>Key insight:</strong> Product A (versioned, tenant-isolated views) is the same for all mechanisms. Delivery is just how clients access those views.</p>
       </div>
     </div>
   </div>
