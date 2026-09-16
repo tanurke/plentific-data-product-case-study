@@ -319,22 +319,28 @@
       <h1 class="slide-title">Build a data contract, not a bigger export</h1>
     </div>
     <div class="slide-content">
+      <!-- Client evidence box -->
+      <div style="background: var(--blue-50); border-left: 4px solid var(--primary); padding: 1rem; margin-bottom: 1.5rem; border-radius: 0 8px 8px 0;">
+        <p style="font-style: italic; margin: 0;">"We need repairs data in our Snowflake every night so we can build our own dashboards and join it to our tenancy data."</p>
+        <p style="font-size: 0.85rem; color: var(--gray-600); margin: 0.5rem 0 0 0;">— Large housing association data team (pattern across NHG, Peabody, similar)</p>
+      </div>
+      
       <div class="two-col">
         <div>
-          <h3>What clients say</h3>
-          <p style="font-style: italic; color: var(--gray-600);">"Can you batch export everything into our warehouse every night?"</p>
+          <h3>What they're asking for</h3>
+          <p>"Batch export everything every night"</p>
           
-          <h3 style="margin-top: 1.5rem;">What they actually need</h3>
-          <p>Dependable, governed data that their pipelines can safely depend on — with a schema that won't break.</p>
+          <h3 style="margin-top: 1rem;">What they actually need</h3>
+          <p>Dependable, governed data with a schema that won't break their pipelines.</p>
         </div>
         <div>
           <h3>What the brief tells us</h3>
-          <p>There are <strong>two products here</strong>:</p>
+          <p><strong>Two products:</strong></p>
           <ul style="margin-top: 0.5rem;">
-            <li><strong>Product A:</strong> Internal foundation</li>
-            <li><strong>Product B:</strong> Client-facing delivery</li>
+            <li><strong>A:</strong> Internal foundation</li>
+            <li><strong>B:</strong> Client-facing delivery</li>
           </ul>
-          <p style="margin-top: 1rem;"><strong>The hard problem:</strong> How does Plentific keep shipping fast while clients need stability?</p>
+          <p style="margin-top: 0.75rem;"><strong>Hard problem:</strong> Plentific ships fast. Clients need stability.</p>
         </div>
       </div>
       
@@ -658,6 +664,10 @@ PRODUCT B: Client Product
           </div>
         </div>
       </div>
+      
+      <div style="background: var(--yellow-50); border: 1px solid var(--yellow-300); padding: 0.75rem; border-radius: 6px; margin-top: 1rem;">
+        <p style="font-size: 0.85rem; margin: 0;"><strong>Current state cost:</strong> Bespoke exports and custom dashboards are quoted case-by-case. No established cost-to-serve. <em>Validate: what are we spending today on ad-hoc data requests?</em></p>
+      </div>
     </div>
   </div>
 
@@ -669,53 +679,56 @@ PRODUCT B: Client Product
       <p class="slide-subtitle" style="font-size: 0.85rem; color: var(--gray-500);">Estimates approximate — validate with engineering</p>
     </div>
     <div class="slide-content">
-      <table>
-        <tr>
-          <th>Phase</th>
-          <th>Engineering</th>
-          <th>Product</th>
-          <th>Gate</th>
-        </tr>
-        <tr>
-          <td><strong>0. Validate</strong><br><span style="color: var(--gray-500); font-size: 0.8rem;">~4 wks</span></td>
-          <td>—</td>
-          <td>Client interviews, price testing, design partners</td>
-          <td>5+ confirmed buyers</td>
-        </tr>
-        <tr>
-          <td><strong>1. Foundation</strong><br><span style="color: var(--gray-500); font-size: 0.8rem;">~8-12 wks</span></td>
-          <td>RLS, export pipeline, contract layer</td>
-          <td>Define SLAs, table scope, contract templates</td>
-          <td>Pen test passed</td>
-        </tr>
-        <tr>
-          <td><strong>2. Pilot</strong><br><span style="color: var(--gray-500); font-size: 0.8rem;">~4-6 wks</span></td>
-          <td>First client integration, monitoring</td>
-          <td>Pilot feedback, docs, prep beta</td>
-          <td>30 days stable</td>
-        </tr>
-        <tr>
-          <td><strong>3. Beta</strong><br><span style="color: var(--gray-500); font-size: 0.8rem;">~6-8 wks</span></td>
-          <td>Self-service config, scale testing</td>
-          <td>Onboarding playbook, pricing refinement</td>
-          <td>Onboarding &lt;5 days</td>
-        </tr>
-        <tr>
-          <td><strong>4. GA</strong><br><span style="color: var(--gray-500); font-size: 0.8rem;">~4 wks</span></td>
-          <td>Production hardening, support tooling</td>
-          <td>Launch materials, sales enablement</td>
-          <td>Margin &gt;40%</td>
-        </tr>
-        <tr style="background: var(--gray-50);">
-          <td><strong>5+. Expand</strong><br><span style="color: var(--gray-500); font-size: 0.8rem;">Ongoing</span></td>
-          <td>Native sharing, hourly, real-time, AI</td>
-          <td>Upsell playbook, tier packaging</td>
-          <td>Revenue justifies</td>
-        </tr>
-      </table>
+      <!-- Visual Gantt-style timeline -->
+      <div style="position: relative; margin-bottom: 1.5rem;">
+        <!-- Timeline bar -->
+        <div style="display: flex; gap: 2px; margin-bottom: 0.5rem;">
+          <div style="flex: 1; background: var(--blue-100); padding: 0.5rem; text-align: center; border-radius: 4px 0 0 4px; font-weight: 600; font-size: 0.75rem;">Validate<br><span style="font-weight: normal; color: var(--gray-600);">4 wks</span></div>
+          <div style="flex: 3; background: var(--blue-200); padding: 0.5rem; text-align: center; font-weight: 600; font-size: 0.75rem;">Foundation<br><span style="font-weight: normal; color: var(--gray-700);">8-12 wks</span></div>
+          <div style="flex: 1.5; background: var(--green-100); padding: 0.5rem; text-align: center; font-weight: 600; font-size: 0.75rem;">Pilot<br><span style="font-weight: normal; color: var(--gray-600);">4-6 wks</span></div>
+          <div style="flex: 2; background: var(--green-200); padding: 0.5rem; text-align: center; font-weight: 600; font-size: 0.75rem;">Beta<br><span style="font-weight: normal; color: var(--gray-700);">6-8 wks</span></div>
+          <div style="flex: 1; background: var(--primary); color: white; padding: 0.5rem; text-align: center; font-weight: 600; font-size: 0.75rem;">GA<br><span style="font-weight: normal;">4 wks</span></div>
+          <div style="flex: 2; background: var(--gray-200); padding: 0.5rem; text-align: center; border-radius: 0 4px 4px 0; font-weight: 600; font-size: 0.75rem;">Expand<br><span style="font-weight: normal; color: var(--gray-600);">Ongoing</span></div>
+        </div>
+        <!-- Gate markers -->
+        <div style="display: flex; gap: 2px; font-size: 0.65rem; color: var(--gray-500);">
+          <div style="flex: 1; text-align: center;">▲ 5+ buyers</div>
+          <div style="flex: 3; text-align: center;">▲ Pen test</div>
+          <div style="flex: 1.5; text-align: center;">▲ 30d stable</div>
+          <div style="flex: 2; text-align: center;">▲ &lt;5d onboard</div>
+          <div style="flex: 1; text-align: center;">▲ 40% margin</div>
+          <div style="flex: 2; text-align: center;"></div>
+        </div>
+      </div>
       
-      <div class="warning" style="margin-top: 1rem;">
-        <p><strong>Exit criteria:</strong> Stop if validation shows &lt;3 interested clients or no willingness to pay for standardised product.</p>
+      <!-- Two tracks -->
+      <div class="two-col">
+        <div>
+          <h3 style="color: var(--orange-600);">Engineering track</h3>
+          <ul style="font-size: 0.85rem;">
+            <li><strong>Foundation:</strong> RLS, export pipeline, contract layer</li>
+            <li><strong>Pilot:</strong> First client integration, monitoring</li>
+            <li><strong>Beta:</strong> Self-service config, scale testing</li>
+            <li><strong>GA:</strong> Production hardening</li>
+          </ul>
+          
+          <div style="background: var(--orange-50); border: 1px solid var(--orange-200); padding: 0.75rem; border-radius: 6px; margin-top: 1rem;">
+            <p style="font-size: 0.85rem; margin: 0;"><strong>First ticket to engineering:</strong><br>Audit tenant_id coverage on export-candidate tables</p>
+          </div>
+        </div>
+        <div>
+          <h3 style="color: var(--green-600);">Product track</h3>
+          <ul style="font-size: 0.85rem;">
+            <li><strong>Validate:</strong> Client interviews, price testing, design partners</li>
+            <li><strong>Foundation:</strong> Define SLAs, scope, contracts</li>
+            <li><strong>Pilot:</strong> Feedback, docs, prep beta</li>
+            <li><strong>GA:</strong> Launch materials, sales enablement</li>
+          </ul>
+          
+          <div style="background: var(--red-50); border: 1px solid var(--red-200); padding: 0.75rem; border-radius: 6px; margin-top: 1rem;">
+            <p style="font-size: 0.85rem; margin: 0;"><strong>Exit if:</strong> &lt;3 interested clients or no willingness to pay for standardised product</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
