@@ -253,7 +253,7 @@
 <h3>What is in</h3>
 <ul>
   <li><strong>Small standard domain set</strong> chosen with design partners — likely work orders/repairs, assets/locations, bookings/appointments, compliance/inspections and selected financial/work-order attributes. Exact scope is a discovery decision, not something I would invent from the brief.</li>
-  <li><strong>Initial backfill</strong> followed by changed records only: inserts, updates and explicit deletion/tombstone events.</li>
+  <li><strong>Initial backfill</strong> followed by changed records only: inserts, updates and explicit deletion events.</li>
   <li><strong>Idempotent ingestion semantics:</strong> stable business key + revision/update timestamp so a client can safely replay a batch.</li>
   <li><strong>Manifest per delivery:</strong> dataset, contract version, extraction time, watermark, file/row counts, checksums and completion state.</li>
   <li><strong>Operational controls:</strong> retries, replay/backfill, audit log, freshness monitoring and client-visible incident communication.</li>
@@ -284,7 +284,7 @@
     <tr><th>Semantic risk</th><td>New enum/status value</td><td>Contract test + impact review; document unknown-value behaviour</td></tr>
     <tr><th>Breaking</th><td>Rename/remove field, type change, key semantics change, meaning changes</td><td>New major contract version</td></tr>
     <tr><th>Correction/restatement</th><td>Yesterday's completed repair is corrected today</td><td>Publish a new record revision; do not silently rewrite a previously delivered batch</td></tr>
-    <tr><th>Deletion</th><td>Record must no longer appear</td><td>Explicit tombstone/delete event and documented handling</td></tr>
+    <tr><th>Deletion</th><td>Record must no longer appear</td><td>Explicit deletion event and documented handling</td></tr>
   </tbody>
 </table>
 </div>
