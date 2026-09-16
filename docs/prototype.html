@@ -438,6 +438,7 @@
   <nav class="sidebar">
     <div class="sidebar-section">Data Export</div>
     <a href="#" class="sidebar-link active" data-page="dashboard">Dashboard</a>
+    <a href="#" class="sidebar-link" data-page="datasets">Datasets</a>
     <a href="#" class="sidebar-link" data-page="settings">Settings</a>
     <a href="#" class="sidebar-link" data-page="history">Export history</a>
     <a href="#" class="sidebar-link" data-page="schema">Schema documentation</a>
@@ -562,6 +563,173 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
+    
+    <!-- Datasets page -->
+    <div class="page" id="page-datasets">
+      <div class="page-header">
+        <h1 class="page-title">Datasets</h1>
+        <p class="page-subtitle">A governed standard catalogue. Configuration varies per client; the schema does not.</p>
+      </div>
+      
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Available datasets</span>
+          <span class="version-badge">Standard package</span>
+        </div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Dataset</th>
+              <th>Purpose</th>
+              <th>PII profile</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>repairs</code></td>
+              <td>Repair lifecycle, priority, status, completion</td>
+              <td><span style="color: var(--success);">Minimised</span></td>
+              <td><span class="badge badge-success">Published</span></td>
+            </tr>
+            <tr>
+              <td><code>properties</code></td>
+              <td>Stable asset/property identifiers, addresses</td>
+              <td><span style="color: var(--success);">Low</span></td>
+              <td><span class="badge badge-success">Published</span></td>
+            </tr>
+            <tr>
+              <td><code>compliance</code></td>
+              <td>Compliance events, certificates, inspections</td>
+              <td><span style="color: #d48806;">Controlled</span></td>
+              <td><span class="badge badge-success">Published</span></td>
+            </tr>
+            <tr>
+              <td><code>appointments</code></td>
+              <td>Bookings, attendance, reschedules</td>
+              <td><span style="color: var(--success);">Low</span></td>
+              <td><span class="badge badge-success">Published</span></td>
+            </tr>
+            <tr>
+              <td><code>work_orders</code></td>
+              <td>Work orders, contractors, costs</td>
+              <td><span style="color: var(--success);">Minimised</span></td>
+              <td><span class="badge badge-success">Published</span></td>
+            </tr>
+            <tr>
+              <td><code>reference_data</code></td>
+              <td>Statuses, categories, code dictionaries</td>
+              <td><span style="color: var(--success);">None</span></td>
+              <td><span class="badge badge-success">Published</span></td>
+            </tr>
+            <tr style="background: #fffbe6;">
+              <td><code>free_text_notes</code></td>
+              <td>Operational free text from repairs</td>
+              <td><span style="color: var(--error);">High</span></td>
+              <td><span class="badge badge-warning">Excluded by default</span></td>
+            </tr>
+            <tr style="background: #fff1f0;">
+              <td><code>attachments</code></td>
+              <td>Photos and documents</td>
+              <td><span style="color: var(--error);">High</span></td>
+              <td><span class="badge badge-error">Out of MVP</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Your selected datasets</span>
+        </div>
+        <div class="card-body">
+          <div class="checkbox-group">
+            <label class="checkbox-item">
+              <input type="checkbox" checked>
+              <span class="checkbox-label"><code>repairs</code> — Repair lifecycle, priority, status</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" checked>
+              <span class="checkbox-label"><code>properties</code> — Asset identifiers, addresses</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" checked>
+              <span class="checkbox-label"><code>compliance</code> — Compliance events, inspections</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox">
+              <span class="checkbox-label"><code>appointments</code> — Bookings, attendance</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox">
+              <span class="checkbox-label"><code>work_orders</code> — Work orders, contractors</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" checked disabled>
+              <span class="checkbox-label"><code>reference_data</code> — Always included</span>
+            </label>
+          </div>
+          <button class="btn btn-primary" style="margin-top: 1.25rem;">Save selection</button>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Data governance principle</span>
+        </div>
+        <div class="card-body">
+          <div class="alert alert-info" style="margin: 0;">
+            <span class="alert-icon">📋</span>
+            <div>
+              <strong>Every field exposed becomes a compatibility and governance promise.</strong><br>
+              The standard package covers repeated needs. Unique requests do not automatically become custom schema — they are quoted separately or declined.
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">PII classification</span>
+        </div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Level</th>
+              <th>Meaning</th>
+              <th>Example fields</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span style="color: var(--success); font-weight: 500;">None</span></td>
+              <td>No personal data</td>
+              <td>Status codes, categories, reference data</td>
+            </tr>
+            <tr>
+              <td><span style="color: var(--success); font-weight: 500;">Low</span></td>
+              <td>Property-level, not person-level</td>
+              <td>Property ID, address, UPRN</td>
+            </tr>
+            <tr>
+              <td><span style="color: var(--success); font-weight: 500;">Minimised</span></td>
+              <td>Personal data removed or masked</td>
+              <td>Repair description (names redacted)</td>
+            </tr>
+            <tr>
+              <td><span style="color: #d48806; font-weight: 500;">Controlled</span></td>
+              <td>Contains personal data with justified need</td>
+              <td>Compliance contact details</td>
+            </tr>
+            <tr>
+              <td><span style="color: var(--error); font-weight: 500;">High</span></td>
+              <td>Free text, photos — excluded by default</td>
+              <td>Repair notes, attachments</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
     
