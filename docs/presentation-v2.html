@@ -497,27 +497,32 @@ PRODUCT B: Client Product
       <table>
         <tr>
           <th>Area</th>
+          <th>Risk</th>
           <th>Value / Revenue</th>
           <th>Depends on</th>
         </tr>
         <tr>
-          <td><strong>1. Commercial validation</strong></td>
-          <td><span class="badge badge-green">Validate first</span> — if no one pays, don't build</td>
-          <td>Nothing — do first</td>
+          <td><strong>1. Commercial</strong></td>
+          <td>Recoverable — adjust pricing</td>
+          <td><span class="badge badge-green">Validate first</span></td>
+          <td>Nothing</td>
         </tr>
         <tr>
-          <td><strong>2. Governance & tenant safety</strong></td>
-          <td><span class="badge badge-red">Blocker</span> — can't sell without security review</td>
-          <td>Commercial validation</td>
+          <td><strong>2. Governance</strong></td>
+          <td>Catastrophic — breach, £17M fines</td>
+          <td><span class="badge badge-red">Blocker</span></td>
+          <td>Commercial</td>
         </tr>
         <tr>
-          <td><strong>3. Version & change control</strong></td>
-          <td><span class="badge badge-yellow">Retention</span> — clients churn if pipelines break</td>
+          <td><strong>3. Versioning</strong></td>
+          <td>Serious — pipelines break, support explodes</td>
+          <td><span class="badge badge-yellow">Retention</span></td>
           <td>Governance</td>
         </tr>
         <tr>
-          <td><strong>4. Delivery mechanism</strong></td>
-          <td><span class="badge badge-green">Enabler</span> — this is what clients buy</td>
+          <td><strong>4. Delivery</strong></td>
+          <td>Manageable — can iterate</td>
+          <td><span class="badge badge-green">Enabler</span></td>
           <td>Governance + versioning</td>
         </tr>
       </table>
