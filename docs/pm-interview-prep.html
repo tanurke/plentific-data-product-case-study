@@ -367,12 +367,22 @@ RISK     │                     │                     │      RISK
           <tr>
             <td><strong>"What's the 1-year cost to run this at 50 clients?"</strong></td>
             <td>Can you think commercially?</td>
-            <td><strong>Compute</strong> (export jobs): &pound;6k/year. <strong>Egress</strong> (50 clients &times; 20GB/month): &pound;18k/year. <strong>Storage</strong>: negligible. <strong>Tooling</strong>: &pound;5k/year. <strong>Human</strong> (0.5 FTE): &pound;50k/year. <strong>Total: ~&pound;80k/year.</strong> Revenue needed at 40% margin: &pound;130k = &pound;220/client/month. Plausible for enterprise</td>
+            <td>Quick math: &pound;320 COGS &times; 50 clients &times; 12 months = <strong>~&pound;192k/year</strong>. At &pound;2k/mo revenue &times; 50 &times; 12 = &pound;1.2M revenue. <strong>Gross margin ~84%</strong>. Main risk is support cost scaling &mdash; that's why standardisation matters</td>
           </tr>
           <tr>
             <td><strong>"Why wouldn't we just use Fivetran/Airbyte?"</strong></td>
             <td>Do you understand the architecture?</td>
-            <td>They <em>pull</em> from sources via our transactional API &mdash; slow and expensive for bulk. We'd pay compute for every API call. Our solution: we <em>push</em> files directly to client buckets. No API load, no rate limits, predictable cost. Different architecture</td>
+            <td>They <em>pull</em> from sources via our transactional API &mdash; slow and expensive for bulk. We'd pay compute for every API call. Our solution: we <em>push</em> files directly to client buckets. No API load, no rate limits, predictable cost. Different architecture. Also: they don't solve versioning &mdash; we still need the publication layer</td>
+          </tr>
+          <tr>
+            <td><strong>"We shipped a bug that corrupted last week's data. How do you handle a restatement?"</strong></td>
+            <td>Do you understand data ops recovery?</td>
+            <td>Issue a <strong>versioned replay</strong>: new delivery labelled <code>replay_2026-09-10_status_bug_fix</code>. Document: what was wrong, date range affected, who authorised. Client re-ingests &mdash; their pipeline upserts on primary key + timestamp. Audit trail preserved. Never silently overwrite &mdash; they may have filed regulatory reports from old data</td>
+          </tr>
+          <tr>
+            <td><strong>"How do 50 clients on different versions work?"</strong></td>
+            <td>Can you think about scale?</td>
+            <td>Max 2 versions live (N and N-1). Version registry tracks which client is on which. Automated nudges when N-1 support window closing. At 50 clients: same two versions, same code paths, just config per client. If client misses migration window, they're on unsupported version &mdash; contractually their risk. This is why we don't support unlimited versions</td>
           </tr>
         </tbody>
       </table>
