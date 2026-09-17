@@ -392,8 +392,46 @@
     </div>
   </div>
 
-  <!-- SLIDE 3: Two Products -->
+  <!-- SLIDE 3: Validation -->
   <div class="slide" data-slide="3">
+    <div class="slide-header">
+      <div class="slide-number">Validation</div>
+      <h1 class="slide-title">How I'd validate</h1>
+    </div>
+    <div class="slide-content">
+      <div class="two-col">
+        <div>
+          <h3>Before committing engineering</h3>
+          <ul>
+            <li><strong>Demand:</strong> 5 clients or 50?</li>
+            <li><strong>Datasets:</strong> What do they need first?</li>
+            <li><strong>Price:</strong> Will they sign at £2k/mo?</li>
+            <li><strong>Current cost:</strong> What's bespoke costing us?</li>
+          </ul>
+          
+          <h3 style="margin-top: 1.5rem;">Success metrics</h3>
+          <ul>
+            <li>Time to first usable dataset</li>
+            <li>Delivery rate + freshness SLO</li>
+            <li>ARR, margin, support cost/client</li>
+            <li><strong>Zero cross-tenant incidents</strong></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Exit criteria — when I'd stop</h3>
+          <table>
+            <tr><th>Signal</th><th>Decision</th></tr>
+            <tr><td>&lt;3 clients interested</td><td>Don't build</td></tr>
+            <tr><td>All need custom</td><td>It's services, not product</td></tr>
+            <tr><td>RLS needs replatform</td><td>Pause, scope first</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: Two Products -->
+  <div class="slide" data-slide="4">
     <div class="slide-header">
       <div class="slide-number">Architecture</div>
       <h1 class="slide-title">Two products, sequenced deliberately</h1>
@@ -436,8 +474,8 @@ PRODUCT B: Client Product
     </div>
   </div>
 
-  <!-- SLIDE 4: Options Considered -->
-  <div class="slide" data-slide="4">
+  <!-- SLIDE 5: Options Considered -->
+  <div class="slide" data-slide="5">
     <div class="slide-header">
       <div class="slide-number">Options</div>
       <h1 class="slide-title">Delivery mechanisms considered</h1>
@@ -487,8 +525,8 @@ PRODUCT B: Client Product
     </div>
   </div>
 
-  <!-- SLIDE 5: The Four Areas -->
-  <div class="slide" data-slide="5">
+  <!-- SLIDE 6: The Four Areas -->
+  <div class="slide" data-slide="6">
     <div class="slide-header">
       <div class="slide-number">Brief Coverage</div>
       <h1 class="slide-title">The four areas — prioritised</h1>
@@ -537,8 +575,8 @@ PRODUCT B: Client Product
     </div>
   </div>
 
-  <!-- SLIDE 6: Version Control Deep Dive -->
-  <div class="slide" data-slide="6">
+  <!-- SLIDE 7: Version Control Deep Dive -->
+  <div class="slide" data-slide="7">
     <div class="slide-header">
       <div class="slide-number">Deep Dive</div>
       <h1 class="slide-title">Version and change control</h1>
@@ -592,8 +630,8 @@ PRODUCT B: Client Product
     </div>
   </div>
 
-  <!-- SLIDE 7: Security -->
-  <div class="slide" data-slide="7">
+  <!-- SLIDE 8: Security -->
+  <div class="slide" data-slide="8">
     <div class="slide-header">
       <div class="slide-number">Governance</div>
       <h1 class="slide-title">Security and tenant isolation</h1>
@@ -630,8 +668,8 @@ PRODUCT B: Client Product
     </div>
   </div>
 
-  <!-- SLIDE 8: Commercial -->
-  <div class="slide" data-slide="8">
+  <!-- SLIDE 9: Commercial -->
+  <div class="slide" data-slide="9">
     <div class="slide-header">
       <div class="slide-number">Commercial</div>
       <h1 class="slide-title">Value and pricing</h1>
@@ -680,8 +718,8 @@ PRODUCT B: Client Product
     </div>
   </div>
 
-  <!-- SLIDE 9: Sequence -->
-  <div class="slide" data-slide="9">
+  <!-- SLIDE 10: Sequence -->
+  <div class="slide" data-slide="10">
     <div class="slide-header">
       <div class="slide-number">Roadmap</div>
       <h1 class="slide-title">Phased delivery</h1>
@@ -741,8 +779,8 @@ PRODUCT B: Client Product
     </div>
   </div>
 
-  <!-- SLIDE 10: What I Won't Build -->
-  <div class="slide" data-slide="10">
+  <!-- SLIDE 11: What I Won't Build -->
+  <div class="slide" data-slide="11">
     <div class="slide-header">
       <div class="slide-number">Discipline</div>
       <h1 class="slide-title">What I won't build (yet)</h1>
@@ -763,44 +801,6 @@ PRODUCT B: Client Product
           <h3>My position</h3>
           <p><strong>Client:</strong> "Give us everything every night."</p>
           <p style="margin-top: 0.75rem;"><strong>Me:</strong> "I'll give you complete data every morning — via initial snapshot + daily incremental. Faster, cheaper, recoverable."</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- SLIDE 11: Validation -->
-  <div class="slide" data-slide="11">
-    <div class="slide-header">
-      <div class="slide-number">Validation</div>
-      <h1 class="slide-title">How I'd validate</h1>
-    </div>
-    <div class="slide-content">
-      <div class="two-col">
-        <div>
-          <h3>Before committing engineering</h3>
-          <ul>
-            <li><strong>Demand:</strong> 5 clients or 50?</li>
-            <li><strong>Datasets:</strong> What do they need first?</li>
-            <li><strong>Price:</strong> Will they sign at £2k/mo?</li>
-            <li><strong>Current cost:</strong> What's bespoke costing us?</li>
-          </ul>
-          
-          <h3 style="margin-top: 1.5rem;">Success metrics</h3>
-          <ul>
-            <li>Time to first usable dataset</li>
-            <li>Delivery rate + freshness SLO</li>
-            <li>ARR, margin, support cost/client</li>
-            <li><strong>Zero cross-tenant incidents</strong></li>
-          </ul>
-        </div>
-        <div>
-          <h3>Exit criteria — when I'd stop</h3>
-          <table>
-            <tr><th>Signal</th><th>Decision</th></tr>
-            <tr><td>&lt;3 clients interested</td><td>Don't build</td></tr>
-            <tr><td>All need custom</td><td>It's services, not product</td></tr>
-            <tr><td>RLS needs replatform</td><td>Pause, scope first</td></tr>
-          </table>
         </div>
       </div>
     </div>
