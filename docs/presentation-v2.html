@@ -345,7 +345,7 @@
       </div>
       
       <div class="decision" style="margin-top: 1.5rem; text-align: center;">
-        <p><strong>That's why I weighted version/change control highest.</strong></p>
+        <p><strong>Governance is the launch gate. Versioning is the retention gate.</strong></p>
       </div>
     </div>
   </div>
@@ -379,9 +379,9 @@
           </ul>
         </div>
         <div>
-          <h3>What I'd push back on</h3>
-          <p>Client asks: "Give us everything, every night."</p>
-          <p style="margin-top: 0.5rem;"><strong>My response:</strong> I can give you complete, dependable data every morning — via incremental delivery. Full re-extraction nightly is slower, costlier, and unnecessary.</p>
+          <h3>Recommended delivery pattern</h3>
+          <p>Initial historical snapshot + daily incremental.</p>
+          <p style="margin-top: 0.5rem;">Complete, dependable data every morning. Faster, cheaper, and recoverable vs. full re-extraction nightly.</p>
         </div>
       </div>
       
@@ -571,13 +571,14 @@ PRODUCT B: Client Product
           </table>
         </div>
         <div>
-          <h3>My policy</h3>
+          <h3>Policy hypothesis</h3>
           <ul>
             <li><strong>180-day deprecation</strong> for breaking changes</li>
             <li><strong>N and N-1 only</strong> — not forever</li>
             <li><strong>Dual-run</strong> during migration</li>
             <li><strong>CI checks</strong> on schema changes</li>
           </ul>
+          <p style="font-size: 0.8rem; color: var(--gray-500);">Validate with eng + early clients</p>
         </div>
       </div>
       
@@ -602,9 +603,9 @@ PRODUCT B: Client Product
         <div>
           <h3>Isolation model</h3>
           <ul>
-            <li><strong>RLS</strong> at database level</li>
+            <li><strong>Tenant-scoped publication</strong> + RLS/policy</li>
             <li>Separate destination per tenant</li>
-            <li>Automated cross-tenant tests</li>
+            <li>Negative tests (cross-tenant queries return nothing)</li>
             <li>Pen test before first client</li>
           </ul>
           
@@ -657,15 +658,15 @@ PRODUCT B: Client Product
           <p style="font-size: 0.8rem; color: var(--gray-500); margin-top: 0.5rem;">Validate with design partners</p>
         </div>
         <div>
-          <h3>Unit economics</h3>
+          <h3>Unit economics (illustrative)</h3>
           <table>
             <tr><td>Compute + storage + egress</td><td>~£100/mo</td></tr>
             <tr><td>Orchestration + monitoring</td><td>~£30/mo</td></tr>
             <tr><td>Support allocation</td><td>~£120/mo</td></tr>
             <tr><td>Platform allocation</td><td>~£70/mo</td></tr>
-            <tr><td><strong>Total COGS</strong></td><td><strong>~£320/mo</strong></td></tr>
+            <tr><td><strong>Illustrative COGS</strong></td><td><strong>~£320/mo</strong></td></tr>
           </table>
-          <p style="margin-top: 0.75rem;">At £2k/mo: <strong>~84% gross margin</strong></p>
+          <p style="margin-top: 0.75rem; font-size: 0.85rem;">At £2k/mo hypothesis: ~84% gross margin. <em>Validate with real costs.</em></p>
           
           <div class="insight" style="margin-top: 1rem;">
             <p><strong>"Already paid for data?"</strong> — You pay for the platform. This is a managed product with real costs.</p>
@@ -684,19 +685,19 @@ PRODUCT B: Client Product
     <div class="slide-header">
       <div class="slide-number">Roadmap</div>
       <h1 class="slide-title">Phased delivery</h1>
-      <p class="slide-subtitle" style="font-size: 0.85rem; color: var(--gray-500);">Estimates approximate — validate with engineering</p>
+      <p class="slide-subtitle" style="font-size: 0.85rem; color: var(--gray-500);">Gates are stronger than timeline estimates</p>
     </div>
     <div class="slide-content">
       <!-- Visual Gantt-style timeline -->
       <div style="position: relative; margin-bottom: 1.5rem;">
         <!-- Timeline bar -->
         <div style="display: flex; gap: 2px; margin-bottom: 0.5rem;">
-          <div style="flex: 1; background: var(--blue-100); padding: 0.5rem; text-align: center; border-radius: 4px 0 0 4px; font-weight: 600; font-size: 0.75rem;">Validate<br><span style="font-weight: normal; color: var(--gray-600);">4 wks</span></div>
-          <div style="flex: 3; background: var(--blue-200); padding: 0.5rem; text-align: center; font-weight: 600; font-size: 0.75rem;">Foundation<br><span style="font-weight: normal; color: var(--gray-700);">8-12 wks</span></div>
-          <div style="flex: 1.5; background: var(--green-100); padding: 0.5rem; text-align: center; font-weight: 600; font-size: 0.75rem;">Pilot<br><span style="font-weight: normal; color: var(--gray-600);">4-6 wks</span></div>
-          <div style="flex: 2; background: var(--green-200); padding: 0.5rem; text-align: center; font-weight: 600; font-size: 0.75rem;">Beta<br><span style="font-weight: normal; color: var(--gray-700);">6-8 wks</span></div>
-          <div style="flex: 1; background: var(--primary); color: white; padding: 0.5rem; text-align: center; font-weight: 600; font-size: 0.75rem;">GA<br><span style="font-weight: normal;">4 wks</span></div>
-          <div style="flex: 2; background: var(--gray-200); padding: 0.5rem; text-align: center; border-radius: 0 4px 4px 0; font-weight: 600; font-size: 0.75rem;">Expand<br><span style="font-weight: normal; color: var(--gray-600);">Ongoing</span></div>
+          <div style="flex: 1; background: var(--blue-100); padding: 0.5rem; text-align: center; border-radius: 4px 0 0 4px; font-weight: 600; font-size: 0.75rem;">Validate</div>
+          <div style="flex: 3; background: var(--blue-200); padding: 0.5rem; text-align: center; font-weight: 600; font-size: 0.75rem;">Foundation</div>
+          <div style="flex: 1.5; background: var(--green-100); padding: 0.5rem; text-align: center; font-weight: 600; font-size: 0.75rem;">Pilot</div>
+          <div style="flex: 2; background: var(--green-200); padding: 0.5rem; text-align: center; font-weight: 600; font-size: 0.75rem;">Beta</div>
+          <div style="flex: 1; background: var(--primary); color: white; padding: 0.5rem; text-align: center; font-weight: 600; font-size: 0.75rem;">GA</div>
+          <div style="flex: 2; background: var(--gray-200); padding: 0.5rem; text-align: center; border-radius: 0 4px 4px 0; font-weight: 600; font-size: 0.75rem;">Expand</div>
         </div>
         <!-- Gate markers -->
         <div style="display: flex; gap: 2px; font-size: 0.65rem; color: var(--gray-500);">
@@ -798,7 +799,6 @@ PRODUCT B: Client Product
           <table>
             <tr><th>Signal</th><th>Decision</th></tr>
             <tr><td>&lt;3 clients interested</td><td>Don't build</td></tr>
-            <tr><td>Pay &lt;£500/mo</td><td>Don't build</td></tr>
             <tr><td>All need custom</td><td>It's services, not product</td></tr>
             <tr><td>RLS needs replatform</td><td>Pause, scope first</td></tr>
           </table>
@@ -831,8 +831,8 @@ EXPAND  →  Sharing, AI when proven</div>
         <div>
           <h3>Why this wins</h3>
           <ul>
-            <li>Competitors: manual CSV, transactional APIs</li>
-            <li><strong>No one offers versioned automated delivery</strong></li>
+            <li>Based on research: competitors offer manual CSV and transactional APIs</li>
+            <li>Versioned automated delivery is an opportunity</li>
             <li>Standardisation protects margin</li>
           </ul>
           
