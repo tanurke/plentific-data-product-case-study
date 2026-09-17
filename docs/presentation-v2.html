@@ -497,35 +497,37 @@ PRODUCT B: Client Product
       <table>
         <tr>
           <th>Area</th>
-          <th>Risk if wrong</th>
-          <th>Reversible?</th>
+          <th>Value / Revenue</th>
+          <th>Depends on</th>
         </tr>
         <tr>
-          <td><strong>1. Governance & tenant safety</strong></td>
-          <td>Catastrophic — breach, £17M fines, trust destroyed</td>
-          <td><span class="badge badge-red">No</span></td>
+          <td><strong>1. Commercial validation</strong></td>
+          <td><span class="badge badge-green">Validate first</span> — if no one pays, don't build</td>
+          <td>Nothing — do first</td>
         </tr>
         <tr>
-          <td><strong>2. Version & change control</strong></td>
-          <td>Serious — pipelines break, support explodes</td>
-          <td><span class="badge badge-yellow">Partially</span></td>
+          <td><strong>2. Governance & tenant safety</strong></td>
+          <td><span class="badge badge-red">Blocker</span> — can't sell without security review</td>
+          <td>Commercial validation</td>
         </tr>
         <tr>
-          <td><strong>3. Delivery mechanism</strong></td>
-          <td>Manageable — can iterate on format/timing</td>
-          <td><span class="badge badge-green">Yes</span></td>
+          <td><strong>3. Version & change control</strong></td>
+          <td><span class="badge badge-yellow">Retention</span> — clients churn if pipelines break</td>
+          <td>Governance</td>
         </tr>
         <tr>
-          <td><strong>4. Commercial model</strong></td>
-          <td>Recoverable — adjust pricing based on learnings</td>
-          <td><span class="badge badge-green">Yes</span></td>
+          <td><strong>4. Delivery mechanism</strong></td>
+          <td><span class="badge badge-green">Enabler</span> — this is what clients buy</td>
+          <td>Governance + versioning</td>
         </tr>
       </table>
       
-      <div class="decision" style="margin-top: 1.5rem;">
-        <p><strong>Order of work:</strong></p>
-        <p style="margin-top: 0.5rem;">Validate commercial → Governance → Versioning → Delivery</p>
-        <p style="font-size: 0.85rem; color: var(--gray-600); margin-top: 0.5rem;">(Will they pay? → Can we isolate? → Can we keep contracts stable? → How do we ship?)</p>
+      <div class="insight" style="margin-top: 1.5rem;">
+        <p><strong>Prioritisation framework:</strong> Value drives order, but dependencies constrain it. Validate commercial first (cheapest to test), then work through dependencies.</p>
+      </div>
+      
+      <div class="decision" style="margin-top: 1rem;">
+        <p><strong>Order of work:</strong> Commercial → Governance → Versioning → Delivery</p>
       </div>
     </div>
   </div>
