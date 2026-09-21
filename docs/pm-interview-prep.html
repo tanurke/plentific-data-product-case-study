@@ -42,6 +42,7 @@
       <a href="#unexpected-questions">Unexpected questions</a>
       <a href="#already-paid">The "already paid" conversation</a>
       <a href="#validation-objections">When clients say no</a>
+      <a href="#pr-checkbox">PR checkbox for schema changes</a>
       <a href="#why-not-api">Why API is bad for bulk extraction</a>
       <a href="#phase0-pm">Phase 0 &mdash; PM-level questions</a>
       <a href="#phase1">Phase 1 &mdash; scope questions</a>
@@ -476,6 +477,53 @@ RISK     │                     │                     │      RISK
     <blockquote>
       "Validation failure isn't project failure &mdash; it's the system working. I'd either adjust the offer (different price, scope, packaging), find different customers (maybe SMBs don't value this but enterprise does), or kill it. The worst outcome isn't 'no' &mdash; it's building something nobody pays for."
     </blockquote>
+
+    <!-- ============================================================ -->
+    <h2 id="pr-checkbox">PR checkbox for schema changes</h2>
+
+    <p>How engineering stays fast while protecting the external contract: a simple PR checkbox.</p>
+
+    <h4>Schema impact checkbox</h4>
+    <div style="background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 8px; padding: 1rem; margin: 1rem 0; font-family: monospace; font-size: 0.9rem;">
+      <p style="margin: 0 0 0.5rem 0;"><strong>PR checkbox for schema changes</strong></p>
+      <p style="margin: 0 0 0.5rem 0;">## Schema impact</p>
+      <p style="margin: 0;">- [ ] This change does NOT affect the external data contract</p>
+      <p style="margin: 0;">- [ ] This change DOES affect the external schema (requires PM review)</p>
+    </div>
+
+    <h4>If checked "DOES affect":</h4>
+    <ul>
+      <li>PM has reviewed and approved</li>
+      <li>Change is classified as: <strong>Additive</strong> / <strong>Deprecation</strong> / <strong>Breaking</strong></li>
+      <li>Changelog updated</li>
+    </ul>
+
+    <h4>Why this works</h4>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Benefit</th><th>Explanation</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Engineering stays fast</strong></td>
+            <td>Most PRs check "does NOT affect" &mdash; no slowdown</td>
+          </tr>
+          <tr>
+            <td><strong>PM gets visibility</strong></td>
+            <td>Only flagged when external contract is touched</td>
+          </tr>
+          <tr>
+            <td><strong>Audit trail</strong></td>
+            <td>Every schema change has a PR with classification</td>
+          </tr>
+          <tr>
+            <td><strong>Forces the question</strong></td>
+            <td>Engineers must actively decide if change affects clients</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
     <!-- ============================================================ -->
     <h2 id="why-not-api">Why API is bad for bulk extraction</h2>
