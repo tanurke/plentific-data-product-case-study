@@ -706,36 +706,48 @@ PRODUCT B: Client Product
       </div>
       
       <h3 style="margin-top: 1.5rem;">Success metrics</h3>
-      <table style="font-size: 0.8rem;">
+      <table style="font-size: 0.75rem;">
         <tr>
           <th></th>
           <th>Product A (Foundation)</th>
+          <th>Formula</th>
           <th>Product B (Client Product)</th>
+          <th>Formula</th>
         </tr>
         <tr>
           <td></td>
           <td><span style="color: var(--error); font-weight: 600;">Zero cross-tenant incidents</span></td>
-          <td>Active clients with delivery in last 7 days</td>
+          <td><code>Count = 0</code></td>
+          <td>Active clients (7 days)</td>
+          <td><code>last_delivery > now()-7d</code></td>
         </tr>
         <tr>
           <td><strong>Launch gate</strong></td>
-          <td>Pen test passed, 100% isolation tests</td>
-          <td>First client successfully ingesting</td>
+          <td>Pen test + isolation tests</td>
+          <td><code>Pass rate = 100%</code></td>
+          <td>First client ingesting</td>
+          <td><code>first_ingestion ≠ null</code></td>
         </tr>
         <tr>
-          <td><strong>Health metric</strong></td>
-          <td>Contract violation count</td>
+          <td><strong>Health</strong></td>
+          <td>Contract violations</td>
+          <td><code>Failed contract tests</code></td>
           <td>On-time delivery %</td>
+          <td><code>on-time ÷ total × 100</code></td>
         </tr>
         <tr>
-          <td><strong>Scale metric</strong></td>
+          <td><strong>Scale</strong></td>
           <td>Time to add tenant</td>
-          <td>Support cost per client</td>
+          <td><code>Hours to active</code></td>
+          <td>Support cost/client</td>
+          <td><code>hours × rate ÷ clients</code></td>
         </tr>
         <tr>
-          <td><strong>Business metric</strong></td>
+          <td><strong>Business</strong></td>
           <td>N/A (internal)</td>
+          <td>—</td>
           <td>ARR, Gross margin</td>
+          <td><code>Σ(contracts); (rev-cogs)÷rev</code></td>
         </tr>
       </table>
     </div>
