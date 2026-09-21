@@ -706,11 +706,38 @@ PRODUCT B: Client Product
       </div>
       
       <h3 style="margin-top: 1.5rem;">Success metrics</h3>
-      <div style="display: flex; gap: 2rem; font-size: 0.85rem;">
-        <div><strong>Client:</strong> Time to first usable dataset, delivery freshness SLO</div>
-        <div><strong>Business:</strong> ARR, margin, support cost/client</div>
-        <div><strong>Risk:</strong> <span style="color: var(--error); font-weight: 600;">Zero cross-tenant incidents</span></div>
-      </div>
+      <table style="font-size: 0.8rem;">
+        <tr>
+          <th></th>
+          <th>Product A (Foundation)</th>
+          <th>Product B (Client Product)</th>
+        </tr>
+        <tr>
+          <td><strong>North Star</strong></td>
+          <td><span style="color: var(--error); font-weight: 600;">Zero cross-tenant incidents</span></td>
+          <td>Active clients with delivery in last 7 days</td>
+        </tr>
+        <tr>
+          <td><strong>Launch gate</strong></td>
+          <td>Pen test passed, 100% isolation tests</td>
+          <td>First client successfully ingesting</td>
+        </tr>
+        <tr>
+          <td><strong>Health metric</strong></td>
+          <td>Contract violation count</td>
+          <td>On-time delivery %</td>
+        </tr>
+        <tr>
+          <td><strong>Scale metric</strong></td>
+          <td>Time to add tenant</td>
+          <td>Support cost per client</td>
+        </tr>
+        <tr>
+          <td><strong>Business metric</strong></td>
+          <td>N/A (internal)</td>
+          <td>ARR, Gross margin</td>
+        </tr>
+      </table>
     </div>
   </div>
 
